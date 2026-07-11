@@ -1,0 +1,57 @@
+{
+  "header": {
+    "home": "Inicio",
+    "workshops": "Talleres",
+    "blog": "Blog",
+    "videos": "Videos",
+    "about": "Quiénes Somos",
+    "testimonials": "Testimonios",
+    "gallery": "Galería",
+    "contact": "Contacto",
+    "login": "Iniciar Sesión"
+  },
+  "home": {
+    "heroTagline": "«Nada de lo que has hecho hasta ahora define quién Eres»",
+    "heroBtn1": "Ingresar a mi cuenta",
+    "heroBtn2": "El Proceso",
+    "heroBtn3": "Talleres",
+    "processTitle": "El Proceso",
+    "processLine1": "<strong>Sanación en Luz</strong> llega a nosotros para la <strong>Era de la Luz</strong>.",
+    "processLine2": "<strong>Sanación en Luz</strong> es un proceso diseñado para la evolución hacia el <strong>Nuevo Humano</strong>.",
+    "processLine3": "<strong>Sanación en Luz</strong> es el camino hacia tu <strong>Pureza</strong> original.",
+    "processBtn": "Descubrir los Talleres",
+    "facilitatorsTitle": "Los Facilitadores",
+    "facilitatorsText": "Somos Darío y Mónica. Sanación en Luz comenzó a llegar a nosotros en agosto de 2020. Nos mostraron que éramos Complementos Divinos y que en este tiempo es necesario que recibamos su guía para el próximo proceso: Sanación en Luz.",
+    "facilitatorsBtn": "Leer nuestra historia",
+    "testimonialsTitle": "Testimonios",
+    "testimonialsBtn": "Leer más testimonios",
+    "testimonialsItems": [
+      {
+        "text": "Cuando empecé a hacer el proceso de Sanación en Luz mi vida cambió por completo. Me siento feliz, con mucha paz, en armonía y por sobre todo logré destrabar eso que me tenía estancada.",
+        "author": "Miriam (Argentina)"
+      },
+      {
+        "text": "Darío y Mónica acompañan desde el Amor puro y un respeto profundo por el proceso individual. Encontrarlos fue un antes y un después en mi vida.",
+        "author": "Laura (España)"
+      },
+      {
+        "text": "El taller de Quietud es una experiencia que no se puede explicar con palabras. Es un volver a casa, un volver al centro.",
+        "author": "Carlos (México)"
+      }
+    ],
+    "videosTitle": "Conectando con la Frecuencia",
+    "videosBtn": "Ver más videos",
+    "blogTitle": "Blog",
+    "blogBtn": "Ver todos los artículos",
+    "ctaTitle": "¿Sentís el llamado?",
+    "ctaText": "Comenzá tu proceso hacia el Nuevo Humano hoy mismo.",
+    "ctaBtn1": "WhatsApp",
+    "ctaBtn2": "Email"
+  },
+  "blog": {
+    "title": "Últimos Artículos",
+    "subtitle": "Descubre las últimas novedades y artículos de opinión.",
+    "read_more": "Leer Más",
+    "empty": "No hay artículos publicados en este idioma aún."
+  }
+}

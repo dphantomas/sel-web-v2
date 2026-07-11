@@ -1,0 +1,387 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- MÓDULO AUTH ---
+
+model User {
+  id               String    @id @default(cuid())
+  firstName        String
+  lastName         String
+  email            String    @unique
+  emailVerified    DateTime?
+  passwordHash     String
+  phone            String?
+  image            String?
+  hideGooglePhoto  Boolean   @default(false)
+  role             Role      @default(Guest)
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  currentChallenge String?
+  sparkName        String?
+
+  authenticators Authenticator[]
+
+  // Relaciones del MÓDULO CURSOS
+  unlockedCourses   UserCourseAccess[]
+  unlockedInstances UserInstanceAccess[]
+  progress          Progress[]
+  posts             Post[]
+
+  // Relaciones del MÓDULO E-COMMERCE
+  addresses UserAddress[]
+  cart      Cart?
+  orders    Order[]
+}
+
+enum Role {
+  Guest
+  Participante
+  Transmisor
+  Admin
+}
+
+model PasswordResetToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, token])
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(cuid())
+  email     String
+  token     String   @unique
+  expires   DateTime
+  createdAt DateTime @default(now())
+
+  @@unique([email, token])
+}
+
+model Authenticator {
+  credentialID         String   @id
+  userId               String
+  credentialPublicKey  String
+  counter              Int
+  credentialDeviceType String
+  credentialBackedUp   Boolean
+  transports           String?
+  deviceName           String?
+  createdAt            DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+// --- MÓDULO CURSOS ---
+
+enum CourseType {
+  Curso
+  Taller
+  Iniciacion
+  Activacion
+  Retiro
+}
+
+enum Modality {
+  Presencial
+  Virtual
+}
+
+enum Synchronicity {
+  Sincronico
+  Asincronico
+}
+
+model Course {
+  id                 String        @id @default(cuid())
+  title              String
+  slug               String        @unique
+  shortDescription   String?
+  description        String?
+  type               CourseType
+  durationDays       Int?
+  modality           Modality      @default(Virtual)
+  synchronicity      Synchronicity @default(Asincronico)
+  published          Boolean       @default(false)
+  image              String?
+  language           String        @default("es")
+  translationGroupId String?
+
+  modules         Module[]
+  instances       CourseInstance[]
+  usersWithAccess UserCourseAccess[]
+  resources       Resource[]
+
+  prerequisites   Course[] @relation("CoursePrerequisites")
+  prerequisiteFor Course[] @relation("CoursePrerequisites")
+
+  prerequisiteForInstances CourseInstance[] @relation("InstancePrerequisiteCourses")
+}
+
+model CourseInstance {
+  id        String    @id @default(cuid())
+  courseId  String
+  startDate DateTime
+  endDate   DateTime?
+  price     Float?
+  location  String?
+
+  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  resources Resource[]
+
+  prerequisites Course[] @relation("InstancePrerequisiteCourses")
+
+  usersWithAccess UserInstanceAccess[]
+}
+
+model UserCourseAccess {
+  id        String   @id @default(cuid())
+  userId    String
+  courseId  String
+  grantedAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseId])
+}
+
+model UserInstanceAccess {
+  id               String   @id @default(cuid())
+  userId           String
+  courseInstanceId String
+  grantedAt        DateTime @default(now())
+
+  user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseInstance CourseInstance @relation(fields: [courseInstanceId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, courseInstanceId])
+}
+
+model Module {
+  id       String   @id @default(cuid())
+  title    String
+  order    Int      @default(0)
+  courseId String
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  lessons  Lesson[]
+}
+
+model Lesson {
+  id        String     @id @default(cuid())
+  title     String
+  slug      String     @unique
+  content   String?
+  videoUrl  String?
+  order     Int        @default(0)
+  moduleId  String
+  module    Module     @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  progress  Progress[]
+  resources Resource[]
+}
+
+model Resource {
+  id             String  @id @default(cuid())
+  name           String
+  description    String? @db.Text
+  type           String
+  cloudflareKey  String
+  isDownloadable Boolean @default(false)
+
+  lessonId String?
+  lesson   Lesson? @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  courseId String?
+  course   Course? @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  courseInstanceId String?
+  courseInstance   CourseInstance? @relation(fields: [courseInstanceId], references: [id], onDelete: Cascade)
+
+  overridesResourceId String?
+  overridesResource   Resource?  @relation("ResourceOverrides", fields: [overridesResourceId], references: [id], onDelete: SetNull)
+  overriddenBy        Resource[] @relation("ResourceOverrides")
+}
+
+model Progress {
+  id        String   @id @default(cuid())
+  userId    String
+  lessonId  String
+  completed Boolean  @default(false)
+  updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, lessonId])
+}
+
+model GalleryImage {
+  id        String   @id @default(cuid())
+  url       String
+  publicId  String   @unique
+  alt       String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model Post {
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  language   String   @default("es")
+  title      String
+  excerpt    String?
+  content    String
+  coverImage String?
+  published  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  translationGroupId String?
+
+  authorId String
+  author   User   @relation(fields: [authorId], references: [id])
+}
+
+// --- MÓDULO E-COMMERCE ---
+
+model Category {
+  id        String     @id @default(cuid())
+  name      String     @unique
+  slug      String     @unique
+  parentId  String?
+  parent    Category?  @relation("CategoryChildren", fields: [parentId], references: [id], onDelete: SetNull)
+  children  Category[] @relation("CategoryChildren")
+  products  Product[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  externalId  String    @unique @default(cuid())
+  name        String
+  description String?   @db.Text
+  image       String?
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  weight Float?
+  height Float?
+  width  Float?
+  depth  Float?
+
+  price Float @default(0)
+  stock Int   @default(0)
+
+  courseId String?
+
+  orderItems OrderItem[]
+  cartItems  CartItem[]
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+}
+
+model UserAddress {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String   @default("Principal")
+  street    String
+  number    String
+  apartment String?
+  city      String
+  province  String
+  zipCode   String
+  phone     String?
+  dni       String?
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([cartId, productId])
+}
+
+model Order {
+  id     String  @id @default(cuid())
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  total        Float
+  shippingCost Float @default(0)
+
+  shippingStreet    String?
+  shippingNumber    String?
+  shippingApartment String?
+  shippingCity      String?
+  shippingProvince  String?
+  shippingZipCode   String?
+
+  customerName  String?
+  customerEmail String?
+  customerDni   String?
+  customerPhone String?
+
+  shippingProvider String?
+  shippingType     String?
+  trackingCode     String?
+  labelUrl         String?
+
+  status       String  @default("PENDING")
+  preferenceId String?
+  paymentId    String?
+
+  items OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model OrderItem {
+  id              String  @id @default(cuid())
+  orderId         String
+  productId       String?
+  quantity        Int
+  priceAtPurchase Float
+
+  order   Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+}
+
+// --- MÓDULO RESEÑAS ---
+
+model Review {
+  id          String   @id @default(cuid())
+  authorName  String
+  authorRole  String?
+  authorImage String?
+  content     String   @db.Text
+  rating      Int?     @default(5)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

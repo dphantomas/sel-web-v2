@@ -1,0 +1,57 @@
+{
+  "header": {
+    "home": "Home",
+    "workshops": "Workshops",
+    "blog": "Blog",
+    "videos": "Videos",
+    "about": "About Us",
+    "testimonials": "Testimonials",
+    "gallery": "Gallery",
+    "contact": "Contact",
+    "login": "Sign In"
+  },
+  "home": {
+    "heroTagline": "“Nothing you have done so far defines who you Are”",
+    "heroBtn1": "Log In",
+    "heroBtn2": "The Process",
+    "heroBtn3": "Workshops",
+    "processTitle": "The Process",
+    "processLine1": "<strong>Sanación en Luz</strong> comes to us for the <strong>Age of Light</strong>.",
+    "processLine2": "<strong>Sanación en Luz</strong> is a process designed for evolution into the <strong>New Human</strong>.",
+    "processLine3": "<strong>Sanación en Luz</strong> is the path to your original <strong>Purity</strong>.",
+    "processBtn": "Discover the Workshops",
+    "facilitatorsTitle": "The Facilitators",
+    "facilitatorsText": "We are Darío and Mónica. Sanación en Luz began to arrive to us in August 2020. They showed us that we were Divine Complements, and that at this time it is necessary that we receive their guidance for the next process: Sanacion en Luz.",
+    "facilitatorsBtn": "Read our story",
+    "testimonialsTitle": "Testimonials",
+    "testimonialsBtn": "Read more testimonials",
+    "testimonialsItems": [
+      {
+        "text": "When I started doing the process of Sanación en Luz my life changed completely. I feel happy, with a lot of peace, in harmony and above all I managed to unblock what had me stagnant.",
+        "author": "Miriam (Argentina)"
+      },
+      {
+        "text": "Darío and Mónica accompany from pure Love and a deep respect for the individual process. Finding them was a before and after in my life.",
+        "author": "Laura (España)"
+      },
+      {
+        "text": "The Quietude workshop is an experience that cannot be explained in words. It is a return home, a return to the center.",
+        "author": "Carlos (México)"
+      }
+    ],
+    "videosTitle": "Connecting with the Frequency",
+    "videosBtn": "Watch more videos",
+    "blogTitle": "Blog",
+    "blogBtn": "View all articles",
+    "ctaTitle": "Do you feel the call?",
+    "ctaText": "Start your process towards the New Human today.",
+    "ctaBtn1": "WhatsApp",
+    "ctaBtn2": "Email"
+  },
+  "blog": {
+    "title": "Latest Articles",
+    "subtitle": "Discover the latest news and opinion pieces.",
+    "read_more": "Read More",
+    "empty": "No articles published in this language yet."
+  }
+}

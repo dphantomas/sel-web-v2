@@ -1,0 +1,244 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sans: 'Open Sans', Arial, sans-serif;
+  --font-lato: 'Lato', Helvetica, Arial, Lucida, sans-serif;
+
+  /* === Real site colors === */
+  --color-sel-purple:      #33275f;
+  --color-sel-lavender:    #d4aeea;
+  --color-sel-cream:       #fefdff;
+  --color-sel-white:       #ffffff;
+  --color-sel-body:        #666666;
+  --color-sel-blue:        #2ea3f2;
+  --color-sel-testimonial: #f5f5f5;
+  --color-sel-author:      #b085b3;
+  --color-sel-blog-meta:   #c2a2e8;
+  --color-sel-quote-icon:  #9187ba;
+  --color-sel-quote-bg:    #e3e1e8;
+  --color-sel-overlay:     rgba(122, 111, 170, 0.56);
+}
+/* ============================
+   Base
+   ============================ */
+html {
+  scroll-behavior: smooth;
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-sel-body);
+  font-size: 14px;
+  line-height: 1.7em;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* Custom scrollbar */
+@supports (scrollbar-color: auto) {
+  html {
+    scrollbar-color: #d4aeea #f5f5f5;
+    scrollbar-width: thin;
+  }
+}
+
+/* ============================
+   Section backgrounds
+   ============================ */
+
+/* Used for footer/bottom gradient sections */
+.section-gradient {
+  background: linear-gradient(90deg, #d4aeea 0%, #fefdff 100%);
+}
+
+/* Hero full-screen background */
+.hero-bg {
+  background-image: url('/assets/cabezal.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Generic parallax background */
+.parallax-bg {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+/* Fix for background-attachment: fixed on mobile/iOS */
+@media (max-width: 1024px) {
+  .hero-bg,
+  .parallax-bg,
+  .quienes-bg {
+    background-attachment: scroll !important;
+  }
+}
+
+/* Internal page section header background */
+.section-header-bg {
+  background-image: url('/assets/cabezal2.jpg');
+  background-size: cover;
+  background-position: center bottom;
+  background-repeat: no-repeat;
+}
+
+/* Quiénes Somos background */
+.quienes-bg {
+  background-image: url('/assets/fondo-quienes.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Shadow ornament used below hero */
+.sombra-bg {
+  background-image: url('/assets/sombra.png');
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+}
+
+/* ============================
+   Blog cards
+   ============================ */
+.blog-card-overlay {
+  background-color: rgba(122, 111, 170, 0.56);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.blog-card:hover .blog-card-overlay {
+  opacity: 1;
+}
+.blog-card {
+  box-shadow: 6px 6px 18px 0px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.blog-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 8px 8px 24px 0px rgba(0, 0, 0, 0.35);
+}
+
+/* ============================
+   Testimonials
+   ============================ */
+.testimonial-card {
+  background-color: #f5f5f5;
+  box-shadow: 0px 12px 18px -6px rgba(0, 0, 0, 0.3);
+  margin-bottom: 40px;
+  position: relative;
+}
+
+/* ============================
+   Navbar
+   ============================ */
+.navbar-scrolled {
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 2px 20px rgba(51, 39, 95, 0.08);
+  border-bottom: 1px solid rgba(212, 174, 234, 0.3);
+}
+
+/* ============================
+   WhatsApp floating button
+   ============================ */
+.whatsapp-float {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  z-index: 999;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #25d366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.whatsapp-float:hover {
+  transform: scale(1.08);
+  box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+}
+
+/* ============================
+   Gallery hover effect
+   ============================ */
+.gallery-item {
+  overflow: hidden;
+  position: relative;
+}
+.gallery-item img {
+  transition: transform 0.5s ease;
+}
+.gallery-item:hover img {
+  transform: scale(1.06);
+}
+.gallery-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(122, 111, 170, 0.4);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-item:hover .gallery-overlay {
+  opacity: 1;
+}
+
+/* ============================
+   Section title arrows (original style)
+   ============================ */
+.section-arrow {
+  display: inline-block;
+  width: 60px;
+  height: auto;
+}
+
+/* ============================
+   Smooth fade-in animation
+   ============================ */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in {
+  animation: fadeIn 0.6s ease both;
+}
+
+/* ============================
+   Modal animations
+   ============================ */
+@keyframes modalOverlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalContentIn {
+  from { opacity: 0; transform: scale(0.95) translateY(10px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.animate-modal-overlay {
+  animation: modalOverlayIn 0.3s ease-out forwards;
+}
+
+.animate-modal-content {
+  animation: modalContentIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
