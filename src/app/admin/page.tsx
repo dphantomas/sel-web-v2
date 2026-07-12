@@ -2,17 +2,18 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { FileText, BookOpen, Users } from "lucide-react";
+import { FileText, BookOpen, Users, Image as ImageIcon } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 
-  const [postCount, courseCount, userCount] = await Promise.all([
-    prisma.post.count(),
+  const [courseCount, userCount, postCount, galleryCount] = await Promise.all([
     prisma.course.count(),
     prisma.user.count(),
+    prisma.post.count(),
+    prisma.galleryImage.count(),
   ]);
 
   return (
@@ -22,39 +23,64 @@ export default async function AdminDashboardPage() {
       </h1>
       <p className="text-sel-body mb-8">Bienvenido al panel de control de Sanación en Luz.</p>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-        <div className="bg-white rounded-2xl p-6 blog-card">
-          <div className="flex items-center gap-4 mb-4 text-sel-blue">
-            <FileText className="w-6 h-6" />
-            <h3 className="font-semibold text-sel-purple">Artículos</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        
+        {/* Cursos */}
+        <Link href="/admin/cursos" className="block group">
+          <div className="bg-white rounded-2xl p-6 blog-card h-full border border-transparent transition-all hover:border-sel-purple/30 hover:shadow-md hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4 text-sel-purple group-hover:text-sel-blue transition-colors">
+              <BookOpen className="w-6 h-6" />
+              <h3 className="font-semibold text-sel-purple">Cursos</h3>
+            </div>
+            <p className="text-4xl font-bold text-sel-purple mb-2">{courseCount}</p>
+            <span className="text-sm font-medium text-blue-600">
+              Gestionar Cursos &rarr;
+            </span>
           </div>
-          <p className="text-4xl font-bold text-sel-purple mb-2">{postCount}</p>
-          <Link href="/admin/blog" className="text-sm font-medium text-sel-blue hover:underline">
-            Gestionar Blog &rarr;
-          </Link>
-        </div>
+        </Link>
 
-        <div className="bg-white rounded-2xl p-6 blog-card">
-          <div className="flex items-center gap-4 mb-4 text-sel-lavender">
-            <BookOpen className="w-6 h-6" />
-            <h3 className="font-semibold text-sel-purple">Cursos</h3>
+        {/* Usuarios */}
+        <Link href="/admin/usuarios" className="block group">
+          <div className="bg-white rounded-2xl p-6 blog-card h-full border border-transparent transition-all hover:border-sel-purple/30 hover:shadow-md hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4 text-sel-purple group-hover:text-sel-blue transition-colors">
+              <Users className="w-6 h-6" />
+              <h3 className="font-semibold text-sel-purple">Usuarios</h3>
+            </div>
+            <p className="text-4xl font-bold text-sel-purple mb-2">{userCount}</p>
+            <span className="text-sm font-medium text-blue-600">
+              Gestionar Usuarios &rarr;
+            </span>
           </div>
-          <p className="text-4xl font-bold text-sel-purple mb-2">{courseCount}</p>
-          <Link href="/admin/cursos" className="text-sm font-medium text-sel-blue hover:underline">
-            Gestionar Cursos &rarr;
-          </Link>
-        </div>
+        </Link>
 
-        <div className="bg-white rounded-2xl p-6 blog-card">
-          <div className="flex items-center gap-4 mb-4 text-sel-purple">
-            <Users className="w-6 h-6" />
-            <h3 className="font-semibold text-sel-purple">Usuarios</h3>
+        {/* Artículos */}
+        <Link href="/admin/blog" className="block group">
+          <div className="bg-white rounded-2xl p-6 blog-card h-full border border-transparent transition-all hover:border-sel-purple/30 hover:shadow-md hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4 text-sel-purple group-hover:text-sel-blue transition-colors">
+              <FileText className="w-6 h-6" />
+              <h3 className="font-semibold text-sel-purple">Artículos</h3>
+            </div>
+            <p className="text-4xl font-bold text-sel-purple mb-2">{postCount}</p>
+            <span className="text-sm font-medium text-blue-600">
+              Gestionar Blog &rarr;
+            </span>
           </div>
-          <p className="text-4xl font-bold text-sel-purple mb-2">{userCount}</p>
-          <Link href="/admin/usuarios" className="text-sm font-medium text-sel-blue hover:underline">
-            Gestionar Usuarios &rarr;
-          </Link>
-        </div>
+        </Link>
+
+        {/* Galería */}
+        <Link href="/admin/galeria" className="block group">
+          <div className="bg-white rounded-2xl p-6 blog-card h-full border border-transparent transition-all hover:border-sel-purple/30 hover:shadow-md hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4 text-sel-purple group-hover:text-sel-blue transition-colors">
+              <ImageIcon className="w-6 h-6" />
+              <h3 className="font-semibold text-sel-purple">Galería</h3>
+            </div>
+            <p className="text-4xl font-bold text-sel-purple mb-2">{galleryCount}</p>
+            <span className="text-sm font-medium text-blue-600">
+              Gestionar Galería &rarr;
+            </span>
+          </div>
+        </Link>
+
       </div>
     </div>
   );

@@ -873,10 +873,14 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       {/* VISTA CURSOS */}
       {activeTab === 'courses' && (
         <div className="p-6">
-          <div className="mb-6 flex justify-end">
+          <div className="flex justify-between items-center mb-6">
+            <div>
+              <h2 className="text-xl font-bold text-sel-purple">Cursos y Talleres</h2>
+              <p className="text-sm text-sel-body">Administrá los cursos, retiros y talleres de la plataforma.</p>
+            </div>
             <button
               onClick={() => setIsCreatingCourse(true)}
-              className="bg-[#33275f] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#4c3c86] transition shadow-sm"
+              className="bg-sel-purple text-white px-5 py-2.5 rounded-xl font-bold hover:bg-sel-quote-icon transition shadow-sm"
             >
               + Crear Nuevo Taller
             </button>

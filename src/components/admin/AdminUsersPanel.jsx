@@ -764,7 +764,20 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       {/* VISTA PARTICIPANTES */}
       {activeTab === 'users' && (
         <>
-          <div className="p-6 border-b border-gray-100 bg-white flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="p-6 border-b border-sel-lavender/20 bg-white">
+            <div className="flex justify-between items-center mb-6">
+              <div>
+                <h2 className="text-xl font-bold text-sel-purple">Participantes</h2>
+                <p className="text-sm text-sel-body">Gestioná los usuarios y sus accesos.</p>
+              </div>
+              <Link
+                href="/admin/users/new"
+                className="bg-sel-purple text-white px-5 py-2.5 rounded-xl font-bold hover:bg-sel-quote-icon transition shadow-sm whitespace-nowrap text-center"
+              >
+                + Crear Nuevo Participante
+              </Link>
+            </div>
+            
             <div className="flex items-center gap-4 w-full max-w-2xl">
               <div className="relative w-full max-w-md">
                 <input
@@ -772,22 +785,16 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   placeholder="Buscar por nombre, email, teléfono o chispa..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] text-gray-800 transition"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple transition bg-sel-cream/30"
                 />
-                <div className="absolute left-3 top-3 text-gray-400">
+                <div className="absolute left-3 top-3 text-sel-lavender">
                   <Search className="w-5 h-5" />
                 </div>
               </div>
-              <div className="text-sm text-gray-500 font-bold whitespace-nowrap bg-gray-100 px-3 py-1.5 rounded-lg border border-gray-200">
+              <div className="text-sm text-sel-purple font-bold whitespace-nowrap bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
                 {filteredUsers.length} {filteredUsers.length === 1 ? 'usuario' : 'usuarios'}
               </div>
             </div>
-            <Link
-              href="/admin/users/new"
-              className="bg-[#33275f] text-white px-5 py-2.5 rounded-xl font-bold hover:bg-[#4c3c86] transition shadow-sm whitespace-nowrap text-center"
-            >
-              + Crear Nuevo Participante
-            </Link>
           </div>
 
           <div className="overflow-x-auto">
