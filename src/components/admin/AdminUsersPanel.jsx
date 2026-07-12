@@ -8,7 +8,7 @@ import ImageCropperModal from '@/components/ImageCropperModal'
 import GalleryAdmin from './GalleryAdmin'
 
 export default function AdminUsersPanel({ initialUsers, courses: initialCourses }) {
-  const [activeTab, setActiveTab] = useState('users') // 'users' | 'courses' | 'gallery'
+  const [activeTab, setActiveTab] = useState('users') // Hardcoded to 'users' for this panel
   const [expandedCourses, setExpandedCourses] = useState(new Set())
   
   const [users, setUsers] = useState(initialUsers || [])
@@ -760,34 +760,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
       <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="lazyOnload" />
-      {/* Pestañas */}
-      <div className="flex border-b border-gray-200 bg-gray-50/50">
-        <button
-          onClick={() => setActiveTab('users')}
-          className={`px-6 py-4 font-bold text-sm transition ${
-            activeTab === 'users' ? 'border-b-2 border-[#9187BA] text-[#33275f]' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Participantes
-        </button>
-        <button
-          onClick={() => setActiveTab('courses')}
-          className={`px-6 py-4 font-bold text-sm transition ${
-            activeTab === 'courses' ? 'border-b-2 border-[#9187BA] text-[#33275f]' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Cursos y Talleres
-        </button>
-        <button
-          onClick={() => setActiveTab('gallery')}
-          className={`px-6 py-4 font-bold text-sm transition ${
-            activeTab === 'gallery' ? 'border-b-2 border-[#9187BA] text-[#33275f]' : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          Galería
-        </button>
-      </div>
-
+      {/* Pestañas eliminadas - La navegación ahora es mediante el menú lateral */}
       {/* VISTA PARTICIPANTES */}
       {activeTab === 'users' && (
         <>
