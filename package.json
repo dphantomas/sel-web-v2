@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "dev:clean": "lsof -ti:3000 | xargs kill -9 2>/dev/null || true && rm -rf .next && next dev",
-    "build": "prisma db push && next build",
+    "build": "next build",
     "start": "next start",
     "lint": "eslint",
     "create-client": "npx tsx scripts/create-client.ts",
