@@ -48,7 +48,7 @@ export function LoginForm() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}/home`
+        const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}`
         router.push(lastRoute)
       }
     }
@@ -97,7 +97,7 @@ export function LoginForm() {
         }
         throw new Error(result.error)
       }
-      router.push(`/${lang}/home`)
+      router.push(`/${lang}`)
       router.refresh()
     } catch (err: any) {
       setError(err.message || 'Error al autenticar con biometría.')
@@ -114,7 +114,7 @@ export function LoginForm() {
     try {
       const result = await signIn('credentials', { redirect: false, email, password })
       if (result?.error) throw new Error(result.error || 'Credenciales incorrectas.')
-      router.push(`/${lang}/home`)
+      router.push(`/${lang}`)
       router.refresh()
     } catch (err: any) {
       setError(err.message)
@@ -177,7 +177,7 @@ export function LoginForm() {
         <div className="mb-6">
           <button
             id="google-login-btn"
-            onClick={() => { setLoading(true); signIn('google', { callbackUrl: `/${lang}/home` }) }}
+            onClick={() => { setLoading(true); signIn('google', { callbackUrl: `/${lang}` }) }}
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-bold py-3 px-6 rounded-xl transition duration-300 shadow-sm disabled:opacity-50"
           >
@@ -199,7 +199,7 @@ export function LoginForm() {
       {biometricAvailable && (
         <div className="mb-5">
           <button
-            onClick={() => { setLoading(true); signIn('google', { callbackUrl: `/${lang}/home` }) }}
+            onClick={() => { setLoading(true); signIn('google', { callbackUrl: `/${lang}` }) }}
             disabled={loading}
             className="w-full flex items-center justify-center gap-3 bg-white border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-3 px-6 rounded-xl transition duration-300 shadow-sm disabled:opacity-50 text-sm"
           >

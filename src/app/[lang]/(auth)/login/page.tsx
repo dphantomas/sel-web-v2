@@ -11,7 +11,7 @@ export default function LoginPage() {
     if (e.target === e.currentTarget) {
       const langMatch = window.location.pathname.match(/^\/([a-z]{2})/);
       const lang = langMatch ? langMatch[1] : 'es';
-      const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}/home`
+      const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}`
       router.push(lastRoute)
     }
   }

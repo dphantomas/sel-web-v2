@@ -30,7 +30,7 @@ export function RegisterForm() {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
-        const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}/home`
+        const lastRoute = sessionStorage.getItem('lastNonAuthRoute') || `/${lang}`
         router.push(lastRoute)
       }
     }
