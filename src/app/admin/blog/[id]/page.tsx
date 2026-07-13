@@ -1,15 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useEffect, Suspense } from "react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft, Save, Trash2, Loader2, Image as ImageIcon, UploadCloud } from "lucide-react";
 import { createPost, updatePost, deletePost } from "@/modules/blog/actions";
 import { CldUploadWidget } from "next-cloudinary";
-
-// En Next.js 15+ params puede ser una promesa, así que lo envolvemos y unwrap si es necesario.
-import { use, Suspense } from "react";
-import { useSearchParams } from "next/navigation";
 
 function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
   const router = useRouter();
@@ -309,8 +305,6 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
     </div>
   );
 }
-
-import { useParams } from "next/navigation";
 
 export default function BlogEditorPage() {
   const params = useParams();
