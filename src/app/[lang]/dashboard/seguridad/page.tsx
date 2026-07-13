@@ -53,7 +53,7 @@ export default async function SeguridadPage() {
         </div>
 
         <div className="animate-in fade-in slide-in-from-bottom-3 duration-500 delay-100">
-          <PasskeyManager initialAuthenticators={user.authenticators as any} />
+          <PasskeyManager initialAuthenticators={user.authenticators as any} userEmail={session.user.email || undefined} />
         </div>
 
       </div>

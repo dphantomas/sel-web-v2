@@ -30,7 +30,7 @@ function formatDate(dateStr: string): string {
 
 // ─── Componente ──────────────────────────────────────────────────────────────
 
-export default function PasskeyManager({ initialAuthenticators }: { initialAuthenticators: Authenticator[] }) {
+export default function PasskeyManager({ initialAuthenticators, userEmail }: { initialAuthenticators: Authenticator[], userEmail?: string }) {
   const [authenticators, setAuthenticators] = useState<Authenticator[]>(initialAuthenticators || [])
   const [isRegistering, setIsRegistering] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -117,6 +117,9 @@ export default function PasskeyManager({ initialAuthenticators }: { initialAuthe
         // Marcar en localStorage con el ID exacto
         localStorage.setItem('local_passkey_id', attResp.id)
         localStorage.setItem('device_registered', 'true') // legacy para el login general
+        if (userEmail) {
+          localStorage.setItem('registered_email', userEmail)
+        }
         setIsDeviceRegisteredLocally(true)
         
         const emailResp = await fetch('/api/auth/webauthn/list-authenticators')
