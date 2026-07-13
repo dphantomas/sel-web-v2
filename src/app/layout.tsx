@@ -5,7 +5,7 @@ export const metadata: Metadata = {
   title: "Sanación en Luz",
   description: "Sanación en Luz - Espacio de sanación y consciencia",
   icons: {
-    icon: '/favicon.ico',
+    icon: '/favicon.ico?v=2',
   },
 };
 
