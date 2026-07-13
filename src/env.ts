@@ -37,8 +37,14 @@ export const env = createEnv({
     CLOUDINARY_CLOUD_NAME: z.string().optional(),
     CLOUDINARY_ROOT_FOLDER: z.string().optional().default("dgg-master"),
   },
-  client: {},
-  experimental__runtimeEnv: {},
+  client: {
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: z.string().optional(),
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: z.string().optional(),
+  },
+  experimental__runtimeEnv: {
+    NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    NEXT_PUBLIC_CLOUDINARY_API_KEY: process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  },
   emptyStringAsUndefined: true,
 });
 
@@ -62,7 +68,7 @@ if (env.ENABLE_S3_STORAGE === "true") {
 }
 
 if (env.ENABLE_CLOUDINARY === "true") {
-  if (!env.CLOUDINARY_URL || !env.CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET || !env.CLOUDINARY_CLOUD_NAME) {
+  if (!env.CLOUDINARY_URL || !env.NEXT_PUBLIC_CLOUDINARY_API_KEY || !env.CLOUDINARY_API_SECRET || !env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME) {
     throw new Error("❌ Faltan credenciales de Cloudinary para activar el módulo Cloudinary Storage");
   }
 }

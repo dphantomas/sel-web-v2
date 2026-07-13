@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
-import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon } from "lucide-react";
+import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon, Star } from "lucide-react";
 
 export const metadata = {
   title: "Admin Panel | Sanación en Luz",
@@ -49,6 +49,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin/galeria" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple transition-colors">
               <ImageIcon className="w-4 h-4" />
               Galería
+            </Link>
+            <Link href="/admin/reviews" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple transition-colors">
+              <Star className="w-4 h-4" />
+              Reseñas
             </Link>
           </div>
         </nav>

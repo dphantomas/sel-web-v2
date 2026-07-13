@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
 import { revalidatePath } from "next/cache";
+import { deleteCloudinaryImage, extractCloudinaryPublicId } from "@/modules/media/cloudinary";
 
 export async function createPost(data: {
   title: string;
@@ -65,10 +66,23 @@ export async function updatePost(id: string, data: {
   }
 
   try {
+    const oldPost = await prisma.post.findUnique({ where: { id }, select: { coverImage: true } });
+
     const post = await prisma.post.update({
       where: { id },
       data,
     });
+
+    if (oldPost?.coverImage && oldPost.coverImage !== data.coverImage) {
+      const publicId = extractCloudinaryPublicId(oldPost.coverImage);
+      if (publicId) {
+        try {
+          await deleteCloudinaryImage(publicId);
+        } catch (e) {
+          console.error("Error borrando imagen vieja de Cloudinary:", e);
+        }
+      }
+    }
 
     revalidatePath("/admin/blog");
     revalidatePath("/blog");
@@ -94,9 +108,22 @@ export async function deletePost(id: string) {
   }
 
   try {
+    const oldPost = await prisma.post.findUnique({ where: { id }, select: { coverImage: true } });
+
     await prisma.post.delete({
       where: { id },
     });
+
+    if (oldPost?.coverImage) {
+      const publicId = extractCloudinaryPublicId(oldPost.coverImage);
+      if (publicId) {
+        try {
+          await deleteCloudinaryImage(publicId);
+        } catch (e) {
+          console.error("Error borrando imagen de Cloudinary:", e);
+        }
+      }
+    }
 
     revalidatePath("/admin/blog");
     revalidatePath("/blog");

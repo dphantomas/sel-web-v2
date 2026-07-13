@@ -14,14 +14,14 @@ export function LanguageSwitcher({ currentLang, textColor = "text-inherit" }: { 
   const targetEn = `/en${cleanPath}`;
 
   return (
-    <div className={`flex items-center gap-2 border-r border-current pr-4 mr-2 ${textColor}`}>
+    <div className={`flex items-center gap-1.5 ${textColor}`}>
       <Link 
         href={targetEs} 
         className={`text-xs font-bold transition-colors ${currentLang === 'es' ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`}
       >
         ES
       </Link>
-      <span className="opacity-40">|</span>
+      <div className="h-3.5 w-px bg-current opacity-40"></div>
       <Link 
         href={targetEn} 
         className={`text-xs font-bold transition-colors ${currentLang === 'en' ? 'opacity-100' : 'opacity-50 hover:opacity-80'}`}

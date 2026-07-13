@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowLeft, Save, Trash2, Loader2, Image as ImageIcon } from "lucide-react";
+import { ArrowLeft, Save, Trash2, Loader2, Image as ImageIcon, UploadCloud } from "lucide-react";
 import { createPost, updatePost, deletePost } from "@/modules/blog/actions";
+import { CldUploadWidget } from "next-cloudinary";
 
 // En Next.js 15+ params puede ser una promesa, así que lo envolvemos y unwrap si es necesario.
 import { use, Suspense } from "react";
@@ -222,15 +223,43 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
           <div>
             <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2 flex items-center gap-2">
               <ImageIcon className="w-4 h-4" />
-              URL de Imagen de Portada
+              Imagen de Portada
             </label>
-            <input 
-              type="url" 
-              value={formData.coverImage}
-              onChange={(e) => setFormData({...formData, coverImage: e.target.value})}
-              className="w-full px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              placeholder="https://..."
-            />
+            <div className="flex gap-2">
+              <input 
+                type="url" 
+                value={formData.coverImage}
+                onChange={(e) => setFormData({...formData, coverImage: e.target.value})}
+                className="flex-1 min-w-0 px-4 py-2.5 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm text-zinc-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500/50"
+                placeholder="https://..."
+              />
+              <CldUploadWidget 
+                signatureEndpoint="/api/media/cloudinary-sign?folder=blog"
+                onSuccess={(result: any) => {
+                  if (result?.info?.secure_url) {
+                    setFormData(prev => ({ ...prev, coverImage: result.info.secure_url }));
+                  }
+                }}
+                options={{
+                  multiple: false,
+                  resourceType: "image",
+                  folder: "sanacion-en-luz/blog"
+                }}
+              >
+                {({ open }) => {
+                  return (
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); open(); }}
+                      className="px-4 py-2.5 bg-blue-100 hover:bg-blue-200 text-blue-700 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 dark:text-blue-400 font-medium rounded-xl text-sm transition-colors flex items-center gap-2 shrink-0"
+                    >
+                      <UploadCloud className="w-4 h-4" />
+                      Subir
+                    </button>
+                  );
+                }}
+              </CldUploadWidget>
+            </div>
           </div>
           
           <div>

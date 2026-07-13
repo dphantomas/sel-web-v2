@@ -37,3 +37,28 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({ timestamp, signature, folder });
 }
+
+export async function POST(req: NextRequest) {
+  if (env.ENABLE_CLOUDINARY !== "true") {
+    return NextResponse.json({ error: "Cloudinary no habilitado" }, { status: 400 });
+  }
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return NextResponse.json({ error: "No autorizado" }, { status: 401 });
+  }
+
+  try {
+    const body = await req.json();
+    const { paramsToSign } = body;
+
+    const signature = cloudinary.utils.api_sign_request(
+      paramsToSign, 
+      env.CLOUDINARY_API_SECRET as string
+    );
+
+    return NextResponse.json({ signature });
+  } catch (error) {
+    return NextResponse.json({ error: "Error interno" }, { status: 500 });
+  }
+}

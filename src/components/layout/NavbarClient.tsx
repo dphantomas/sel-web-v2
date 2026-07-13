@@ -81,8 +81,10 @@ export function NavbarClient({
               {item.label}
             </Link>
           ))}
-          <div className="flex items-center gap-3 ml-2 border-l pl-4" style={{ borderColor: textColor, color: textColor }}>
+          <div className="flex items-center gap-2.5 ml-4" style={{ color: textColor }}>
+            <div className="h-3.5 w-px bg-current opacity-40"></div>
             <LanguageSwitcher currentLang={lang} textColor="text-inherit" />
+            <div className="h-3.5 w-px bg-current opacity-40"></div>
             <UserMenu user={session?.user || null} lang={lang} />
           </div>
         </div>
