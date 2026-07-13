@@ -1,7 +1,6 @@
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import AuthProvider from "@/components/auth/AuthProvider";
-import PasskeyPrompt from "@/components/auth/PasskeyPrompt";
 import { RouteHistorySaver } from "@/components/layout/RouteHistorySaver";
 
 export default async function RootLayout({
@@ -21,7 +20,6 @@ export default async function RootLayout({
         {children}
       </main>
       <Footer lang={lang} />
-      <PasskeyPrompt />
     </AuthProvider>
   );
 }

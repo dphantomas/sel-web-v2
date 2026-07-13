@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { signOut } from "next-auth/react";
 import { LanguageSwitcher } from "./LanguageSwitcher";
 import { UserMenu } from "./UserMenu";
 
@@ -119,10 +120,67 @@ export function NavbarClient({
               </Link>
             ))}
             
-            {/* Mobile Language Switcher & User Menu */}
+            {/* Mobile Language Switcher & Authentication Links */}
+            {session?.user ? (
+              <div className="mt-2 border-t border-gray-100 pt-2">
+                <Link
+                  href={lang === 'en' ? '/en/dashboard/perfil' : '/dashboard/perfil'}
+                  onClick={() => setIsOpen(false)}
+                  className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
+                  style={{ color: '#33275f', textDecoration: 'none' }}
+                >
+                  {lang === 'en' ? 'My Profile' : 'Mis datos'}
+                </Link>
+                <Link
+                  href={lang === 'en' ? '/en/mis-cursos' : '/mis-cursos'}
+                  onClick={() => setIsOpen(false)}
+                  className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
+                  style={{ color: '#33275f', textDecoration: 'none' }}
+                >
+                  {lang === 'en' ? 'My Workshops' : 'Mis talleres'}
+                </Link>
+                <Link
+                  href={lang === 'en' ? '/en/dashboard/recursos' : '/dashboard/recursos'}
+                  onClick={() => setIsOpen(false)}
+                  className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
+                  style={{ color: '#33275f', textDecoration: 'none' }}
+                >
+                  {lang === 'en' ? 'My Materials' : 'Mis materiales'}
+                </Link>
+                {session.user.role === 'Admin' && (
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
+                    style={{ color: '#B681AE', textDecoration: 'none' }}
+                  >
+                    {lang === 'en' ? 'Admin Panel' : 'Panel de Admin'}
+                  </Link>
+                )}
+                <button
+                  onClick={() => {
+                    setIsOpen(false)
+                    signOut({ callbackUrl: lang === 'en' ? '/en' : '/' })
+                  }}
+                  className="text-left px-6 py-3 text-sm font-bold text-red-600 transition-colors hover:bg-red-50 w-full"
+                >
+                  {lang === 'en' ? 'Sign Out' : 'Cerrar sesión'}
+                </button>
+              </div>
+            ) : (
+              <div className="mt-2 border-t border-gray-100 pt-2">
+                <Link
+                  href={lang === 'en' ? '/en/login' : '/login'}
+                  onClick={() => setIsOpen(false)}
+                  className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
+                  style={{ color: '#33275f', textDecoration: 'none' }}
+                >
+                  {lang === 'en' ? 'Sign In' : 'Iniciar Sesión'}
+                </Link>
+              </div>
+            )}
             <div className="px-6 py-4 flex flex-col gap-4 border-t mt-2">
               <LanguageSwitcher currentLang={lang} />
-              <UserMenu user={session?.user || null} lang={lang} />
             </div>
           </div>
         </div>

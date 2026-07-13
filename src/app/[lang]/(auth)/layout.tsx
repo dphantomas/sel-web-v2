@@ -1,5 +1,4 @@
 import AuthProvider from "@/components/auth/AuthProvider";
-import PasskeyPrompt from "@/components/auth/PasskeyPrompt";
 import { Header } from "@/components/layout/Header";
 
 /**
@@ -23,7 +22,6 @@ export default async function AuthLayout({
       <main className="flex-1 flex flex-col">
         {children}
       </main>
-      <PasskeyPrompt />
     </AuthProvider>
   );
 }

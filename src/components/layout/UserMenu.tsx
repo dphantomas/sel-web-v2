@@ -103,17 +103,6 @@ export function UserMenu({
                   <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Materials' : 'Mis materiales'}</span>
                 </Link>
 
-                <Link 
-                  href={getLocalizedUrl('/dashboard/seguridad')} 
-                  onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
-                  style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
-                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8f6fc'}
-                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
-                >
-                  <Shield className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
-                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'Security & Passkeys' : 'Seguridad y Passkeys'}</span>
-                </Link>
                 
                 {user.role === 'Admin' && (
                   <Link 
