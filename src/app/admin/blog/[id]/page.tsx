@@ -311,6 +311,7 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
 }
 
 import { useParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function BlogEditorPage() {
   const params = useParams();
@@ -327,6 +328,12 @@ export default function BlogEditorPage() {
   const isNew = id === 'new';
 
   return (
-    <BlogEditorContent id={id} isNew={isNew} />
+    <Suspense fallback={
+      <div className="flex items-center justify-center h-64">
+        <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
+      </div>
+    }>
+      <BlogEditorContent id={id} isNew={isNew} />
+    </Suspense>
   );
 }
