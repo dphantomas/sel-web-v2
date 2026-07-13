@@ -6,7 +6,7 @@ import { LayoutGrid, List, BookOpen } from 'lucide-react'
 import UserCourseHistory from './UserCourseHistory'
 
 export default function MisTalleresView({ instances, lang }: { instances: any[], lang: string }) {
-  const [viewMode, setViewMode] = useState<'list' | 'grid'>('list')
+  const [viewMode, setViewMode] = useState<'list' | 'grid'>('grid')
 
   const getLocalizedUrl = (path: string) => {
     if (lang === 'es') return path;
@@ -31,22 +31,27 @@ export default function MisTalleresView({ instances, lang }: { instances: any[],
   return (
     <div className="space-y-6">
       {/* View Toggle */}
-      <div className="flex justify-between items-center bg-white/80 backdrop-blur-md rounded-[20px] p-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40">
-        <h2 className="text-[#33275f] text-lg md:text-xl font-bold tracking-wide m-0">HISTORIAL DE ENCUENTROS</h2>
-        <div className="flex bg-gray-100 p-1 rounded-xl">
-          <button
-            onClick={() => setViewMode('list')}
-            className={`p-2 rounded-lg flex items-center justify-center transition-colors ${viewMode === 'list' ? 'bg-white shadow-sm text-[#33275f]' : 'text-gray-400 hover:text-gray-600'}`}
-            title="Vista de lista"
-          >
-            <List className="w-5 h-5" />
-          </button>
+      <div className="flex justify-between items-center mb-6">
+        <div className="flex items-center gap-3">
+          <h2 className="text-[#33275f] text-xl font-bold tracking-wide">HISTORIAL DE ENCUENTROS</h2>
+          <span className="bg-[#B681AE]/10 text-[#33275f] text-xs font-bold px-3 py-1 rounded-full hidden sm:inline-block">
+            {instances.length} Participaciones
+          </span>
+        </div>
+        <div className="flex bg-white/80 backdrop-blur-md p-1 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40">
           <button
             onClick={() => setViewMode('grid')}
-            className={`p-2 rounded-lg flex items-center justify-center transition-colors ${viewMode === 'grid' ? 'bg-white shadow-sm text-[#33275f]' : 'text-gray-400 hover:text-gray-600'}`}
+            className={`p-2 rounded-lg flex items-center justify-center transition-colors ${viewMode === 'grid' ? 'bg-[#33275f] shadow-sm text-white' : 'text-gray-400 hover:text-gray-600'}`}
             title="Vista de mosaico"
           >
             <LayoutGrid className="w-5 h-5" />
+          </button>
+          <button
+            onClick={() => setViewMode('list')}
+            className={`p-2 rounded-lg flex items-center justify-center transition-colors ${viewMode === 'list' ? 'bg-[#33275f] shadow-sm text-white' : 'text-gray-400 hover:text-gray-600'}`}
+            title="Vista de lista"
+          >
+            <List className="w-5 h-5" />
           </button>
         </div>
       </div>
