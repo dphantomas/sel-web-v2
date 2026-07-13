@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { signOut } from 'next-auth/react';
-import { LogOut, BookOpen, Settings, User, LogIn } from 'lucide-react';
+import { LogOut, BookOpen, Settings, User, LogIn, Shield, Folder } from 'lucide-react';
 
 export function UserMenu({ 
   user, 
@@ -68,15 +68,51 @@ export function UserMenu({
               </div>
               <div className="p-2">
                 <Link 
-                  href={getLocalizedUrl('/mis-cursos')} 
+                  href={getLocalizedUrl('/dashboard/perfil')} 
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group"
                   style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
                   onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8f6fc'}
                   onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
                 >
+                  <User className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
+                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Profile' : 'Mis datos'}</span>
+                </Link>
+
+                <Link 
+                  href={getLocalizedUrl('/mis-cursos')} 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
+                  style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8f6fc'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
                   <BookOpen className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
-                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Courses' : 'Mis Cursos'}</span>
+                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Workshops' : 'Mis talleres'}</span>
+                </Link>
+
+                <Link 
+                  href={getLocalizedUrl('/dashboard/recursos')} 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
+                  style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8f6fc'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <Folder className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
+                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Materials' : 'Mis materiales'}</span>
+                </Link>
+
+                <Link 
+                  href={getLocalizedUrl('/dashboard/seguridad')} 
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
+                  style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f8f6fc'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'transparent'}
+                >
+                  <Shield className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
+                  <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'Security & Passkeys' : 'Seguridad y Passkeys'}</span>
                 </Link>
                 
                 {user.role === 'Admin' && (

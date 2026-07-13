@@ -7,7 +7,7 @@ import Link from 'next/link'
 import { Eye, EyeOff, Fingerprint, Loader2 } from 'lucide-react'
 import { startAuthentication, platformAuthenticatorIsAvailable } from '@simplewebauthn/browser'
 
-export function LoginForm() {
+export function LoginForm({ googleEnabled = true }: { googleEnabled?: boolean }) {
   const router = useRouter()
   const searchParams = useSearchParams()
   const params = useParams()
@@ -173,7 +173,7 @@ export function LoginForm() {
         </div>
       )}
 
-      {!biometricAvailable && (
+      {!biometricAvailable && googleEnabled && (
         <div className="mb-6">
           <button
             id="google-login-btn"
@@ -196,7 +196,7 @@ export function LoginForm() {
         </div>
       )}
 
-      {biometricAvailable && (
+      {biometricAvailable && googleEnabled && (
         <div className="mb-5">
           <button
             onClick={() => { setLoading(true); signIn('google', { callbackUrl: `/${lang}` }) }}
