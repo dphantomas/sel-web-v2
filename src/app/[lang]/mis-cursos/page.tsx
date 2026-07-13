@@ -6,6 +6,11 @@ import MisTalleresView from "@/components/dashboard/MisTalleresView";
 
 export const dynamic = 'force-dynamic';
 
+export const metadata = {
+  title: 'Mis Talleres | Sanación en Luz',
+  description: 'Historial de encuentros y participaciones.'
+};
+
 export default async function MyCoursesPage({ params }: { params: Promise<{ lang: string }> }) {
   const { lang } = await params;
   const session = await getServerSession(authOptions);
@@ -50,10 +55,10 @@ export default async function MyCoursesPage({ params }: { params: Promise<{ lang
         <div className="bg-white/80 backdrop-blur-md rounded-[24px] p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h1 className="text-[#33275f] text-2xl md:text-3xl font-bold mt-1">
-              Hola, {user.firstName} {user.lastName}
+              Mis Talleres
             </h1>
             <p className="text-gray-600 text-sm mt-1">
-              Rol: <strong className="text-[#B681AE]">{user.role}</strong>
+              Historial de encuentros y participaciones.
             </p>
           </div>
         </div>
