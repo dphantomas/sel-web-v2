@@ -5,6 +5,7 @@ import { UploadCloud, User as UserIcon } from 'lucide-react'
 import ImageCropperModal from '@/components/ImageCropperModal'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
+import { COUNTRIES } from '@/lib/countries'
 
 // ─── Componente Principal ─────────────────────────────────────────────────────
 
@@ -213,12 +214,16 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
 
         <div>
           <label className="block text-xs font-bold text-gray-500 uppercase mb-1">País</label>
-          <input
-            type="text"
+          <select
             value={formData.country}
             onChange={(e: any) => setFormData({ ...formData, country: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
-          />
+            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white"
+          >
+            <option value="">Seleccioná tu país</option>
+            {COUNTRIES.map(c => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
         </div>
         <div className="md:col-span-2">
           <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Dirección (Línea 1)</label>
