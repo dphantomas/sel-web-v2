@@ -2,7 +2,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
-import UserCourseHistory from "@/components/dashboard/UserCourseHistory";
+import MisTalleresView from "@/components/dashboard/MisTalleresView";
 
 export const dynamic = 'force-dynamic';
 
@@ -60,11 +60,7 @@ export default async function MyCoursesPage({ params }: { params: Promise<{ lang
 
         {/* Contenido */}
         <div className="animate-in fade-in slide-in-from-bottom-2 duration-500 space-y-12">
-          {/* Historial de Encuentros (Instancias) */}
-          <div>
-            <h2 className="text-[#33275f] text-xl font-bold mb-6 tracking-wide">HISTORIAL DE ENCUENTROS</h2>
-            <UserCourseHistory instances={user.unlockedInstances} />
-          </div>
+          <MisTalleresView instances={user.unlockedInstances} lang={lang} />
         </div>
 
       </div>
