@@ -50,10 +50,10 @@ export default async function MyCoursesPage({ params }: { params: Promise<{ lang
         <div className="bg-white/80 backdrop-blur-md rounded-[24px] p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40 mb-8 flex flex-col md:flex-row items-center justify-between gap-6">
           <div>
             <h1 className="text-[#33275f] text-2xl md:text-3xl font-bold mt-1">
-              Mis Talleres
+              Hola, {user.firstName} {user.lastName}
             </h1>
             <p className="text-gray-600 text-sm mt-1">
-              Historial de encuentros y participaciones.
+              Rol: <strong className="text-[#B681AE]">{user.role}</strong>
             </p>
           </div>
         </div>
