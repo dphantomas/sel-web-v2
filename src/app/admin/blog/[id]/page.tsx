@@ -311,7 +311,6 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
 }
 
 import { useParams } from "next/navigation";
-import { Suspense } from "react";
 
 export default function BlogEditorPage() {
   const params = useParams();
