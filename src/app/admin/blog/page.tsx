@@ -73,7 +73,7 @@ export default async function AdminBlogPage() {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex flex-wrap gap-2">
-                          {group.map(p => (
+                          {[...group].sort((a, b) => a.language === 'es' ? -1 : b.language === 'es' ? 1 : 0).map(p => (
                             <Link 
                               key={p.id} 
                               href={`/admin/blog/${p.id}`} 
