@@ -101,7 +101,7 @@ const providers: any[] = [
               credentialID: Buffer.from(authenticator.credentialID, 'base64url'),
               credentialPublicKey: Buffer.from(authenticator.credentialPublicKey, 'base64url'),
               counter: authenticator.counter,
-              transports: authenticator.transports ? JSON.parse(authenticator.transports) : undefined,
+              transports: authenticator.transports ? authenticator.transports.split(',') as any : undefined,
             },
           })
         } catch (error: any) {
