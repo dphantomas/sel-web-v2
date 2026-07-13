@@ -47,7 +47,7 @@ export function NavbarClient({
   };
 
   const isHome = pathname === "/" || pathname === "/en" || pathname === "/es";
-  const isLightHeaderPage = ['/login', '/registro', '/verificar-email', '/olvide-contrasena', '/reset-password', '/dashboard', '/admin'].some(route => pathname.startsWith(route));
+  const isLightHeaderPage = ['/login', '/registro', '/verificar-email', '/olvide-contrasena', '/reset-password', '/dashboard', '/admin', '/mis-cursos', '/en/mis-cursos'].some(route => pathname.startsWith(route));
   const hasDarkHeader = !isLightHeaderPage;
   const textColor = (!isScrolled && hasDarkHeader) ? "#ffffff" : "#33275f";
   const borderColor = (!isScrolled && hasDarkHeader) ? "#ffffff" : "#33275f";
