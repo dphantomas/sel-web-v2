@@ -310,20 +310,23 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
   );
 }
 
-function BlogEditorWrapper({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
-  const isNew = id === 'new';
-  return <BlogEditorContent id={id} isNew={isNew} />;
-}
+import { useParams } from "next/navigation";
 
-export default function BlogEditorPage({ params }: { params: Promise<{ id: string }> }) {
-  return (
-    <Suspense fallback={
+export default function BlogEditorPage() {
+  const params = useParams();
+  const id = params?.id as string;
+  
+  if (!id) {
+    return (
       <div className="flex items-center justify-center h-64">
         <Loader2 className="w-8 h-8 animate-spin text-zinc-400" />
       </div>
-    }>
-      <BlogEditorWrapper params={params} />
-    </Suspense>
+    );
+  }
+
+  const isNew = id === 'new';
+
+  return (
+    <BlogEditorContent id={id} isNew={isNew} />
   );
 }
