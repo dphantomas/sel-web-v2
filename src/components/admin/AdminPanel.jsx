@@ -1076,19 +1076,19 @@ export default function AdminPanel({ initialUsers, courses: initialCourses }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">Nombre</label>
-                        <input type="text" name="firstName" required defaultValue={editingUser.firstName} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="firstName" required defaultValue={editingUser.firstName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">Apellido</label>
-                        <input type="text" name="lastName" required defaultValue={editingUser.lastName} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="lastName" required defaultValue={editingUser.lastName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">Nombre de Chispa</label>
-                        <input type="text" name="sparkName" defaultValue={editingUser.sparkName || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" placeholder="Opcional" />
+                        <input type="text" name="sparkName" defaultValue={editingUser.sparkName || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" placeholder="Opcional" />
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">Celular / WhatsApp</label>
-                        <input type="text" name="phone" defaultValue={editingUser.phone || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="phone" defaultValue={editingUser.phone || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-gray-700 mb-1">Rol en la Plataforma</label>
@@ -1096,7 +1096,7 @@ export default function AdminPanel({ initialUsers, courses: initialCourses }) {
                           name="role" 
                           key={`role-${editingUser.role}-${editingUser.unlockedCourses?.length}`}
                           defaultValue={(editingUser.role === 'Guest' && editingUser.unlockedCourses?.length > 0) ? 'Participante' : editingUser.role} 
-                          className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white"
+                          className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white"
                         >
                           <option value="Guest">Invitado (Guest)</option>
                           <option value="Participante">Participante</option>
@@ -1113,19 +1113,19 @@ export default function AdminPanel({ initialUsers, courses: initialCourses }) {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-gray-700 mb-1">Dirección</label>
-                        <input type="text" name="addressLine1" defaultValue={editingUser.addressLine1 || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="addressLine1" defaultValue={editingUser.addressLine1 || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-gray-700 mb-1">Ciudad, Provincia</label>
-                        <input type="text" name="addressLine2" defaultValue={editingUser.addressLine2 || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="addressLine2" defaultValue={editingUser.addressLine2 || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">Código Postal</label>
-                        <input type="text" name="zipCode" defaultValue={editingUser.zipCode || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <input type="text" name="zipCode" defaultValue={editingUser.zipCode || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-700 mb-1">País</label>
-                        <select name="country" defaultValue={editingUser.country || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white">
+                        <select name="country" defaultValue={editingUser.country || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white">
                           <option value="" disabled>Seleccionar...</option>
                           <option value="Argentina">Argentina</option>
                           <option value="Bolivia">Bolivia</option>

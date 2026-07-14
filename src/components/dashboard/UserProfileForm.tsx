@@ -168,7 +168,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             required
             value={formData.firstName}
             onChange={(e: any) => setFormData({ ...formData, firstName: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         <div>
@@ -178,7 +178,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             required
             value={formData.lastName}
             onChange={(e: any) => setFormData({ ...formData, lastName: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         {(hasInitiatoryRetreat || user.sparkName) && (
@@ -188,7 +188,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
               type="text"
               value={formData.sparkName}
               onChange={(e: any) => setFormData({ ...formData, sparkName: e.target.value })}
-              className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+              className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
             />
           </div>
         )}
@@ -198,7 +198,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="email"
             disabled
             value={user.email}
-            className="w-full px-4 py-2 rounded-xl border bg-gray-100 text-gray-500 cursor-not-allowed outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border bg-gray-100 text-gray-500 cursor-not-allowed outline-none"
           />
         </div>
         <div>
@@ -207,7 +207,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="text"
             value={formData.phone}
             onChange={(e: any) => setFormData({ ...formData, phone: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         <div>
@@ -242,7 +242,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="text"
             value={formData.addressLine1}
             onChange={(e: any) => setFormData({ ...formData, addressLine1: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         <div>
@@ -251,7 +251,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="text"
             value={formData.addressLine2}
             onChange={(e: any) => setFormData({ ...formData, addressLine2: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         <div>
@@ -260,7 +260,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="text"
             value={formData.zipCode}
             onChange={(e: any) => setFormData({ ...formData, zipCode: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
 
