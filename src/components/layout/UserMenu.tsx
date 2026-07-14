@@ -67,7 +67,7 @@ export function UserMenu({
                 )}
               </div>
               <div className="p-2">
-                <Link 
+                <a 
                   href={getLocalizedUrl('/dashboard/perfil')} 
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group"
@@ -77,9 +77,9 @@ export function UserMenu({
                 >
                   <User className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
                   <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Profile' : 'Mis datos'}</span>
-                </Link>
+                </a>
 
-                <Link 
+                <a 
                   href={getLocalizedUrl('/mis-cursos')} 
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
@@ -89,9 +89,9 @@ export function UserMenu({
                 >
                   <BookOpen className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
                   <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Workshops' : 'Mis talleres'}</span>
-                </Link>
+                </a>
 
-                <Link 
+                <a 
                   href={getLocalizedUrl('/dashboard/recursos')} 
                   onClick={() => setIsOpen(false)}
                   className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
@@ -101,11 +101,11 @@ export function UserMenu({
                 >
                   <Folder className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#2ea3f2' }} />
                   <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'My Materials' : 'Mis materiales'}</span>
-                </Link>
+                </a>
 
                 
                 {user.role === 'Admin' && (
-                  <Link 
+                  <a 
                     href="/admin" 
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
@@ -115,7 +115,7 @@ export function UserMenu({
                   >
                     <Settings className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#b085b3' }} />
                     <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'Admin Panel' : 'Panel Admin'}</span>
-                  </Link>
+                  </a>
                 )}
               </div>
               <div className="p-2 border-t border-gray-100 bg-[#faf9fc]">
@@ -133,7 +133,7 @@ export function UserMenu({
             </>
           ) : (
             <div className="p-2">
-              <Link 
+              <a 
                 href={getLocalizedUrl('/login')} 
                 onClick={() => setIsOpen(false)}
                 className="flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors group"
@@ -143,7 +143,7 @@ export function UserMenu({
               >
                 <LogIn className="w-5 h-5 transition-transform group-hover:scale-110" style={{ color: '#b085b3' }} />
                 <span>{lang === 'en' ? 'Sign In' : 'Iniciar Sesión'}</span>
-              </Link>
+              </a>
             </div>
           )}
         </div>

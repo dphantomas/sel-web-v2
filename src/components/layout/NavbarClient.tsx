@@ -55,7 +55,7 @@ export function NavbarClient({
   return (
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'navbar-scrolled py-2' : 'py-3 bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 md:px-6 flex justify-between items-center">
-        <Link href={getLocalizedUrl("/")} className="shrink-0" title="Home">
+        <a href={getLocalizedUrl("/")} className="shrink-0" title="Home">
           <Image
             src="/assets/logo-sel.png"
             alt="Sanación en Luz"
@@ -65,7 +65,7 @@ export function NavbarClient({
             className="h-10 md:h-12 w-auto object-contain transition-all duration-300"
             style={(!isScrolled && hasDarkHeader) ? { filter: 'brightness(0) invert(1)' } : {}}
           />
-        </Link>
+        </a>
 
         <div className="hidden lg:flex items-center gap-5 xl:gap-7">
           {navItems.map((item) => (
@@ -105,57 +105,54 @@ export function NavbarClient({
         <div className="lg:hidden bg-white border-t shadow-xl absolute top-full left-0 w-full">
           <div className="flex flex-col py-4">
             {navItems.map((item) => (
-              <Link
+              <a
                 key={item.href}
                 href={item.href}
                 onClick={() => setIsOpen(false)}
-                className="text-left px-6 py-3 text-sm transition-colors hover:bg-purple-50"
-                style={{
-                  color: isActive(item.href) ? '#33275f' : '#555',
-                  fontWeight: isActive(item.href) ? '700' : '500',
-                  borderLeft: isActive(item.href) ? '3px solid #33275f' : '3px solid transparent',
-                }}
+                className={`block px-6 py-3 text-sm font-bold uppercase tracking-wider transition-colors duration-300 ${
+                  isActive(item.href) ? 'text-[#b085b3]' : 'text-[#33275f]'
+                }`}
               >
                 {item.label}
-              </Link>
+              </a>
             ))}
             
             {/* Mobile Language Switcher & Authentication Links */}
             {session?.user ? (
               <div className="mt-2 border-t border-gray-100 pt-2">
-                <Link
+                <a
                   href={lang === 'en' ? '/en/dashboard/perfil' : '/dashboard/perfil'}
                   onClick={() => setIsOpen(false)}
                   className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                   style={{ color: '#33275f', textDecoration: 'none' }}
                 >
                   {lang === 'en' ? 'My Profile' : 'Mis datos'}
-                </Link>
-                <Link
+                </a>
+                <a
                   href={lang === 'en' ? '/en/mis-cursos' : '/mis-cursos'}
                   onClick={() => setIsOpen(false)}
                   className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                   style={{ color: '#33275f', textDecoration: 'none' }}
                 >
                   {lang === 'en' ? 'My Workshops' : 'Mis talleres'}
-                </Link>
-                <Link
+                </a>
+                <a
                   href={lang === 'en' ? '/en/dashboard/recursos' : '/dashboard/recursos'}
                   onClick={() => setIsOpen(false)}
                   className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                   style={{ color: '#33275f', textDecoration: 'none' }}
                 >
                   {lang === 'en' ? 'My Materials' : 'Mis materiales'}
-                </Link>
+                </a>
                 {session.user.role === 'Admin' && (
-                  <Link
+                  <a
                     href="/admin"
                     onClick={() => setIsOpen(false)}
                     className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                     style={{ color: '#B681AE', textDecoration: 'none' }}
                   >
                     {lang === 'en' ? 'Admin Panel' : 'Panel de Admin'}
-                  </Link>
+                  </a>
                 )}
                 <button
                   onClick={() => {
@@ -169,14 +166,14 @@ export function NavbarClient({
               </div>
             ) : (
               <div className="mt-2 border-t border-gray-100 pt-2">
-                <Link
+                <a
                   href={lang === 'en' ? '/en/login' : '/login'}
                   onClick={() => setIsOpen(false)}
                   className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                   style={{ color: '#33275f', textDecoration: 'none' }}
                 >
                   {lang === 'en' ? 'Sign In' : 'Iniciar Sesión'}
-                </Link>
+                </a>
               </div>
             )}
             <div className="px-6 py-4 flex flex-col gap-4 border-t mt-2">
