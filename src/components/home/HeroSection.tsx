@@ -79,10 +79,6 @@ export function HeroSection({ dict, lang, session }: HeroSectionProps) {
             )}
           </div>
           
-          {/* Scroll down indicator */}
-          <div className="absolute bottom-6 animate-bounce cursor-pointer opacity-80 hover:opacity-100 transition-opacity" onClick={() => document.getElementById("process-section")?.scrollIntoView({ behavior: "smooth" })}>
-            <Image src="/assets/flecha-blanca.png" alt="Scroll down" width={32} height={32} className="w-8 rotate-90" />
-          </div>
         </div>
       </section>
     </div>
