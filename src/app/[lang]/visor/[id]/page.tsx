@@ -3,6 +3,7 @@ import { authOptions } from '@/modules/auth/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getPresignedDownloadUrl } from '@/modules/media/s3'
+import { SecureVideo, SecureAudio } from '@/components/ui/SecureMedia'
 
 export const metadata = {
   title: 'Visor de Materiales | Sanación en Luz',
@@ -42,9 +43,10 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
     redirect('/dashboard/recursos')
   }
 
-  const isPdf = resource.type.includes('pdf')
-  const isAudio = resource.type.includes('audio')
-  const isVideo = resource.type.includes('video')
+  const resourceType = (resource.type || '').toLowerCase()
+  const isPdf = resourceType.includes('pdf')
+  const isAudio = resourceType.includes('audio') || resourceType.includes('mp3') || resourceType.includes('m4a')
+  const isVideo = resourceType.includes('video') || resourceType.includes('mp4')
 
   let url = ''
   try {
@@ -84,13 +86,7 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
         
         {isVideo && (
           <div className="w-full bg-black rounded-xl shadow-lg overflow-hidden border border-gray-800">
-            <video 
-              src={url} 
-              controls 
-              controlsList="nodownload"
-              onContextMenu={(e) => e.preventDefault()}
-              className="w-full max-h-[80vh] object-contain" 
-            />
+            <SecureVideo src={url} />
           </div>
         )}
         
@@ -106,13 +102,7 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
               <h2 className="text-[#33275f] font-bold text-lg">{resource.name}</h2>
               <p className="text-gray-500 text-sm mt-1">Audio</p>
             </div>
-            <audio 
-              src={url} 
-              controls 
-              controlsList="nodownload"
-              onContextMenu={(e) => e.preventDefault()}
-              className="w-full custom-audio-player" 
-            />
+            <SecureAudio src={url} />
           </div>
         )}
         
