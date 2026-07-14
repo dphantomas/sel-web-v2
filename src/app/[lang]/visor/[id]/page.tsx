@@ -4,6 +4,7 @@ import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getPresignedDownloadUrl } from '@/modules/media/s3'
 import { SecureVideo, SecureAudio } from '@/components/ui/SecureMedia'
+import { SecurePDFViewer } from '@/components/ui/SecurePDFViewer'
 
 export const metadata = {
   title: 'Visor de Materiales | Sanación en Luz',
@@ -75,13 +76,9 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
       
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
         {isPdf && (
-          <iframe 
-            src={url} 
-            className="w-full h-[85vh] rounded-xl shadow-lg border border-gray-200 bg-white" 
-            title={resource.name}
-            // Some browsers try to download PDFs if they can't render them, we can't prevent that 100% 
-            // but the inline presigned URL headers prevent the immediate download prompt.
-          />
+          <div className="w-full">
+            <SecurePDFViewer url={url} />
+          </div>
         )}
         
         {isVideo && (
