@@ -19,12 +19,16 @@ export default async function AdminLayout({ children }: { children: React.ReactN
         style={{ position: 'fixed', top: 0, left: 0, bottom: 0, width: '16rem', zIndex: 40 }}
         className="hidden md:flex flex-col bg-white border-r border-sel-lavender/30 font-sans text-sel-body dark:bg-zinc-900 dark:border-zinc-800 dark:text-zinc-400 transition-colors"
       >
-        <div className="h-16 flex items-center px-6 border-b border-sel-lavender/30 flex-shrink-0 dark:border-zinc-800">
-          <Link href="/admin" className="font-bold text-lg tracking-tight text-sel-purple flex items-center gap-2 dark:text-white">
+        <div className="py-5 flex flex-col px-6 border-b border-sel-lavender/30 flex-shrink-0 dark:border-zinc-800">
+          <Link href="/admin" className="font-bold text-lg tracking-tight text-sel-purple flex items-center gap-2 dark:text-white mb-3">
             <div className="w-8 h-8 bg-sel-purple text-white rounded-lg flex items-center justify-center text-sm font-bold dark:bg-white dark:text-zinc-900">
               SL
             </div>
             Sanación Admin
+          </Link>
+          <Link href="/" className="flex items-center gap-2 text-sm font-medium text-sel-body hover:text-sel-purple dark:text-zinc-400 dark:hover:text-white transition-colors ml-10">
+            <ArrowLeft className="w-4 h-4" />
+            Volver a la Web
           </Link>
         </div>
         
@@ -58,12 +62,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
           </div>
         </nav>
         
-        <div className="p-4 border-t border-sel-lavender/30 flex-shrink-0 dark:border-zinc-800 space-y-2">
+        <div className="p-4 border-t border-sel-lavender/30 flex-shrink-0 dark:border-zinc-800 flex justify-center">
           <ThemeToggle />
-          <Link href="/" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            Volver a la Web
-          </Link>
         </div>
       </aside>
 
