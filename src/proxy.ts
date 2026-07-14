@@ -41,19 +41,10 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Si alguien entra a /es/... lo redirigimos a /... (para que ES no tenga prefijo)
-  if (pathname.startsWith('/es/') || pathname === '/es') {
-    request.nextUrl.pathname = pathname.replace(/^\/es/, '') || '/';
-    return NextResponse.redirect(request.nextUrl);
-  }
-
-  // Si ya tiene el prefijo /en/, lo dejamos pasar normalmente
-  if (pathname.startsWith('/en/') || pathname === '/en') {
-    return NextResponse.next();
-  }
- 
-  // Llegados a este punto, la ruta NO tiene prefijo de idioma (es una ruta "limpia" como /cursos o /).
-  // Solo en la raíz (/) hacemos detección de idioma activa y redireccionamos si es necesario.
+  // Toda la lógica de reescritura de rutas limpias a /es/ ahora se maneja
+  // en next.config.ts (rewrites) para que sea compatible con next/link en el cliente.
+  
+  // Si alguien entra a la raíz, detectamos idioma para redireccionar a /en si hace falta
   if (pathname === '/') {
     const locale = getLocale(request);
     if (locale === 'en') {
@@ -62,10 +53,7 @@ export async function proxy(request: NextRequest) {
     }
   }
 
-  // Para el resto de rutas sin prefijo, o si la raíz detectó español, asumimos que es el defaultLocale (es).
-  // Hacemos un REWRITE (no redirect) para que internamente Next.js procese app/[lang] con lang='es'.
-  request.nextUrl.pathname = `/es${pathname}`;
-  return NextResponse.rewrite(request.nextUrl);
+  return NextResponse.next();
 }
 
 export const config = {

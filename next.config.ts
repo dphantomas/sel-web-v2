@@ -17,6 +17,18 @@ const nextConfig: NextConfig = {
   // experimental: {
   //   allowedDevOrigins: ['192.168.1.119', 'localhost:3000'],
   // },
+  async rewrites() {
+    return [
+      {
+        source: '/:path((?!es|en|api|_next|assets|favicon.ico|admin).*)',
+        destination: '/es/:path*',
+      },
+      {
+        source: '/',
+        destination: '/es',
+      }
+    ];
+  },
 };
 
 export default nextConfig;
