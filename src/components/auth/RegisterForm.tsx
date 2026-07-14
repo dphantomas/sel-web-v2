@@ -124,7 +124,7 @@ export function RegisterForm() {
             <div>
               <label className="block text-xs font-semibold text-[#33275f] uppercase tracking-wider mb-2">Fecha Nacimiento</label>
               <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-800 bg-white/60" />
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-900 bg-white/60" />
             </div>
           </div>
 

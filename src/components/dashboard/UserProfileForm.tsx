@@ -216,7 +216,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             type="date"
             value={formData.birthDate}
             onChange={(e: any) => setFormData({ ...formData, birthDate: e.target.value })}
-            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white text-gray-900"
           />
         </div>
         <div className="md:col-span-2 mt-2">
