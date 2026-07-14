@@ -3,8 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import { remark } from "remark";
-import html from "remark-html";
+import DOMPurify from "isomorphic-dompurify";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
@@ -62,11 +61,8 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const imageUrl = post.coverImage;
 
-  // Procesar markdown a HTML
-  const processedContent = await remark()
-    .use(html)
-    .process(post.content);
-  const contentHtml = processedContent.toString();
+  // Sanitizar HTML
+  const contentHtml = DOMPurify.sanitize(post.content);
 
   return (
     <article className="bg-white">
@@ -111,7 +107,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
       {/* Post content */}
       <div className="max-w-3xl mx-auto px-4 md:px-6 pb-8">
         <div
-          className="wp-content"
+          className="wp-content prose prose-sm sm:prose-base dark:prose-invert max-w-none"
           style={{ fontFamily: "'Open Sans', Arial, sans-serif", fontSize: '15px', color: '#666', lineHeight: '1.7em' }}
           dangerouslySetInnerHTML={{ __html: contentHtml }}
         />

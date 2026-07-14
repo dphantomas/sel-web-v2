@@ -7,7 +7,7 @@ import { sendEmail } from '@/modules/auth/email'
 
 export async function POST(request) {
   try {
-    const { firstName, lastName, email, phone, password } = await request.json()
+    const { firstName, lastName, email, phone, birthDate, password } = await request.json()
 
     if (!firstName || !lastName || !email || !password) {
       return NextResponse.json(
@@ -50,6 +50,14 @@ export async function POST(request) {
     // Hashear contraseña
     const passwordHash = await bcrypt.hash(password, 10)
 
+    let parsedBirthDate = null
+    if (birthDate) {
+      const bDate = new Date(birthDate)
+      if (!isNaN(bDate.getTime())) {
+        parsedBirthDate = bDate
+      }
+    }
+
     // Crear el usuario
     const newUser = await prisma.user.create({
       data: {
@@ -57,6 +65,7 @@ export async function POST(request) {
         lastName: lastName.trim(),
         email: emailLower,
         phone: phone ? phone.trim() : null,
+        birthDate: parsedBirthDate,
         passwordHash,
         role: 'Guest' // Rol por defecto
       }

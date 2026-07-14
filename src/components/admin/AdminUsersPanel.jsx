@@ -1070,6 +1070,10 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                         <label className="block text-xs font-bold text-gray-700 mb-1">Celular / WhatsApp</label>
                         <input type="text" name="phone" defaultValue={editingUser.phone || ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Fecha Nacimiento</label>
+                        <input type="date" name="birthDate" defaultValue={editingUser.birthDate ? new Date(editingUser.birthDate).toISOString().split('T')[0] : ''} className="w-full px-4 py-2.5 rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                      </div>
                       <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-gray-700 mb-1">Rol en la Plataforma</label>
                         <select 

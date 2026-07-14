@@ -11,9 +11,10 @@ import { COUNTRIES } from '@/lib/countries'
 
 export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: any, hasInitiatoryRetreat: any }) {
   const [formData, setFormData] = useState({
-    firstName: user.firstName,
-    lastName: user.lastName,
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
     phone: user.phone || '',
+    birthDate: user.birthDate ? new Date(user.birthDate).toISOString().split('T')[0] : '',
     addressLine1: user.addressLine1 || '',
     addressLine2: user.addressLine2 || '',
     zipCode: user.zipCode || '',
@@ -59,6 +60,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
       formPayload.append('zipCode', formData.zipCode)
       formPayload.append('country', formData.country)
       formPayload.append('sparkName', formData.sparkName)
+      formPayload.append('birthDate', formData.birthDate)
       if (croppedImageBlob) {
         formPayload.append('image', croppedImageBlob, 'profile.jpg')
       } else if (removeImage) {
@@ -208,6 +210,15 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
+        <div>
+          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Fecha Nacimiento</label>
+          <input
+            type="date"
+            value={formData.birthDate}
+            onChange={(e: any) => setFormData({ ...formData, birthDate: e.target.value })}
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white"
+          />
+        </div>
         <div className="md:col-span-2 mt-2">
           <h3 className="text-sm font-bold text-[#33275f] border-b pb-1">Datos Adicionales</h3>
         </div>
@@ -217,7 +228,7 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
           <select
             value={formData.country}
             onChange={(e: any) => setFormData({ ...formData, country: e.target.value })}
-            className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white"
+            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white"
           >
             <option value="">Seleccioná tu país</option>
             {COUNTRIES.map(c => (

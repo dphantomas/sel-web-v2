@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { createReview, updateReview } from "@/app/actions/review-actions";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
+import { ReviewContentEditor } from "@/components/admin/ReviewContentEditor";
 
 export default async function ReviewEditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -55,14 +56,8 @@ export default async function ReviewEditPage({ params }: { params: Promise<{ id:
         </div>
 
         <div className="space-y-2">
-          <label className="text-sm font-bold text-sel-purple">Contenido (Admite Markdown) *</label>
-          <textarea 
-            name="content" 
-            defaultValue={review?.content || ""}
-            required 
-            rows={5}
-            className="w-full px-4 py-2 bg-[#fcfbfe] border border-sel-lavender/30 rounded-lg focus:outline-none focus:ring-2 focus:ring-sel-purple text-sel-body" 
-          />
+          <label className="text-sm font-bold text-sel-purple">Contenido (Admite Markdown/HTML) *</label>
+          <ReviewContentEditor initialContent={review?.content || ""} />
         </div>
 
         <div className="flex items-center gap-3 py-2">

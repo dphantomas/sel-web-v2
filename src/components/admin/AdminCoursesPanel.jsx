@@ -899,10 +899,10 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                 )}
                 
                 <h3 className="font-bold text-[#33275f] text-lg mb-1 pr-6">{course.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-3 mb-4 mt-2">{course.shortDescription || 'Sin descripción'}</p>
+                <p className="text-sm text-gray-600 line-clamp-3 mb-4 mt-2 flex-grow">{course.shortDescription || 'Sin descripción'}</p>
                 <button
                   onClick={() => setEditingCourse(course)}
-                  className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition w-full"
+                  className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition w-full mt-auto"
                 >
                   Editar Información
                 </button>

@@ -5,6 +5,8 @@ import useEmblaCarousel from "embla-carousel-react";
 import AutoScroll from "embla-carousel-auto-scroll";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import DOMPurify from "isomorphic-dompurify";
+
 interface Review {
   id: string;
   authorName: string;
@@ -94,9 +96,11 @@ export function HomeTestimonialCarousel({ reviews, isEn }: HomeTestimonialCarous
                 className="flex-[0_0_100%] min-w-0 px-4 md:px-8"
               >
                 <div className="flex flex-col items-center justify-center min-h-[120px]">
-                  <p className="text-[#555] text-base md:text-lg italic mb-6 mt-4 text-center w-full" style={{ fontFamily: "'Open Sans', sans-serif", lineHeight: '1.7em' }}>
-                    {review.content}
-                  </p>
+                  <div 
+                    className="text-[#555] text-base md:text-lg mb-6 mt-4 text-center w-full prose prose-sm md:prose-base mx-auto max-w-none" 
+                    style={{ fontFamily: "'Open Sans', sans-serif", lineHeight: '1.7em' }}
+                    dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(review.content) }}
+                  />
                   <p className="text-[#b085b3] font-bold text-base uppercase tracking-wider text-center w-full">
                     — {review.authorName} {review.authorRole ? `(${review.authorRole})` : ''}
                   </p>

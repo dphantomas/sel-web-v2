@@ -6,6 +6,7 @@ import Link from "next/link";
 import { ArrowLeft, Save, Trash2, Loader2, Image as ImageIcon, UploadCloud } from "lucide-react";
 import { createPost, updatePost, deletePost } from "@/modules/blog/actions";
 import { CldUploadWidget } from "next-cloudinary";
+import { RichTextEditor } from "@/components/ui/RichTextEditor";
 
 function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
   const router = useRouter();
@@ -200,17 +201,13 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
 
           <div>
             <div className="flex items-center justify-between mb-2">
-              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Contenido (Markdown)</label>
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">Contenido del Artículo</label>
             </div>
-            <textarea 
-              required
-              rows={15}
+            <RichTextEditor 
               value={formData.content}
-              onChange={(e) => setFormData({...formData, content: e.target.value})}
-              className="w-full px-4 py-4 bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl text-sm font-mono text-zinc-900 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500/50"
-              placeholder="# Escribe aquí el contenido..."
+              onChange={(htmlOutput) => setFormData({...formData, content: htmlOutput})}
+              placeholder="Escribe el contenido del artículo aquí..."
             />
-            <p className="text-xs text-zinc-500 mt-2">Próximamente editor WYSIWYG. Por ahora, utilizá sintaxis Markdown.</p>
           </div>
         </div>
 

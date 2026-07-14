@@ -3,6 +3,7 @@ import { authOptions } from "@/modules/auth/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import MisTalleresView from "@/components/dashboard/MisTalleresView";
+import Link from "next/link";
 
 export const dynamic = 'force-dynamic';
 
@@ -60,6 +61,14 @@ export default async function MyCoursesPage({ params }: { params: Promise<{ lang
             <p className="text-gray-600 text-sm mt-1">
               Historial de encuentros y participaciones.
             </p>
+          </div>
+          <div>
+            <Link 
+              href={`/${lang}/escribir-resena`}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#9187ba] text-white rounded-xl font-bold shadow-sm hover:bg-[#b085b3] transition-colors whitespace-nowrap"
+            >
+              Compartir Experiencia
+            </Link>
           </div>
         </div>
 

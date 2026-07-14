@@ -23,6 +23,7 @@ model User {
   updatedAt        DateTime  @updatedAt
   currentChallenge String?
   sparkName        String?
+  birthDate        DateTime?
 
   authenticators Authenticator[]
 

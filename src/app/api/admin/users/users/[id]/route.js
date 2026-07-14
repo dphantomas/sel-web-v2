@@ -162,6 +162,7 @@ export async function PUT(req, { params }) {
         zipCode: zipCode !== null ? zipCode.trim() : undefined,
         country: country !== null ? country.trim() : undefined,
         sparkName: sparkName !== null ? sparkName.trim() : undefined,
+        birthDate: formData.get('birthDate') ? new Date(formData.get('birthDate')) : undefined,
         ...(imageUrl !== undefined && { image: imageUrl }),
         ...(forceVerify && { emailVerified: new Date() })
       },

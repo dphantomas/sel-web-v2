@@ -77,20 +77,6 @@ export function HeroSection({ dict, lang, session }: HeroSectionProps) {
                 {dict.heroBtn1 || (lang === 'en' ? 'Log In' : 'Ingresar a mi cuenta')}
               </Link>
             )}
-            <button
-              onClick={() => {
-                document.getElementById("process-section")?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="bg-white/10 hover:bg-white/20 backdrop-blur-sm border-2 border-transparent text-white px-8 py-3 rounded-full font-bold tracking-wide transition-all duration-300 cursor-pointer shadow-lg"
-            >
-              {lang === 'en' ? 'The Process' : 'El Proceso'}
-            </button>
-            <Link
-              href={getLocalizedUrl("/talleres")}
-              className="bg-[#c2a2e8] hover:bg-[#9187BA] text-[#33275f] hover:text-white px-8 py-3 rounded-full font-bold tracking-wide transition-all duration-300 shadow-lg"
-            >
-              {lang === 'en' ? 'Workshops' : 'Talleres'}
-            </Link>
           </div>
           
           {/* Scroll down indicator */}

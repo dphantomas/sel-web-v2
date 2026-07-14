@@ -2,18 +2,19 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { FileText, BookOpen, Users, Image as ImageIcon } from "lucide-react";
+import { FileText, BookOpen, Users, Image as ImageIcon, Star } from "lucide-react";
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminDashboardPage() {
   const session = await getServerSession(authOptions);
 
-  const [courseCount, userCount, postCount, galleryCount] = await Promise.all([
+  const [courseCount, userCount, postCount, galleryCount, reviewCount] = await Promise.all([
     prisma.course.count(),
     prisma.user.count(),
     prisma.post.count(),
     prisma.galleryImage.count(),
+    prisma.review.count(),
   ]);
 
   return (
@@ -23,7 +24,7 @@ export default async function AdminDashboardPage() {
       </h1>
       <p className="text-sel-body mb-8">Bienvenido al panel de control de Sanación en Luz.</p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 mb-12">
         
         {/* Cursos */}
         <Link href="/admin/cursos" className="block group">
@@ -77,6 +78,20 @@ export default async function AdminDashboardPage() {
             <p className="text-4xl font-bold text-sel-purple mb-2">{galleryCount}</p>
             <span className="text-sm font-medium text-blue-600">
               Gestionar Galería &rarr;
+            </span>
+          </div>
+        </Link>
+
+        {/* Reseñas */}
+        <Link href="/admin/reviews" className="block group">
+          <div className="bg-white rounded-2xl p-6 blog-card h-full border border-transparent transition-all hover:border-sel-purple/30 hover:shadow-md hover:-translate-y-1">
+            <div className="flex items-center gap-4 mb-4 text-sel-purple group-hover:text-sel-blue transition-colors">
+              <Star className="w-6 h-6" />
+              <h3 className="font-semibold text-sel-purple">Reseñas</h3>
+            </div>
+            <p className="text-4xl font-bold text-sel-purple mb-2">{reviewCount}</p>
+            <span className="text-sm font-medium text-blue-600">
+              Gestionar Reseñas &rarr;
             </span>
           </div>
         </Link>

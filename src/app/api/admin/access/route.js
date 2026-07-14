@@ -3,6 +3,7 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '@/modules/auth/auth'
 import { NextResponse } from 'next/server'
 import { sendWhatsAppNotification } from '@/lib/whatsapp'
+import { sendEmail } from '@/modules/auth/email'
 
 export async function POST(request) {
   try {
@@ -59,6 +60,30 @@ export async function POST(request) {
           where: { id: userId },
           data: { role: 'Participante' }
         })
+      }
+
+      // Enviar email de invitación a reseña si está habilitado
+      if (user.email && process.env.SEND_REVIEW_INVITATIONS === "true") {
+        const reviewUrl = `${process.env.NEXTAUTH_URL || 'https://sanacionenluz.com'}/escribir-resena`;
+        const emailHtml = `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+            <h2 style="color: #6d28d9;">¡Hola ${user.firstName}!</h2>
+            <p>Se ha habilitado tu acceso al taller <strong>"${course.title}"</strong> en Sanación en Luz.</p>
+            <p>Nos encantaría conocer tu experiencia. Cuando lo desees, puedes dejarnos tu testimonio haciendo clic en el siguiente enlace:</p>
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="${reviewUrl}" style="background-color: #9187ba; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-block;">Compartir mi experiencia</a>
+            </div>
+            <p>¡Gracias por ser parte de Sanación en Luz!</p>
+          </div>
+        `;
+        
+        // No bloqueamos la ejecución principal si el email falla
+        sendEmail({
+          to: user.email,
+          subject: `Acceso habilitado a ${course.title} - Sanación en Luz`,
+          html: emailHtml,
+          from: process.env.REVIEWS_EMAIL
+        }).catch(err => console.error("Error enviando email de invitación a reseña:", err));
       }
 
     } else {

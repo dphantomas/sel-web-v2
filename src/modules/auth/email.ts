@@ -5,9 +5,10 @@ interface SendEmailParams {
   to: string;
   subject: string;
   html: string;
+  from?: string;
 }
 
-export async function sendEmail({ to, subject, html }: SendEmailParams) {
+export async function sendEmail({ to, subject, html, from }: SendEmailParams) {
   if (env.ENABLE_EMAIL_NOTIFICATIONS !== "true") {
     console.warn("Emails are disabled via ENABLE_EMAIL_NOTIFICATIONS. Skipped sending email to:", to);
     return;
@@ -27,7 +28,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
   })
 
   const mailOptions = {
-    from: `"Sanación en Luz" <${env.SMTP_FROM}>`,
+    from: from ? `"Sanación en Luz" <${from}>` : `"Sanación en Luz" <${env.SMTP_FROM}>`,
     to,
     subject,
     html

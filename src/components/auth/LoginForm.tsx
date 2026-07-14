@@ -103,7 +103,7 @@ export function LoginForm({ googleEnabled = true }: { googleEnabled?: boolean })
           <div className="w-full border-t border-gray-300"></div>
         </div>
         <div className="relative flex justify-center text-sm">
-          <span className="px-2 bg-white text-gray-500">O ingresá con tu correo</span>
+          <span className="px-2 bg-white text-gray-500">{googleEnabled ? 'O ingresá con tu correo' : 'Ingresá con tu correo'}</span>
         </div>
       </div>
 

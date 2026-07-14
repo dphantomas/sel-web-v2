@@ -15,6 +15,7 @@ export function RegisterForm() {
     lastName: '',
     email: '',
     phone: '',
+    birthDate: '',
     password: '',
     confirmPassword: ''
   })
@@ -113,11 +114,18 @@ export function RegisterForm() {
               className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-800 bg-white/60" />
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-[#33275f] uppercase tracking-wider mb-2">Teléfono (WhatsApp)</label>
-            <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+5491123456789"
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-800 bg-white/60" />
-            <span className="text-[11px] text-gray-500 mt-1 block">Incluye código de país para poder enviarte notificaciones.</span>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-semibold text-[#33275f] uppercase tracking-wider mb-2">Teléfono</label>
+              <input type="tel" name="phone" value={formData.phone} onChange={handleChange} placeholder="+5491123456789"
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-800 bg-white/60" />
+              <span className="text-[11px] text-gray-500 mt-1 block">Incluye código de país.</span>
+            </div>
+            <div>
+              <label className="block text-xs font-semibold text-[#33275f] uppercase tracking-wider mb-2">Fecha Nacimiento</label>
+              <input type="date" name="birthDate" value={formData.birthDate} onChange={handleChange}
+                className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#9187BA] focus:border-transparent transition text-gray-800 bg-white/60" />
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
