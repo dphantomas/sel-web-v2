@@ -7,9 +7,9 @@ export const env = createEnv({
     NEXTAUTH_SECRET: z.string().min(1),
     NEXTAUTH_URL: z.string().url().optional(), // Vercel lo setea dinámicamente
 
-    // Configuración de Módulos (Feature Flags)
-    ENABLE_GOOGLE_AUTH: z.string().optional().default("false"),
-    ENABLE_EMAIL_NOTIFICATIONS: z.string().optional().default("false"),
+    // Configuración de Módulos (Feature Flags) - REQUERIDOS explícitamente
+    ENABLE_GOOGLE_AUTH: z.enum(["true", "false"]),
+    ENABLE_EMAIL_NOTIFICATIONS: z.enum(["true", "false"]),
 
     // Google Auth & Nodemailer OAuth2
     GOOGLE_CLIENT_ID: z.string().optional(),
@@ -20,9 +20,9 @@ export const env = createEnv({
     SMTP_USER: z.string().optional(),
     SMTP_FROM: z.string().optional(),
 
-    // Módulo Media - Flags
-    ENABLE_S3_STORAGE: z.string().optional().default("false"),
-    ENABLE_CLOUDINARY: z.string().optional().default("false"),
+    // Módulo Media - Flags - REQUERIDOS explícitamente
+    ENABLE_S3_STORAGE: z.enum(["true", "false"]),
+    ENABLE_CLOUDINARY: z.enum(["true", "false"]),
 
     // Cloudflare R2 (S3)
     R2_ACCOUNT_ID: z.string().optional(),
