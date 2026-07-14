@@ -17,12 +17,13 @@ export const s3Client = env.ENABLE_S3_STORAGE === "true"
 /**
  * Genera una URL temporal firmada para acceder a un archivo privado (ej. PDF de un curso).
  */
-export async function getPresignedDownloadUrl(key: string, expiresIn = 3600) {
+export async function getPresignedDownloadUrl(key: string, expiresIn = 3600, inline = false) {
   if (!s3Client || !env.R2_BUCKET_NAME) throw new Error("S3 Storage no está configurado.");
   
   const command = new GetObjectCommand({
     Bucket: env.R2_BUCKET_NAME,
     Key: key,
+    ...(inline ? { ResponseContentDisposition: 'inline' } : {})
   });
   
   return getSignedUrl(s3Client, command, { expiresIn });

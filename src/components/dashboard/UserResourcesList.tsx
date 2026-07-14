@@ -72,8 +72,12 @@ export default function UserResourcesList({ resources }: { resources: any[] }) {
                 <span className="animate-pulse">Cargando...</span>
               ) : (
                 <>
-                  <span className="mr-2">Abrir</span>
-                  <DownloadCloud className="w-4 h-4" />
+                  <span className="mr-2">{resource.isDownloadable ? 'Descargar' : 'Ver'}</span>
+                  {resource.isDownloadable ? (
+                    <DownloadCloud className="w-4 h-4" />
+                  ) : (
+                    <PlayCircle className="w-4 h-4" />
+                  )}
                 </>
               )}
             </div>
