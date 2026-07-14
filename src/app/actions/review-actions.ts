@@ -3,6 +3,7 @@
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendEmail } from "@/modules/auth/email";
+import { env } from "@/env";
 
 export async function submitUserReview(data: {
   authorName: string;
@@ -31,7 +32,7 @@ export async function submitUserReview(data: {
   `;
 
   await sendEmail({
-    to: process.env.REVIEWS_EMAIL || "testimonios@sanacionenluz.com",
+    to: env.REVIEWS_EMAIL,
     subject: `Nuevo Testimonio Recibido: ${data.authorName}`,
     html: emailHtml
   }).catch(err => console.error("Error notificando nueva reseña:", err));

@@ -19,6 +19,7 @@ export const env = createEnv({
     // SMTP General
     SMTP_USER: z.string().optional(),
     SMTP_FROM: z.string().optional(),
+    REVIEWS_EMAIL: z.string().email(),
 
     // Módulo Media - Flags - REQUERIDOS explícitamente
     ENABLE_S3_STORAGE: z.enum(["true", "false"]),
