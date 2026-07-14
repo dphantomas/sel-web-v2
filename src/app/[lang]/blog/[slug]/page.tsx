@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import DOMPurify from "isomorphic-dompurify";
+import sanitizeHtml from "sanitize-html";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
@@ -62,7 +62,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const imageUrl = post.coverImage;
 
   // Sanitizar HTML
-  const contentHtml = DOMPurify.sanitize(post.content);
+  const contentHtml = sanitizeHtml(post.content);
 
   return (
     <article className="bg-white">

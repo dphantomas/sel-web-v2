@@ -37,7 +37,6 @@
     "embla-carousel-react": "^8.6.0",
     "emoji-picker-react": "^4.19.1",
     "hls.js": "^1.6.16",
-    "isomorphic-dompurify": "^3.18.0",
     "lucide-react": "^1.21.0",
     "mercadopago": "^3.1.0",
     "next": "16.2.9",
@@ -51,6 +50,7 @@
     "react-easy-crop": "^6.0.2",
     "remark": "^15.0.1",
     "remark-html": "^16.0.1",
+    "sanitize-html": "^2.17.6",
     "tailwindcss": "^3.4.19",
     "zod": "^4.4.3",
     "zustand": "^5.0.14"
@@ -62,6 +62,7 @@
     "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/sanitize-html": "^2.16.1",
     "dotenv": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.2.9",

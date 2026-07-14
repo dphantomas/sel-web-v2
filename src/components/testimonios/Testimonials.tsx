@@ -1,6 +1,6 @@
 import React from 'react'
 import { getReviews } from '@/app/actions/review-actions'
-import DOMPurify from 'isomorphic-dompurify'
+import sanitizeHtml from "sanitize-html";
 import Link from 'next/link'
 
 export default async function Testimonials({ lang = 'es' }: { lang?: string }) {
@@ -62,7 +62,7 @@ export default async function Testimonials({ lang = 'es' }: { lang?: string }) {
                     lineHeight: '1.7em',
                     padding: '0 10px',
                   }}
-                  dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(t.content) }}
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(t.content) }}
                 />
 
                 <p
