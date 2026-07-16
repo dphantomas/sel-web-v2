@@ -90,18 +90,16 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
                         marginBottom: '8px',
                         lineHeight: '1.3em',
                       }}
-                    >
-                      {post.title}
-                    </h2>
+                      dangerouslySetInnerHTML={{ __html: post.title }}
+                    />
                     <p style={{ color: '#c2a2e8', fontSize: '14px', fontFamily: "'Open Sans', sans-serif", marginBottom: '8px' }}>
                       {format(new Date(post.createdAt), 'MMMM d, yyyy', { locale: dateLocale })}
                     </p>
                     {post.excerpt ? (
                       <div
                         style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '14px', color: '#666', lineHeight: '1.6em' }}
-                      >
-                        {post.excerpt}
-                      </div>
+                        dangerouslySetInnerHTML={{ __html: post.excerpt }}
+                      />
                     ) : (
                       <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '14px', color: '#666', lineHeight: '1.6em' }}>
                         {lang === 'en' ? 'Read full article here...' : 'Lee el artículo completo aquí...'}
