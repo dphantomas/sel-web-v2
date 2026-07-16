@@ -3,6 +3,7 @@ import { authOptions } from '@/modules/auth/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import { getPresignedDownloadUrl } from '@/modules/media/s3'
+import { getUserResourceScope, canAccessResource, classifyResource } from '@/modules/media/resource-access'
 import { SecureVideo, SecureAudio } from '@/components/ui/SecureMedia'
 import { SecurePDFViewer } from '@/components/ui/SecurePDFViewer'
 
@@ -23,41 +24,30 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
     redirect('/dashboard/recursos')
   }
 
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      unlockedCourses: true,
-      unlockedInstances: true
-    }
-  })
-
-  // Validar acceso del usuario al recurso
-  const hasCourseAccess = resource.courseId 
-    ? user?.unlockedCourses.some(uc => uc.courseId === resource.courseId) 
-    : false
-    
-  const hasInstanceAccess = resource.courseInstanceId 
-    ? user?.unlockedInstances.some(ui => ui.courseInstanceId === resource.courseInstanceId) 
-    : false
-  
-  if (!hasCourseAccess && !hasInstanceAccess) {
+  // Misma regla que usa el dashboard para listarlos — ver resource-access.ts
+  const scope = await getUserResourceScope(session.user.id)
+  if (!canAccessResource(resource, scope)) {
     redirect('/dashboard/recursos')
   }
 
-  const resourceType = (resource.type || '').toLowerCase()
-  const isPdf = resourceType.includes('pdf')
-  const isAudio = resourceType.includes('audio') || resourceType.includes('mp3') || resourceType.includes('m4a')
-  const isVideo = resourceType.includes('video') || resourceType.includes('mp4')
+  const kind = classifyResource(resource.type)
+  const isPdf = kind === 'pdf'
+  const isAudio = kind === 'audio'
+  const isVideo = kind === 'video'
 
   let url = ''
+  let urlError = false
   try {
     // Si es un archivo que se va a mostrar en el navegador (pdf, audio, video) forzamos inline=true
     // para que Cloudflare R2 no obligue al navegador a descargarlo
     const shouldViewInline = isPdf || isAudio || isVideo || !resource.isDownloadable
     url = await getPresignedDownloadUrl(resource.cloudflareKey, 3600, shouldViewInline)
   } catch (error) {
+    // Antes esto redirigía al dashboard: cualquier falla de infraestructura
+    // (ej. ENABLE_S3_STORAGE apagado) se convertía en un rebote mudo y el
+    // usuario no tenía forma de saber que el problema no era suyo.
     console.error("Error generating presigned URL:", error)
-    redirect('/dashboard/recursos')
+    urlError = true
   }
 
   return (
@@ -75,19 +65,37 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
       </header>
       
       <main className="flex-1 w-full max-w-5xl mx-auto p-4 md:p-6 flex flex-col justify-center items-center">
-        {isPdf && (
+        {urlError && (
+          <div className="bg-white p-10 rounded-2xl shadow-lg text-center max-w-md w-full border border-gray-100">
+            <svg className="w-16 h-16 mx-auto text-red-400 mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M12 9v2m0 4h.01M5.07 19h13.86a2 2 0 001.74-2.99l-6.93-12a2 2 0 00-3.48 0l-6.93 12A2 2 0 005.07 19z"></path>
+            </svg>
+            <h2 className="text-xl font-bold text-[#33275f] mb-3">No pudimos abrir este material</h2>
+            <p className="text-gray-600 mb-8">
+              Hubo un problema al preparar el archivo. No es un problema de tu cuenta: por favor volvé a intentar en unos minutos, y si sigue igual avisanos.
+            </p>
+            <a
+              href="/dashboard/recursos"
+              className="px-8 py-3 bg-[#33275f] text-white rounded-xl font-bold inline-block hover:bg-[#B681AE] transition-colors shadow-md"
+            >
+              Volver a Mis Materiales
+            </a>
+          </div>
+        )}
+
+        {!urlError && isPdf && (
           <div className="w-full">
             <SecurePDFViewer url={url} />
           </div>
         )}
         
-        {isVideo && (
+        {!urlError && isVideo && (
           <div className="w-full bg-black rounded-xl shadow-lg overflow-hidden border border-gray-800">
             <SecureVideo src={url} />
           </div>
         )}
         
-        {isAudio && (
+        {!urlError && isAudio && (
           <div className="bg-white p-8 rounded-2xl shadow-lg border border-gray-100 w-full max-w-md mx-auto flex flex-col items-center gap-8">
             <div className="w-32 h-32 bg-[#B681AE]/10 rounded-full flex items-center justify-center text-[#B681AE] shadow-inner">
               <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -103,7 +111,7 @@ export default async function VisorPage({ params }: { params: Promise<{ id: stri
           </div>
         )}
         
-        {!isPdf && !isVideo && !isAudio && (
+        {!urlError && !isPdf && !isVideo && !isAudio && (
           <div className="bg-white p-10 rounded-2xl shadow-lg text-center max-w-md w-full border border-gray-100">
             <svg className="w-16 h-16 mx-auto text-[#B681AE] mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path>

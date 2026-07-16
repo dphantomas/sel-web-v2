@@ -3,6 +3,7 @@ import { authOptions } from '@/modules/auth/auth'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import UserResourcesList from '@/components/dashboard/UserResourcesList'
+import { getUserResourceScope } from '@/modules/media/resource-access'
 
 export const metadata = {
   title: 'Mis Materiales | Sanación en Luz',
@@ -16,40 +17,8 @@ export default async function DashboardRecursosPage() {
     redirect('/login')
   }
 
-  // Obtener información del usuario y sus accesos (tanto a cursos como a instancias)
-  const user = await prisma.user.findUnique({
-    where: { id: session.user.id },
-    include: {
-      unlockedCourses: {
-        select: { courseId: true }
-      },
-      unlockedInstances: {
-        include: {
-          courseInstance: {
-            include: {
-              course: true
-            }
-          }
-        },
-        orderBy: {
-          courseInstance: { startDate: 'desc' }
-        }
-      }
-    }
-  })
-
-  if (!user) {
-    redirect('/login')
-  }
-
-  // Juntar todos los IDs de cursos a los que tiene acceso
-  const courseIds = new Set([
-    ...user.unlockedCourses.map(uc => uc.courseId),
-    ...user.unlockedInstances.map(ui => ui.courseInstance.courseId)
-  ])
-
-  // Juntar todos los IDs de instancias a los que tiene acceso
-  const instanceIds = new Set(user.unlockedInstances.map(ui => ui.courseInstanceId))
+  // Misma regla que usa el visor para abrirlos — ver resource-access.ts
+  const { courseIds, instanceIds } = await getUserResourceScope(session.user.id)
 
   // Obtener los recursos de todos esos cursos Y validar instancias
   const allResourcesRaw = await prisma.resource.findMany({

@@ -1,12 +1,17 @@
-'use client'
-
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation'
+import React from 'react'
 import { DownloadCloud, FileText, Headphones, PlayCircle, Folder } from 'lucide-react'
 
-export default function UserResourcesList({ resources }: { resources: any[] }) {
-  const [loadingId, setLoadingId] = useState<string | null>(null)
+type ResourceCard = {
+  id: string
+  name: string
+  description: string | null
+  type: string
+  isDownloadable: boolean
+  courseInstanceId: string | null
+  courseTitle: string
+}
 
+export default function UserResourcesList({ resources }: { resources: ResourceCard[] }) {
   if (!resources || resources.length === 0) {
     return (
       <div className="bg-white/80 backdrop-blur-md rounded-[24px] p-8 text-center shadow-[0_4px_20px_rgba(0,0,0,0.08)]">
@@ -22,22 +27,16 @@ export default function UserResourcesList({ resources }: { resources: any[] }) {
     return <Folder className="w-6 h-6 text-gray-400" />
   }
 
-  const router = useRouter()
-
-  const handleOpenResource = (resource: any) => {
-    // Si el recurso no es descargable y es PDF o Audio, vamos al visor seguro
-    // Opcionalmente podemos enviar todo al visor y que el visor decida, lo cual es más simple y limpio:
-    router.push(`/visor/${resource.id}`)
-  }
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {resources.map((resource) => (
-        <button
+        // Anchor nativo, no router.push: la navegación de cliente contra los
+        // rewrites de next.config.ts es la que rompía con 404 (ver 2b483c9,
+        // que cambió a <a> el resto del sitio por el mismo motivo).
+        <a
           key={resource.id}
-          onClick={() => handleOpenResource(resource)}
-          disabled={loadingId === resource.id}
-          className="bg-white/80 backdrop-blur-md rounded-[24px] p-6 text-left shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40 hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 group disabled:opacity-50 flex flex-col justify-between h-full relative overflow-hidden"
+          href={`/visor/${resource.id}`}
+          className="bg-white/80 backdrop-blur-md rounded-[24px] p-6 text-left shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40 hover:shadow-[0_12px_30px_rgba(0,0,0,0.12)] hover:-translate-y-1 transition-all duration-300 group flex flex-col justify-between h-full relative overflow-hidden"
         >
           {resource.courseInstanceId && (
             <div className="absolute top-0 right-0 bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-bl-xl tracking-wider uppercase z-10 shadow-sm">
@@ -68,21 +67,15 @@ export default function UserResourcesList({ resources }: { resources: any[] }) {
               {resource.type.split('/')[1]?.toUpperCase() || 'ARCHIVO'}
             </span>
             <div className="flex items-center text-[#9187BA] text-sm font-bold group-hover:text-[#33275f] transition-colors">
-              {loadingId === resource.id ? (
-                <span className="animate-pulse">Cargando...</span>
+              <span className="mr-2">{resource.isDownloadable ? 'Descargar' : 'Ver'}</span>
+              {resource.isDownloadable ? (
+                <DownloadCloud className="w-4 h-4" />
               ) : (
-                <>
-                  <span className="mr-2">{resource.isDownloadable ? 'Descargar' : 'Ver'}</span>
-                  {resource.isDownloadable ? (
-                    <DownloadCloud className="w-4 h-4" />
-                  ) : (
-                    <PlayCircle className="w-4 h-4" />
-                  )}
-                </>
+                <PlayCircle className="w-4 h-4" />
               )}
             </div>
           </div>
-        </button>
+        </a>
       ))}
     </div>
   )

@@ -20,7 +20,12 @@ const nextConfig: NextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path((?!es|en|api|_next|assets|favicon.ico|admin).*)',
+        // El lookahead va anclado a fin de segmento — `(?:/|$)`. Sin eso,
+        // cualquier ruta que EMPIECE con "es"/"en" queda excluida del rewrite:
+        // /escribir-resena no se reescribía, caía en [lang] con
+        // lang="escribir-resena" y servía el home con HTTP 200. Sin 404, sin
+        // error: sólo la página equivocada.
+        source: '/:path((?!(?:es|en|api|_next|assets|favicon\\.ico|admin)(?:/|$)).*)',
         destination: '/es/:path*',
       },
       {
