@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
-import sanitizeHtml from "sanitize-html";
+import { renderEditorHtml } from "@/lib/html";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
@@ -61,8 +61,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
 
   const imageUrl = post.coverImage;
 
-  // Sanitizar HTML
-  const contentHtml = sanitizeHtml(post.content);
+  // El blog guarda HTML (editor WYSIWYG). El allowlist vive centralizado en
+  // src/lib/html.ts para que no se desincronice del editor — ver regla 19.
+  const contentHtml = renderEditorHtml(post.content);
 
   return (
     <article className="bg-white">
@@ -90,8 +91,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               fontWeight: 700,
               lineHeight: '1.3em',
             }}
-            dangerouslySetInnerHTML={{ __html: post.title }}
-          />
+          >
+            {post.title}
+          </h1>
           <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '14px', color: 'rgba(255,255,255,0.7)', marginTop: '12px' }}>
             {format(new Date(post.createdAt), 'MMMM d, yyyy', { locale: dateLocale })}
           </p>
@@ -128,8 +130,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '11px', color: '#c2a2e8', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
                 ← {lang === 'en' ? 'Previous' : 'Anterior'}
               </p>
-              <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '14px', color: '#33275f', fontWeight: 600, lineHeight: '1.4em' }}
-                dangerouslySetInnerHTML={{ __html: prevPost.title }} />
+              <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '14px', color: '#33275f', fontWeight: 600, lineHeight: '1.4em' }}>
+                {prevPost.title}
+              </p>
             </Link>
           ) : <span />}
 
@@ -142,8 +145,9 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
               <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '11px', color: '#c2a2e8', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
                 {lang === 'en' ? 'Next' : 'Siguiente'} →
               </p>
-              <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '14px', color: '#33275f', fontWeight: 600, lineHeight: '1.4em' }}
-                dangerouslySetInnerHTML={{ __html: nextPost.title }} />
+              <p style={{ fontFamily: "'Lato', sans-serif", fontSize: '14px', color: '#33275f', fontWeight: 600, lineHeight: '1.4em' }}>
+                {nextPost.title}
+              </p>
             </Link>
           ) : <span />}
         </div>

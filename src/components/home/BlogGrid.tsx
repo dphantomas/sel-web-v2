@@ -127,8 +127,9 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
                     marginBottom: '8px',
                     lineHeight: '1.3em',
                   }}
-                  dangerouslySetInnerHTML={{ __html: post.title }}
-                />
+                >
+                  {post.title}
+                </h2>
                 <p
                   style={{
                     color: '#c2a2e8',
@@ -146,8 +147,9 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
                     color: '#666',
                     lineHeight: '1.6em',
                   }}
-                  dangerouslySetInnerHTML={{ __html: post.excerpt }}
-                />
+                >
+                  {post.excerpt}
+                </div>
                 <span
                   style={{
                     display: 'inline-block',

@@ -28,7 +28,12 @@ export function RichTextEditor({ value, onChange, placeholder = 'Escribe aquí..
       Underline,
       Image.configure({
         inline: true,
-        allowBase64: true,
+        // Tiene que coincidir con el allowlist de src/lib/html.ts, que no deja
+        // pasar `data:`. Si acá fuera `true`, una imagen pegada se vería en el
+        // editor, se guardaría en la base y desaparecería al publicar — sin
+        // error y sin warning. Además una imagen en base64 se guarda entera en
+        // la columna TEXT del post y se arrastra en cada render.
+        allowBase64: false,
       }),
       Link.configure({
         openOnClick: false,
