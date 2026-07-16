@@ -1,7 +1,8 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
-import crypto from 'crypto'
+import { generateToken } from '@/modules/auth/tokens'
+import { guard, getClientIp } from '@/lib/rate-limit'
 import { sendEmail } from '@/modules/auth/email'
 
 export async function POST(req) {
@@ -12,6 +13,17 @@ export async function POST(req) {
     }
 
     const emailLower = email.toLowerCase().trim()
+
+    // Cada llamada manda un mail: sin límite por email, cualquiera inunda la
+    // casilla de un tercero y de paso quema la reputación del SMTP. El límite
+    // por email se aplica exista o no la cuenta — si solo limitáramos las que
+    // existen, la diferencia de respuesta permitiría enumerar usuarios.
+    const limited = await guard([
+      { key: `forgot:ip:${getClientIp(req)}`, limit: 5, windowSec: 3600 },
+      { key: `forgot:email:${emailLower}`, limit: 3, windowSec: 3600 },
+    ])
+    if (limited) return limited
+
     const user = await prisma.user.findUnique({ where: { email: emailLower } })
 
     if (!user) {
@@ -19,8 +31,8 @@ export async function POST(req) {
       return NextResponse.json({ message: 'Si el correo existe, recibirás un enlace de recuperación.' })
     }
 
-    // Generar token
-    const token = crypto.randomBytes(32).toString('hex')
+    // Generar token — en la DB se guarda solo el hash; el plano viaja en el email
+    const { token, tokenHash } = generateToken()
     const expires = new Date(Date.now() + 3600000) // 1 hora de validez
 
     // Guardar token en DB (borrar los anteriores del mismo usuario si los hay)
@@ -28,7 +40,7 @@ export async function POST(req) {
     await prisma.passwordResetToken.create({
       data: {
         email: emailLower,
-        token,
+        token: tokenHash,
         expires
       }
     })

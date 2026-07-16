@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { getRelyingParty } from '@/modules/auth/rp'
 import { generateAuthenticationOptions } from '@simplewebauthn/server'
 
 export async function POST(request) {
@@ -24,9 +25,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No tienes dispositivos registrados. Inicia sesión con contraseña y regístralo en tu Perfil.' }, { status: 400 })
     }
 
-    const host = request.headers.get('host') || 'localhost:3000'
-    const protocol = request.headers.get('x-forwarded-proto') || 'http'
-    const rpID = host.split(':')[0]
+    const { rpID } = getRelyingParty()
 
     const options = await generateAuthenticationOptions({
       rpID,

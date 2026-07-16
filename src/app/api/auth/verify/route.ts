@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { hashToken } from '@/modules/auth/tokens'
 import { sendEmail } from '@/modules/auth/email'
 
 export async function GET(req) {
@@ -14,9 +15,9 @@ export async function GET(req) {
   }
 
   try {
-    // Buscar token
+    // Buscar token — en la DB está hasheado, el plano llega desde el email
     const verificationRecord = await prisma.emailVerificationToken.findUnique({
-      where: { token }
+      where: { token: hashToken(token) }
     })
 
     if (!verificationRecord) {

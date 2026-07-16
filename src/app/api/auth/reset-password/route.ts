@@ -1,6 +1,7 @@
 // @ts-nocheck
 import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
+import { hashToken } from '@/modules/auth/tokens'
 import bcrypt from 'bcryptjs'
 
 export async function POST(req) {
@@ -15,9 +16,9 @@ export async function POST(req) {
       return NextResponse.json({ error: 'La contraseña debe tener al menos 6 caracteres.' }, { status: 400 })
     }
 
-    // Buscar el token
+    // Buscar el token — en la DB está hasheado, el plano llega desde el email
     const resetToken = await prisma.passwordResetToken.findUnique({
-      where: { token }
+      where: { token: hashToken(token) }
     })
 
     if (!resetToken) {

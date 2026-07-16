@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/modules/auth/auth'
 import { prisma } from '@/lib/prisma'
+import { getRelyingParty } from '@/modules/auth/rp'
 import { verifyRegistrationResponse } from '@simplewebauthn/server'
 import { parseDeviceName } from '@/lib/userAgent'
 
@@ -25,10 +26,7 @@ export async function POST(request) {
     const body = await request.json()
     const expectedChallenge = user.currentChallenge
 
-    const host = request.headers.get('host') || 'localhost:3000'
-    const protocol = request.headers.get('x-forwarded-proto') || 'http'
-    const expectedOrigin = `${protocol}://${host}`
-    const expectedRPID = host.split(':')[0]
+    const { expectedOrigin, rpID: expectedRPID } = getRelyingParty()
 
     let verification
     try {

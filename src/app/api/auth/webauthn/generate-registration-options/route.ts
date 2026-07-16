@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/modules/auth/auth'
 import { prisma } from '@/lib/prisma'
+import { getRelyingParty } from '@/modules/auth/rp'
 import { generateRegistrationOptions } from '@simplewebauthn/server'
 
 export async function GET(request) {
@@ -23,8 +24,7 @@ export async function GET(request) {
     }
 
     const rpName = 'Sanación en Luz'
-    const host = request.headers.get('host') || 'localhost:3000'
-    const rpID = host.split(':')[0]
+    const { rpID } = getRelyingParty()
 
     const options = await generateRegistrationOptions({
       rpName,

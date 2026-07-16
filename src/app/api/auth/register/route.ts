@@ -2,11 +2,19 @@
 import { prisma } from '@/lib/prisma'
 import bcrypt from 'bcryptjs'
 import { NextResponse } from 'next/server'
-import crypto from 'crypto'
+import { generateToken } from '@/modules/auth/tokens'
+import { guard, getClientIp } from '@/lib/rate-limit'
 import { sendEmail } from '@/modules/auth/email'
 
 export async function POST(request) {
   try {
+    // Va antes de leer el body: el registro crea filas y manda mails, así que el
+    // límite se cobra por intentar, no por acertar el formato.
+    const limited = await guard([
+      { key: `register:ip:${getClientIp(request)}`, limit: 5, windowSec: 3600 },
+    ])
+    if (limited) return limited
+
     const { firstName, lastName, email, phone, birthDate, password } = await request.json()
 
     if (!firstName || !lastName || !email || !password) {
@@ -71,8 +79,8 @@ export async function POST(request) {
       }
     })
 
-    // Generar token de verificación
-    const token = crypto.randomBytes(32).toString('hex')
+    // Generar token de verificación — en la DB se guarda solo el hash; el plano viaja en el email
+    const { token, tokenHash } = generateToken()
     const expires = new Date(Date.now() + 24 * 3600000) // 24 horas de validez
 
     // Guardar token en DB (borrar anteriores si los hay por algún motivo)
@@ -80,7 +88,7 @@ export async function POST(request) {
     await prisma.emailVerificationToken.create({
       data: {
         email: emailLower,
-        token,
+        token: tokenHash,
         expires
       }
     })
