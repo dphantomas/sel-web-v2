@@ -228,7 +228,7 @@ export const authOptions: NextAuthOptions = {
 
             try {
               await sendEmail({
-                to: env.ADMIN_EMAIL as string,
+                to: env.REGISTRATION_EMAIL as string,
                 subject: `Nuevo usuario registrado (Google): ${dbUser.firstName} ${dbUser.lastName}`,
                 html: `
                   <div style="font-family: Arial, sans-serif; padding: 20px;">

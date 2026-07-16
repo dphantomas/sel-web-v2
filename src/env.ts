@@ -32,9 +32,10 @@ export const env = createEnv({
     SMTP_USER: z.string().optional(),
     SMTP_FROM: z.string().optional(),
     REVIEWS_EMAIL: z.string().email(),
-    // Destinatario de los avisos internos (ej. alta automática vía Google).
-    // Obligatorio solo si ENABLE_GOOGLE_AUTH está prendido — ver validación abajo.
-    ADMIN_EMAIL: z.string().email().optional(),
+    // Avisos al equipo, separados por propósito (ver src/modules/auth y las rutas
+    // de registro/verificación). Obligatorios si hay notificaciones — validación abajo.
+    REGISTRATION_EMAIL: z.string().email().optional(), // altas y verificación de cuentas
+    ALERTS_EMAIL: z.string().email().optional(),       // alertas de error interno
 
     // Módulo Media - Flags - REQUERIDOS explícitamente
     ENABLE_S3_STORAGE: z.enum(["true", "false"]),
@@ -69,15 +70,17 @@ if (env.ENABLE_GOOGLE_AUTH === "true") {
   if (!env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET) {
     throw new Error("❌ Faltan GOOGLE_CLIENT_ID o GOOGLE_CLIENT_SECRET para activar Google Auth");
   }
-  // El alta automática vía Google avisa al admin: sin destinatario el aviso se pierde.
-  if (!env.ADMIN_EMAIL) {
-    throw new Error("❌ Falta ADMIN_EMAIL: el alta automática vía Google le notifica al administrador");
-  }
 }
 
 if (env.ENABLE_EMAIL_NOTIFICATIONS === "true") {
   if (!env.SMTP_USER || !env.SMTP_FROM || !env.GOOGLE_CLIENT_ID || !env.GOOGLE_CLIENT_SECRET || !env.GOOGLE_REFRESH_TOKEN) {
     throw new Error("❌ Faltan credenciales SMTP / Google OAuth2 para notificaciones por correo");
+  }
+  // Con las notificaciones activas, los destinatarios internos DEBEN estar
+  // definidos: sin esto, los avisos de alta y las alertas de error se perderían
+  // en silencio. Antes iban a un mail hardcodeado; ahora son variables.
+  if (!env.REGISTRATION_EMAIL || !env.ALERTS_EMAIL) {
+    throw new Error("❌ Con ENABLE_EMAIL_NOTIFICATIONS=true hacen falta REGISTRATION_EMAIL (altas y verificación) y ALERTS_EMAIL (alertas de error)");
   }
 }
 

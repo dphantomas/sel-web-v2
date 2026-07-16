@@ -3,6 +3,7 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { hashToken } from '@/modules/auth/tokens'
 import { sendEmail } from '@/modules/auth/email'
+import { env } from '@/env'
 
 export async function GET(req) {
   const { searchParams } = new URL(req.url)
@@ -51,7 +52,7 @@ export async function GET(req) {
     // Enviar notificación al administrador
     try {
       await sendEmail({
-        to: 'registro@sanacionenluz.com',
+        to: env.REGISTRATION_EMAIL,
         subject: `Usuario verificado: ${user.firstName} ${user.lastName}`,
         html: `
           <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -76,7 +77,7 @@ export async function GET(req) {
     
     try {
       await sendEmail({
-        to: 'registro@sanacionenluz.com',
+        to: env.ALERTS_EMAIL,
         subject: `⚠️ Error Crítico en Verificación`,
         html: `<p>Se produjo un error al intentar verificar el correo con token ${token}:</p><pre>${error.message}</pre>`
       })

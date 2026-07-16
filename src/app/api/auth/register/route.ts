@@ -5,6 +5,7 @@ import { NextResponse } from 'next/server'
 import { generateToken } from '@/modules/auth/tokens'
 import { guard, getClientIp } from '@/lib/rate-limit'
 import { sendEmail } from '@/modules/auth/email'
+import { env } from '@/env'
 
 export async function POST(request) {
   try {
@@ -123,7 +124,7 @@ export async function POST(request) {
     // Enviar notificación al administrador
     try {
       await sendEmail({
-        to: 'registro@sanacionenluz.com',
+        to: env.REGISTRATION_EMAIL,
         subject: `Nuevo usuario registrado: ${firstName} ${lastName}`,
         html: `
           <div style="font-family: Arial, sans-serif; padding: 20px;">
@@ -152,7 +153,7 @@ export async function POST(request) {
     // Alerta de error interno al admin
     try {
       await sendEmail({
-        to: 'registro@sanacionenluz.com',
+        to: env.ALERTS_EMAIL,
         subject: `⚠️ Error Crítico en Registro de Usuario`,
         html: `<p>Se produjo un error interno al intentar registrar un usuario:</p><pre>${error.message || 'Error desconocido'}</pre>`
       })
