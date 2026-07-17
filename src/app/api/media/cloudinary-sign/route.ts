@@ -31,11 +31,22 @@ export async function GET(req: NextRequest) {
   };
 
   const signature = cloudinary.utils.api_sign_request(
-    paramsToSign, 
+    paramsToSign,
     env.CLOUDINARY_API_SECRET as string
   );
 
-  return NextResponse.json({ timestamp, signature, folder });
+  // `cloudName` y `apiKey` son identificadores públicos (no el secret) que el
+  // widget de Cloudinary necesita para inicializarse. El cliente los espera en
+  // esta respuesta; sin ellos, createUploadWidget abre el overlay pero no puede
+  // arrancar y la pantalla queda bloqueada/congelada. Se toman de las vars
+  // NEXT_PUBLIC_* (obligatorias cuando ENABLE_CLOUDINARY=true, ver src/env.ts).
+  return NextResponse.json({
+    timestamp,
+    signature,
+    folder,
+    cloudName: env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
+    apiKey: env.NEXT_PUBLIC_CLOUDINARY_API_KEY,
+  });
 }
 
 export async function POST(req: NextRequest) {
@@ -53,7 +64,7 @@ export async function POST(req: NextRequest) {
     const { paramsToSign } = body;
 
     const signature = cloudinary.utils.api_sign_request(
-      paramsToSign, 
+      paramsToSign,
       env.CLOUDINARY_API_SECRET as string
     );
 

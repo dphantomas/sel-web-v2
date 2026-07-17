@@ -12,8 +12,9 @@ import sanitizeHtml from "sanitize-html";
  * Markdown sale VACÍO, sin error ni warning.
  *
  * El allowlist NO es genérico: sale de las extensiones que tiene cargadas
- * `RichTextEditor.tsx` (StarterKit con títulos 1-3, Underline, Image, Link)
- * más lo que puede aparecer en contenido migrado desde Markdown (títulos 4-6).
+ * `RichTextEditor.tsx` (StarterKit con títulos 1-3, Underline, Image, Link,
+ * TextAlign) más lo que puede aparecer en contenido migrado desde Markdown
+ * (títulos 4-6).
  *
  * ⚠️ Si agregás una extensión al editor, agregá acá lo que emite. Si no, el
  * usuario lo va a ver en el editor, se va a guardar en la base, y va a
@@ -34,11 +35,9 @@ const CONFIG: sanitizeHtml.IOptions = {
   allowedAttributes: {
     a: ["href", "target", "rel"],
     img: ["src", "alt", "title", "width", "height"],
-    // `style` SOLO para la alineación. El editor de SeL todavía NO carga
-    // TextAlign, así que hoy no emite esto; queda declarado para que el día que
-    // se agregue la extensión la alineación no desaparezca en silencio al
-    // publicar. Habilitarlo acá no alcanza: `allowedStyles` de abajo decide qué
-    // propiedades sobreviven, y solo deja `text-align`.
+    // `style` SOLO para la alineación (TextAlign en RichTextEditor.tsx, sobre
+    // heading/paragraph). Habilitarlo acá no alcanza: `allowedStyles` de abajo
+    // decide qué propiedades sobreviven, y solo deja `text-align`.
     p: ["style"],
     h1: ["style"], h2: ["style"], h3: ["style"],
     h4: ["style"], h5: ["style"], h6: ["style"],

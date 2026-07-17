@@ -16,6 +16,10 @@ import {
   Link as LinkIcon,
   Undo,
   Redo,
+  AlignLeft,
+  AlignCenter,
+  AlignRight,
+  AlignJustify,
 } from 'lucide-react';
 import { EmojiPopover } from './EmojiPopover';
 import { useState } from 'react';
@@ -34,22 +38,49 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   const openCloudinaryWidget = async () => {
     try {
       setIsUploading(true);
-      // 1. Obtener firma del backend
-      const signRes = await fetch('/api/media/cloudinary-sign?folder=wysiwyg-uploads');
-      if (!signRes.ok) throw new Error('Error al firmar en backend');
-      const { signature, timestamp, folder, cloudName, apiKey } = await signRes.json();
 
-      // 2. Abrir Widget
+      // El script carga con `afterInteractive` (ver <Script> más abajo), pero si se
+      // clickea muy rápido después de montar puede no estar listo todavía.
+      if (!(window as any).cloudinary) {
+        alert('El widget de imágenes todavía se está cargando. Esperá un segundo e intentá de nuevo.');
+        return;
+      }
+
+      // 1. Config pública del backend (cloudName, apiKey, folder). La firma NO se
+      //    pre-calcula acá: el widget la pide por cada subida (ver uploadSignature).
+      const signRes = await fetch('/api/media/cloudinary-sign?folder=wysiwyg-uploads');
+      if (!signRes.ok) throw new Error('Error al obtener configuración de Cloudinary');
+      const { folder, cloudName, apiKey } = await signRes.json();
+
+      // 2. Abrir Widget en modo FIRMADO. `uploadSignature` TIENE que ser una
+      //    función: si se le pasa un string pre-firmado, el widget cae a modo
+      //    unsigned y exige un upload preset ("Upload preset must be specified
+      //    when using unsigned upload"). El widget llama a esta función con los
+      //    params reales que va a subir y los firmamos en el backend (POST del
+      //    mismo endpoint), así la firma siempre coincide con lo que se envía.
       const widget = (window as any).cloudinary.createUploadWidget(
         {
           cloudName: cloudName,
           apiKey: apiKey,
-          uploadSignatureTimestamp: timestamp,
-          uploadSignature: signature,
+          uploadSignature: (callback: (signature: string) => void, paramsToSign: Record<string, unknown>) => {
+            fetch('/api/media/cloudinary-sign', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ paramsToSign }),
+            })
+              .then((r) => r.json())
+              .then(({ signature }) => callback(signature))
+              .catch((err) => console.error('Error firmando la subida:', err));
+          },
           folder: folder,
-          sources: ['local', 'url', 'camera', 'google_drive'],
+          // Sin `sources`: se muestran todas las fuentes por defecto (local, url,
+          // cámara, drive, etc.), igual que el widget de la imagen de portada.
           multiple: false,
           clientAllowedFormats: ['image'],
+          // Achica la imagen en el navegador ANTES de subir: nunca se sube una
+          // foto gigante (una cámara/celu sube fácil 4000px+). El editor permite
+          // después ajustar el tamaño a mano arrastrando (ver ResizableImage).
+          maxImageWidth: 1600,
           maxImageFileSize: 10000000,
           theme: 'minimal'
         },
@@ -106,6 +137,10 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
   }) => (
     <button
       type="button"
+      // Sin esto, el mousedown le saca el foco/selección al editor antes de
+      // que el comando se ejecute: el primer click no hace nada visible y
+      // recién el segundo (con el editor ya enfocado) aplica el formato.
+      onMouseDown={(e) => e.preventDefault()}
       onClick={onClick}
       disabled={disabled}
       title={title}
@@ -159,6 +194,22 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
 
       <div className="w-px h-5 bg-zinc-300 dark:bg-zinc-700 mx-1" />
 
+      {/* Alineación */}
+      <ToolbarBtn onClick={() => editor.chain().focus().setTextAlign('left').run()} isActive={editor.isActive({ textAlign: 'left' })} title="Alinear a la izquierda">
+        <AlignLeft className="w-4 h-4" />
+      </ToolbarBtn>
+      <ToolbarBtn onClick={() => editor.chain().focus().setTextAlign('center').run()} isActive={editor.isActive({ textAlign: 'center' })} title="Centrar">
+        <AlignCenter className="w-4 h-4" />
+      </ToolbarBtn>
+      <ToolbarBtn onClick={() => editor.chain().focus().setTextAlign('right').run()} isActive={editor.isActive({ textAlign: 'right' })} title="Alinear a la derecha">
+        <AlignRight className="w-4 h-4" />
+      </ToolbarBtn>
+      <ToolbarBtn onClick={() => editor.chain().focus().setTextAlign('justify').run()} isActive={editor.isActive({ textAlign: 'justify' })} title="Justificar">
+        <AlignJustify className="w-4 h-4" />
+      </ToolbarBtn>
+
+      <div className="w-px h-5 bg-zinc-300 dark:bg-zinc-700 mx-1" />
+
       {/* Listas y Citas */}
       <ToolbarBtn onClick={() => editor.chain().focus().toggleBulletList().run()} isActive={editor.isActive('bulletList')} title="Lista de viñetas">
         <List className="w-4 h-4" />
@@ -183,7 +234,10 @@ export function EditorToolbar({ editor }: EditorToolbarProps) {
       {/* Selector de Emojis */}
       <EmojiPopover onEmojiSelect={(emoji) => editor.chain().focus().insertContent(emoji).run()} />
 
-      <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="lazyOnload" />
+      {/* `afterInteractive` (no `lazyOnload`): con lazyOnload el script podía no estar
+          listo todavía cuando se clickeaba el botón recién montada la página, y
+          window.cloudinary.createUploadWidget tiraba un error silencioso. */}
+      <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="afterInteractive" />
     </div>
   );
 }
