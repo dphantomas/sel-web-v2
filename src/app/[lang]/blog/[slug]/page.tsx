@@ -4,6 +4,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
 import { renderEditorHtml } from "@/lib/html";
+import { cldFocalFill } from "@/lib/cloudinary-url";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = 'force-dynamic';
@@ -75,7 +76,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           paddingBottom: '40px',
           paddingTop: '100px',
           backgroundImage: imageUrl
-            ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(51,39,95,0.7)), url(${imageUrl})`
+            ? `linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(51,39,95,0.7)), url(${cldFocalFill(imageUrl, 1600, 600, post.coverFocus)})`
             : 'linear-gradient(to bottom, #33275f, #5a4a8a)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',

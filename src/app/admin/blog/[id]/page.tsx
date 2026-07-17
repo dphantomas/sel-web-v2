@@ -7,6 +7,7 @@ import { ArrowLeft, Save, Trash2, Loader2, Image as ImageIcon, UploadCloud } fro
 import { createPost, updatePost, deletePost } from "@/modules/blog/actions";
 import { CldUploadWidget } from "next-cloudinary";
 import { RichTextEditor } from "@/components/ui/RichTextEditor";
+import { cldFocalFill } from "@/lib/cloudinary-url";
 
 function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
   const router = useRouter();
@@ -26,9 +27,15 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
     excerpt: "",
     content: "",
     coverImage: "",
+    // "x,y" en píxeles del original; "" => foco automático (g_auto).
+    coverFocus: "",
     published: false,
     translationGroupId: groupIdFromUrl || "",
   });
+
+  // Dimensiones naturales de la portada, para ubicar el marcador del punto de
+  // foco (que se guarda en píxeles del original).
+  const [coverDims, setCoverDims] = useState<{ w: number; h: number } | null>(null);
 
   useEffect(() => {
     if (isNew) {
@@ -49,6 +56,7 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
           excerpt: data.excerpt || "",
           content: data.content,
           coverImage: data.coverImage || "",
+          coverFocus: data.coverFocus || "",
           published: data.published,
           translationGroupId: data.translationGroupId || "",
         });
@@ -230,7 +238,10 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
                 signatureEndpoint="/api/media/cloudinary-sign?folder=blog"
                 onSuccess={(result: any) => {
                   if (result?.info?.secure_url) {
-                    setFormData(prev => ({ ...prev, coverImage: result.info.secure_url }));
+                    // Nueva imagen => el foco viejo (px del original anterior) ya
+                    // no aplica; se resetea a automático.
+                    setFormData(prev => ({ ...prev, coverImage: result.info.secure_url, coverFocus: "" }));
+                    setCoverDims(null);
                   }
                 }}
                 options={{
@@ -253,8 +264,80 @@ function BlogEditorContent({ id, isNew }: { id: string, isNew: boolean }) {
                 }}
               </CldUploadWidget>
             </div>
+
+            {/* Foco de la portada. Sólo para imágenes de Cloudinary (g_xy_center
+                actúa sobre el asset). Dos columnas separadas: IZQUIERDA para
+                elegir el punto (click); DERECHA la preview del recorte real (auto
+                o manual) — Cloudinary no expone el punto que elige g_auto, así que
+                mostramos el resultado en vez de un marcador. */}
+            {formData.coverImage.includes('res.cloudinary.com') && (
+              <div className="mt-4 flex flex-wrap gap-x-10 gap-y-6">
+                {/* Columna 1: elegir el foco */}
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="text-sm font-medium text-zinc-700 dark:text-zinc-200">
+                      {formData.coverFocus ? 'Foco manual' : 'Foco automático'}
+                    </span>
+                    {formData.coverFocus && (
+                      <button
+                        type="button"
+                        onClick={() => setFormData(prev => ({ ...prev, coverFocus: "" }))}
+                        className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        Volver a automático
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative overflow-hidden rounded-lg border border-zinc-200 dark:border-zinc-800 w-fit">
+                    <img
+                      src={formData.coverImage}
+                      alt="Portada"
+                      draggable={false}
+                      onLoad={(e) => setCoverDims({ w: e.currentTarget.naturalWidth, h: e.currentTarget.naturalHeight })}
+                      onClick={(e) => {
+                        const rect = e.currentTarget.getBoundingClientRect();
+                        const x = Math.round(((e.clientX - rect.left) / rect.width) * e.currentTarget.naturalWidth);
+                        const y = Math.round(((e.clientY - rect.top) / rect.height) * e.currentTarget.naturalHeight);
+                        setFormData(prev => ({ ...prev, coverFocus: `${x},${y}` }));
+                      }}
+                      className="block max-h-44 w-auto cursor-crosshair select-none"
+                    />
+                    {formData.coverFocus && coverDims && (() => {
+                      const [fx, fy] = formData.coverFocus.split(',').map(Number);
+                      return (
+                        <span
+                          className="pointer-events-none absolute -translate-x-1/2 -translate-y-1/2"
+                          style={{ left: `${(fx / coverDims.w) * 100}%`, top: `${(fy / coverDims.h) * 100}%` }}
+                        >
+                          <span className="block w-4 h-4 rounded-full border-2 border-white bg-blue-600 shadow ring-2 ring-blue-600/40" />
+                        </span>
+                      );
+                    })()}
+                  </div>
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 max-w-[14rem]">
+                    Hacé click en la imagen para elegir el foco a mano.
+                  </p>
+                </div>
+
+                {/* Columna 2: preview del recorte */}
+                <div>
+                  <span className="block text-sm font-medium text-zinc-700 dark:text-zinc-200 mb-2">
+                    Vista del recorte
+                  </span>
+                  <img
+                    key={formData.coverFocus}
+                    src={cldFocalFill(formData.coverImage, 480, 300, formData.coverFocus)}
+                    alt="Vista del recorte"
+                    className="w-44 h-[110px] object-cover rounded-lg border border-zinc-200 dark:border-zinc-800"
+                  />
+                  <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400 max-w-[14rem]">
+                    Así se va a ver recortada en las tarjetas y el home.
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-2">Translation Group ID (Opcional)</label>
             <input 

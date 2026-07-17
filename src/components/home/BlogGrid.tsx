@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { cldFocalFill } from "@/lib/cloudinary-url";
 
 const BASE = "/assets";
 
@@ -103,7 +104,7 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
               {/* Image */}
               <div className="relative overflow-hidden" style={{ height: '250px' }}>
                 <img
-                  src={post.image || post.coverImage}
+                  src={cldFocalFill(post.image || post.coverImage, 800, 500, post.coverFocus)}
                   alt={post.title}
                   className="w-full h-full object-cover"
                   loading="lazy"

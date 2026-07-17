@@ -1,5 +1,6 @@
 import { getPublishedPosts } from "@/modules/blog/services";
 import { getDictionary, Locale } from "@/i18n/dictionaries";
+import { cldFocalFill } from "@/lib/cloudinary-url";
 import Link from "next/link";
 import { format } from "date-fns";
 import { es, enUS } from "date-fns/locale";
@@ -68,7 +69,7 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
                   {imageUrl && (
                     <div className="relative overflow-hidden" style={{ height: '250px' }}>
                       <img
-                        src={imageUrl}
+                        src={cldFocalFill(imageUrl, 800, 500, post.coverFocus)}
                         alt={post.title}
                         className="w-full h-full object-cover"
                         loading="lazy"

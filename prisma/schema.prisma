@@ -239,6 +239,9 @@ model Post {
   excerpt    String?
   content    String
   coverImage String?
+  // Punto de foco manual de la portada como "x,y" en píxeles del original
+  // (ver src/lib/cloudinary-url.ts). Null/"" => foco automático (g_auto).
+  coverFocus String?
   published  Boolean  @default(false)
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt

@@ -13,6 +13,7 @@ export async function createPost(data: {
   excerpt?: string;
   content: string;
   coverImage?: string;
+  coverFocus?: string | null;
   published: boolean;
   translationGroupId?: string;
 }) {
@@ -22,15 +23,14 @@ export async function createPost(data: {
     return { success: false, error: "No autorizado" };
   }
 
-  // Generar cuid simple manualmente si no provee grupo de traducción, 
-  // así es más fácil agrupar cosas luego.
-  const groupId = data.translationGroupId || crypto.randomUUID();
-
   try {
     const post = await prisma.post.create({
       data: {
         ...data,
-        translationGroupId: groupId,
+        // Sin inventar un UUID si viene vacío: no agrupa nada (nadie más lo
+        // comparte) y la lista de admin ya sabe mostrar sueltos los posts sin
+        // grupo (ver admin/blog/page.tsx: `post.translationGroupId || post.id`).
+        translationGroupId: data.translationGroupId || null,
         authorId: session.user.id,
       },
     });
@@ -56,6 +56,7 @@ export async function updatePost(id: string, data: {
   excerpt?: string;
   content: string;
   coverImage?: string;
+  coverFocus?: string | null;
   published: boolean;
   translationGroupId?: string;
 }) {
