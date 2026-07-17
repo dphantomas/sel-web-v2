@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef, useEffect } from 'react'
-import { UploadCloud, User as UserIcon, Users, X, Check, Search, Eye, EyeOff, FileText, CheckCircle, Edit2, Shield, Layout, Trash2, Calendar, Link2, DollarSign, Image as ImageIcon, ChevronDown, ChevronRight } from 'lucide-react'
+import { UploadCloud, User as UserIcon, Users, X, Check, Search, Eye, EyeOff, FileText, CheckCircle, Edit2, Shield, Layout, LayoutGrid, List, Globe, Languages, Trash2, Calendar, Link2, DollarSign, Image as ImageIcon, ChevronDown, ChevronRight } from 'lucide-react'
 import Script from 'next/script'
 import Link from 'next/link'
 import ImageCropperModal from '@/components/ImageCropperModal'
@@ -14,7 +14,10 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
   const [users, setUsers] = useState(initialUsers || [])
 
   const [courses, setCourses] = useState(initialCourses || [])
-  
+
+  // Vista de la lista de cursos: tarjetas (grilla) o tabla (lista).
+  const [courseView, setCourseView] = useState('grid') // 'grid' | 'list'
+
   // Image Cropping States
   const [cropModalImage, setCropModalImage] = useState(null)
   const [croppedImageBlob, setCroppedImageBlob] = useState(null)
@@ -30,7 +33,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
 
   const [isCreatingCourse, setIsCreatingCourse] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
-  const [newCourseData, setNewCourseData] = useState({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', published: false })
+  const [newCourseData, setNewCourseData] = useState({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', modality: 'Virtual', language: 'es', translationGroupId: '', published: false })
   const [isSaving, setIsSaving] = useState(false)
 
   const [managingInstanceUsers, setManagingInstanceUsers] = useState(null)
@@ -69,7 +72,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
     }
     setIsCreatingCourse(false)
     setEditingCourse(null)
-    setNewCourseData({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', published: false })
+    setNewCourseData({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', modality: 'Virtual', language: 'es', translationGroupId: '', published: false })
   }
 
   // =================== LOGICA CLOUDINARY CURSO ===================
@@ -671,6 +674,8 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
           shortDescription: editingCourse.shortDescription,
           image: editingCourse.image,
           modality: editingCourse.modality,
+          language: editingCourse.language,
+          translationGroupId: editingCourse.translationGroupId ?? '',
           published: editingCourse.published
         })
       })
@@ -689,6 +694,23 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
     }
   }
 
+
+  // Abre el modal de creación precargado como TRADUCCIÓN de otro curso: mismo
+  // grupo de traducción, idioma opuesto. El admin completa el contenido traducido.
+  // El grupo cae a course.id si el original no tenía uno: así quedan vinculados
+  // (el original agrupa por `translationGroupId || id`).
+  const startTranslateCourse = (course) => {
+    setNewCourseData({
+      title: '', slug: '', description: '', shortDescription: '',
+      image: course.image || '',
+      type: course.type || 'Curso',
+      modality: course.modality || 'Virtual',
+      language: course.language === 'es' ? 'en' : 'es',
+      translationGroupId: course.translationGroupId || course.id,
+      published: false,
+    })
+    setIsCreatingCourse(true)
+  }
 
   // =================== LOGICA CREACION CURSO ===================
   const handleCreateCourseSubmit = async (e) => {
@@ -710,7 +732,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       setCourses([...courses, data.course])
       pendingUploadRef.current = null // Todo correcto, limpiamos pendingUpload
       setIsCreatingCourse(false)
-      setNewCourseData({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', modality: 'Virtual', published: false })
+      setNewCourseData({ title: '', slug: '', description: '', shortDescription: '', image: '', type: 'Curso', modality: 'Virtual', language: 'es', translationGroupId: '', published: false })
     } catch (error) {
       console.error(error)
       alert(error.message || 'Hubo un error al crear el curso.')
@@ -873,42 +895,143 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       {/* VISTA CURSOS */}
       {activeTab === 'courses' && (
         <div className="p-6">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-6 gap-4 flex-wrap">
             <div>
               <h2 className="text-xl font-bold text-sel-purple">Cursos y Talleres</h2>
               <p className="text-sm text-sel-body">Administrá los cursos, retiros y talleres de la plataforma.</p>
             </div>
-            <button
-              onClick={() => setIsCreatingCourse(true)}
-              className="bg-sel-purple text-white px-5 py-2.5 rounded-xl font-bold hover:bg-sel-quote-icon transition shadow-sm"
-            >
-              + Crear Nuevo Taller
-            </button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {courses.map(course => (
-              <div key={course.id} className="border rounded-2xl p-5 shadow-sm bg-white hover:border-[#9187BA] transition relative flex flex-col">
-                <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                  <span className={`w-3 h-3 rounded-full ${course.published ? 'bg-green-500' : 'bg-gray-300'}`} title={course.published ? 'Publicado' : 'Oculto'}></span>
-                </div>
-                
-                {course.image && (
-                  <div className="w-full h-32 mb-4 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
-                    <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
-                  </div>
-                )}
-                
-                <h3 className="font-bold text-[#33275f] text-lg mb-1 pr-6">{course.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-3 mb-4 mt-2 flex-grow">{course.shortDescription || 'Sin descripción'}</p>
+            <div className="flex items-center gap-3">
+              {/* Toggle grilla / lista */}
+              <div className="flex items-center bg-gray-100 rounded-xl p-1">
                 <button
-                  onClick={() => setEditingCourse(course)}
-                  className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition w-full mt-auto"
+                  onClick={() => setCourseView('grid')}
+                  title="Vista de tarjetas"
+                  className={`p-2 rounded-lg transition ${courseView === 'grid' ? 'bg-white shadow-sm text-sel-purple' : 'text-gray-400 hover:text-gray-600'}`}
                 >
-                  Editar Información
+                  <LayoutGrid className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => setCourseView('list')}
+                  title="Vista de lista"
+                  className={`p-2 rounded-lg transition ${courseView === 'list' ? 'bg-white shadow-sm text-sel-purple' : 'text-gray-400 hover:text-gray-600'}`}
+                >
+                  <List className="w-5 h-5" />
                 </button>
               </div>
-            ))}
+              <button
+                onClick={() => setIsCreatingCourse(true)}
+                className="bg-sel-purple text-white px-5 py-2.5 rounded-xl font-bold hover:bg-sel-quote-icon transition shadow-sm"
+              >
+                + Crear Nuevo Taller
+              </button>
+            </div>
           </div>
+
+          {/* VISTA GRILLA (tarjetas) */}
+          {courseView === 'grid' && (
+            <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {courses.map(course => (
+                <div key={course.id} className="border rounded-2xl p-5 shadow-sm bg-white hover:border-[#9187BA] transition relative flex flex-col">
+                  <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
+                    <span className={`w-3 h-3 rounded-full ${course.published ? 'bg-green-500' : 'bg-gray-300'}`} title={course.published ? 'Publicado' : 'Oculto'}></span>
+                  </div>
+
+                  {course.image && (
+                    <div className="w-full h-32 mb-4 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
+                      <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
+                    </div>
+                  )}
+
+                  <h3 className="font-bold text-[#33275f] text-lg mb-1 pr-6">{course.title}</h3>
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-4 mt-2 flex-grow">{course.shortDescription || 'Sin descripción'}</p>
+                  <button
+                    onClick={() => setEditingCourse(course)}
+                    className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition w-full mt-auto"
+                  >
+                    Editar Información
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* VISTA LISTA (tabla) */}
+          {courseView === 'list' && (
+            <div className="border border-gray-200 rounded-2xl overflow-hidden bg-white shadow-sm">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-gray-50 border-b border-gray-200">
+                      <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Curso</th>
+                      <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Idioma</th>
+                      <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Tipo / Mod.</th>
+                      <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Estado</th>
+                      <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-100">
+                    {courses.length === 0 ? (
+                      <tr>
+                        <td colSpan={5} className="px-6 py-8 text-center text-gray-400">No hay cursos creados aún.</td>
+                      </tr>
+                    ) : (
+                      courses.map(course => (
+                        <tr key={course.id} className="hover:bg-gray-50 transition-colors">
+                          <td className="px-6 py-4">
+                            <div className="flex items-center gap-3">
+                              {course.image && (
+                                <img src={course.image} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
+                              )}
+                              <div className="min-w-0">
+                                <p className="font-semibold text-[#33275f] truncate">{course.title}</p>
+                                <p className="text-xs text-gray-500 truncate max-w-xs">{course.shortDescription || 'Sin descripción corta'}</p>
+                              </div>
+                            </div>
+                          </td>
+                          <td className="px-6 py-4">
+                            <span className="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600">
+                              <Globe className="w-4 h-4 text-gray-400" />
+                              {(course.language || 'es').toUpperCase()}
+                            </span>
+                          </td>
+                          <td className="px-6 py-4 text-sm text-gray-600">
+                            <div>{course.type}</div>
+                            <div className="text-xs text-gray-400">{course.modality}</div>
+                          </td>
+                          <td className="px-6 py-4">
+                            {course.published ? (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-100 text-emerald-700">Publicado</span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-700">Borrador</span>
+                            )}
+                          </td>
+                          <td className="px-6 py-4 text-right">
+                            <div className="flex items-center justify-end gap-2">
+                              <button
+                                onClick={() => startTranslateCourse(course)}
+                                title={`Crear traducción a ${course.language === 'es' ? 'EN' : 'ES'}`}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-emerald-700 bg-emerald-50 hover:bg-emerald-100 rounded-lg transition-colors"
+                              >
+                                <Languages className="w-4 h-4" />
+                                Traducir
+                              </button>
+                              <button
+                                onClick={() => setEditingCourse(course)}
+                                className="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-white bg-[#33275f] hover:bg-[#4c3c86] rounded-lg transition-colors"
+                              >
+                                <Edit2 className="w-4 h-4" />
+                                Editar
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -1347,6 +1470,18 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                             <option value="Presencial">Presencial</option>
                           </select>
                         </div>
+                        <div>
+                          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Idioma</label>
+                          <select value={editingCourse.language || 'es'} onChange={(e) => setEditingCourse({...editingCourse, language: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                            <option value="es">Español</option>
+                            <option value="en">English</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div>
+                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo de Traducción (opcional)</label>
+                        <input type="text" value={editingCourse.translationGroupId || ''} onChange={(e) => setEditingCourse({...editingCourse, translationGroupId: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Vacío = curso suelto" />
+                        <p className="text-[11px] text-gray-400 mt-1">Vincula este curso con su versión en otro idioma (mismo valor en ambos). Vacío = sin traducción.</p>
                       </div>
                       <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
@@ -1782,7 +1917,15 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       {isCreatingCourse && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold text-[#33275f] mb-4">Crear Nuevo Curso/Taller</h2>
+            <h2 className="text-xl font-bold text-[#33275f] mb-4">
+              {newCourseData.translationGroupId ? 'Crear Traducción del Curso' : 'Crear Nuevo Curso/Taller'}
+            </h2>
+            {newCourseData.translationGroupId && (
+              <div className="mb-4 flex items-center gap-2 text-sm text-emerald-800 bg-emerald-50 border border-emerald-100 rounded-xl px-3 py-2">
+                <Languages className="w-4 h-4 shrink-0" />
+                <span>Traducción a <strong>{(newCourseData.language || 'es').toUpperCase()}</strong>, vinculada al curso original. Completá el contenido traducido.</span>
+              </div>
+            )}
             <form onSubmit={handleCreateCourseSubmit}>
               <div className="space-y-4">
                 <div>
@@ -1803,12 +1946,26 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                     <option value="Retiro">Retiro</option>
                   </select>
                 </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Modalidad</label>
+                    <select value={newCourseData.modality || 'Virtual'} onChange={(e) => setNewCourseData({...newCourseData, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                      <option value="Virtual">Virtual</option>
+                      <option value="Presencial">Presencial</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Idioma</label>
+                    <select value={newCourseData.language || 'es'} onChange={(e) => setNewCourseData({...newCourseData, language: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                      <option value="es">Español</option>
+                      <option value="en">English</option>
+                    </select>
+                  </div>
+                </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Modalidad</label>
-                  <select value={newCourseData.modality || 'Virtual'} onChange={(e) => setNewCourseData({...newCourseData, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
-                    <option value="Virtual">Virtual</option>
-                    <option value="Presencial">Presencial</option>
-                  </select>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo de Traducción (opcional)</label>
+                  <input type="text" value={newCourseData.translationGroupId || ''} onChange={(e) => setNewCourseData({...newCourseData, translationGroupId: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Se completa solo al usar “Traducir”. Vacío = curso suelto." />
+                  <p className="text-[11px] text-gray-400 mt-1">Vincula este curso con su versión en otro idioma. Normalmente lo llena el botón “Traducir”; dejalo vacío si es un curso nuevo sin traducción.</p>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
