@@ -44,9 +44,14 @@ export async function proxy(request: NextRequest) {
   // Toda la lógica de reescritura de rutas limpias a /es/ ahora se maneja
   // en next.config.ts (rewrites) para que sea compatible con next/link en el cliente.
   
-  // Si alguien entra a la raíz, detectamos idioma para redireccionar a /en si hace falta
+  // Si alguien entra a la raíz, detectamos idioma para redireccionar a /en si hace falta.
+  // La cookie NEXT_LOCALE (la setea LanguageSwitcher al click) tiene prioridad sobre el
+  // header: si no, cada visita a "/" pisaba la elección manual de idioma con lo que
+  // mande Accept-Language, y el botón ES quedaba pegado en inglés en navegadores/perfiles
+  // cuyo header no incluye "es" (ej. Chrome incógnito).
   if (pathname === '/') {
-    const locale = getLocale(request);
+    const cookieLocale = request.cookies.get('NEXT_LOCALE')?.value;
+    const locale = cookieLocale === 'es' || cookieLocale === 'en' ? cookieLocale : getLocale(request);
     if (locale === 'en') {
       request.nextUrl.pathname = `/en`;
       return NextResponse.redirect(request.nextUrl);
