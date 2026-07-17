@@ -821,7 +821,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       <td className="py-4 px-6">
                         <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0">
                           {user.image ? (
-                            <img src={user.image} alt={user.firstName} className="w-full h-full object-cover" />
+                            <img src={user.image} alt={user.firstName} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                           ) : (
                             <UserIcon className="w-5 h-5 text-gray-400" />
                           )}
@@ -1918,7 +1918,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                     <div key={user.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition">
                       <div className="flex items-center gap-3">
                         {user.image ? (
-                          <img src={user.image} alt={user.firstName} className="w-10 h-10 rounded-full object-cover" />
+                          <img src={user.image} alt={user.firstName} referrerPolicy="no-referrer" className="w-10 h-10 rounded-full object-cover" />
                         ) : (
                           <div className="w-10 h-10 rounded-full bg-[#B681AE]/20 flex items-center justify-center text-[#B681AE] font-bold">
                             {user.firstName?.charAt(0) || ''}{user.lastName?.charAt(0) || ''}

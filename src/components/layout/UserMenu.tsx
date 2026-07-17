@@ -40,7 +40,7 @@ export function UserMenu({
         <div className="w-9 h-9 flex-shrink-0 rounded-full bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center text-zinc-500 overflow-hidden ring-2 ring-zinc-100 dark:ring-zinc-800">
           {user ? (
             user.image ? (
-              <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
+              <img src={user.image} alt="Avatar" referrerPolicy="no-referrer" className="w-full h-full object-cover" />
             ) : (
               <span className="text-sm font-bold text-zinc-600 dark:text-zinc-300">
                 {user.name?.charAt(0).toUpperCase() || user.email?.charAt(0).toUpperCase() || "U"}
