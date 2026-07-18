@@ -49,9 +49,8 @@ export async function PUT(req) {
     const firstName = safeString(formData.get('firstName'))
     const lastName = safeString(formData.get('lastName'))
     const phone = safeString(formData.get('phone'))
-    const addressLine1 = safeString(formData.get('addressLine1'))
-    const addressLine2 = safeString(formData.get('addressLine2'))
-    const zipCode = safeString(formData.get('zipCode'))
+    const city = safeString(formData.get('city'))
+    const province = safeString(formData.get('province'))
     const country = safeString(formData.get('country'))
     const sparkName = safeString(formData.get('sparkName'))
     const birthDateRaw = safeString(formData.get('birthDate'))
@@ -114,6 +113,9 @@ export async function PUT(req) {
     if (firstName) updateData.firstName = firstName
     if (lastName !== undefined) updateData.lastName = lastName || ''
     if (phone !== undefined) updateData.phone = phone
+    if (city !== undefined) updateData.city = city
+    if (province !== undefined) updateData.province = province
+    if (country !== undefined) updateData.country = country
     if (sparkName !== undefined) updateData.sparkName = sparkName
     if (birthDateRaw) {
       updateData.birthDate = new Date(birthDateRaw)

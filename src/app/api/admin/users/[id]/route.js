@@ -81,11 +81,10 @@ export async function PUT(req, { params }) {
     const phone = formData.get('phone') || null
     const role = formData.get('role')
     const forceVerify = formData.get('forceVerify') === 'true'
-    const addressLine1 = formData.get('addressLine1')
-    const addressLine2 = formData.get('addressLine2')
-    const zipCode = formData.get('zipCode')
-    const country = formData.get('country')
     const sparkName = formData.get('sparkName')
+    const city = formData.get('city')
+    const province = formData.get('province')
+    const country = formData.get('country')
     const imageFile = formData.get('image')
     const removeImage = formData.get('removeImage')
 
@@ -157,11 +156,10 @@ export async function PUT(req, { params }) {
         ...(lastName && { lastName: lastName.trim() }),
         phone: phone !== null ? phone.trim() : undefined,
         ...(role && { role }),
-        addressLine1: addressLine1 !== null ? addressLine1.trim() : undefined,
-        addressLine2: addressLine2 !== null ? addressLine2.trim() : undefined,
-        zipCode: zipCode !== null ? zipCode.trim() : undefined,
-        country: country !== null ? country.trim() : undefined,
         sparkName: sparkName !== null ? sparkName.trim() : undefined,
+        city: city !== null ? city.trim() : undefined,
+        province: province !== null ? province.trim() : undefined,
+        country: country !== null ? country.trim() : undefined,
         birthDate: formData.get('birthDate') ? new Date(formData.get('birthDate')) : undefined,
         ...(imageUrl !== undefined && { image: imageUrl }),
         ...(forceVerify && { emailVerified: new Date() })

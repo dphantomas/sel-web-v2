@@ -15,9 +15,8 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
     lastName: user.lastName || '',
     phone: user.phone || '',
     birthDate: user.birthDate ? new Date(user.birthDate).toISOString().split('T')[0] : '',
-    addressLine1: user.addressLine1 || '',
-    addressLine2: user.addressLine2 || '',
-    zipCode: user.zipCode || '',
+    city: user.city || '',
+    province: user.province || '',
     country: user.country || '',
     sparkName: user.sparkName || ''
   })
@@ -55,9 +54,8 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
       formPayload.append('firstName', formData.firstName)
       formPayload.append('lastName', formData.lastName)
       formPayload.append('phone', formData.phone)
-      formPayload.append('addressLine1', formData.addressLine1)
-      formPayload.append('addressLine2', formData.addressLine2)
-      formPayload.append('zipCode', formData.zipCode)
+      formPayload.append('city', formData.city)
+      formPayload.append('province', formData.province)
       formPayload.append('country', formData.country)
       formPayload.append('sparkName', formData.sparkName)
       formPayload.append('birthDate', formData.birthDate)
@@ -236,30 +234,21 @@ export default function UserProfileForm({ user, hasInitiatoryRetreat }: { user: 
             ))}
           </select>
         </div>
-        <div className="md:col-span-2">
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Dirección (Línea 1)</label>
+        <div>
+          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Ciudad / Localidad</label>
           <input
             type="text"
-            value={formData.addressLine1}
-            onChange={(e: any) => setFormData({ ...formData, addressLine1: e.target.value })}
+            value={formData.city}
+            onChange={(e: any) => setFormData({ ...formData, city: e.target.value })}
             className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>
         <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Dirección (Línea 2) (Opcional)</label>
+          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Provincia / Región</label>
           <input
             type="text"
-            value={formData.addressLine2}
-            onChange={(e: any) => setFormData({ ...formData, addressLine2: e.target.value })}
-            className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
-          />
-        </div>
-        <div>
-          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Código Postal</label>
-          <input
-            type="text"
-            value={formData.zipCode}
-            onChange={(e: any) => setFormData({ ...formData, zipCode: e.target.value })}
+            value={formData.province}
+            onChange={(e: any) => setFormData({ ...formData, province: e.target.value })}
             className="w-full px-4 py-2 h-[46px] rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none"
           />
         </div>

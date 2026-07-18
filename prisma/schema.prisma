@@ -24,6 +24,9 @@ model User {
   currentChallenge String?
   sparkName        String?
   birthDate        DateTime?
+  city             String?
+  province         String?
+  country          String?
 
   authenticators Authenticator[]
 

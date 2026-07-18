@@ -5,6 +5,7 @@ import { UploadCloud, User as UserIcon, Users, X, Check, Search, Eye, EyeOff, Fi
 import Script from 'next/script'
 import ImageCropperModal from '@/components/ImageCropperModal'
 import GalleryAdmin from './GalleryAdmin'
+import { COUNTRIES } from '@/lib/countries'
 
 export default function AdminUsersPanel({ initialUsers, courses: initialCourses }) {
   const [activeTab, setActiveTab] = useState('users') // Hardcoded to 'users' for this panel
@@ -32,7 +33,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   const editFileInputRef = useRef(null)
 
   const [isCreatingUser, setIsCreatingUser] = useState(false)
-  const [newUserData, setNewUserData] = useState({ firstName: '', lastName: '', email: '', phone: '', role: 'Participante' })
+  const [newUserData, setNewUserData] = useState({ firstName: '', lastName: '', email: '', phone: '', role: 'Guest' })
 
   const [isCreatingCourse, setIsCreatingCourse] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
@@ -678,7 +679,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       const data = await res.json()
       setUsers([data.user, ...users])
       setIsCreatingUser(false)
-      setNewUserData({ firstName: '', lastName: '', email: '', phone: '', role: 'Participante' })
+      setNewUserData({ firstName: '', lastName: '', email: '', phone: '', role: 'Guest' })
     } catch (error) {
       console.error(error)
       alert(error.message || 'Hubo un error al crear el participante.')
@@ -1191,48 +1192,25 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                     </div>
                   </div>
 
-                  {/* Residencia */}
+                  {/* Ubicación */}
                   <div>
-                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Residencia</h3>
+                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Ubicación</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="sm:col-span-2">
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Dirección</label>
-                        <input type="text" name="addressLine1" defaultValue={editingUser.addressLine1 || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
-                      </div>
-                      <div className="sm:col-span-2">
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Ciudad, Provincia</label>
-                        <input type="text" name="addressLine2" defaultValue={editingUser.addressLine2 || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                      <div>
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Ciudad / Localidad</label>
+                        <input type="text" name="city" defaultValue={editingUser.city || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Código Postal</label>
-                        <input type="text" name="zipCode" defaultValue={editingUser.zipCode || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 mb-1">Provincia / Región</label>
+                        <input type="text" name="province" defaultValue={editingUser.province || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
                       </div>
-                      <div>
+                      <div className="sm:col-span-2">
                         <label className="block text-xs font-bold text-gray-700 mb-1">País</label>
                         <select name="country" defaultValue={editingUser.country || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white">
-                          <option value="" disabled>Seleccionar...</option>
-                          <option value="Argentina">Argentina</option>
-                          <option value="Bolivia">Bolivia</option>
-                          <option value="Chile">Chile</option>
-                          <option value="Colombia">Colombia</option>
-                          <option value="Costa Rica">Costa Rica</option>
-                          <option value="Cuba">Cuba</option>
-                          <option value="Ecuador">Ecuador</option>
-                          <option value="El Salvador">El Salvador</option>
-                          <option value="España">España</option>
-                          <option value="Estados Unidos">Estados Unidos</option>
-                          <option value="Guatemala">Guatemala</option>
-                          <option value="Honduras">Honduras</option>
-                          <option value="México">México</option>
-                          <option value="Nicaragua">Nicaragua</option>
-                          <option value="Panamá">Panamá</option>
-                          <option value="Paraguay">Paraguay</option>
-                          <option value="Perú">Perú</option>
-                          <option value="Puerto Rico">Puerto Rico</option>
-                          <option value="República Dominicana">República Dominicana</option>
-                          <option value="Uruguay">Uruguay</option>
-                          <option value="Venezuela">Venezuela</option>
-                          <option value="Otro">Otro País</option>
+                          <option value="">Seleccionar...</option>
+                          {COUNTRIES.map((c) => (
+                            <option key={c} value={c}>{c}</option>
+                          ))}
                         </select>
                       </div>
                     </div>
