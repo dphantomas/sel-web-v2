@@ -376,6 +376,20 @@ model OrderItem {
   product Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
 }
 
+// --- MÓDULO HOME ---
+
+// Frases rotativas de la sección "El Proceso" en el home. `order` define el
+// orden del ciclo; solo las `isActive` se muestran en el sitio público.
+model HomePhrase {
+  id        String   @id @default(cuid())
+  textEs    String   @db.Text
+  textEn    String   @db.Text
+  order     Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 // --- MÓDULO RESEÑAS ---
 
 model Review {

@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
-import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon, Star } from "lucide-react";
+import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon, Star, Quote } from "lucide-react";
 import ThemeToggle from "@/components/admin/ThemeToggle";
 
 export const metadata = {
@@ -58,6 +58,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <Link href="/admin/reviews" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
               <Star className="w-4 h-4" />
               Reseñas
+            </Link>
+            <Link href="/admin/frases" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
+              <Quote className="w-4 h-4" />
+              Frases
             </Link>
           </div>
         </nav>

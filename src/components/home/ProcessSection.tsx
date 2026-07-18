@@ -2,14 +2,62 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { renderEditorHtml } from "@/lib/html";
+
+interface HomePhrase {
+  textEs: string;
+  textEn: string;
+}
 
 interface ProcessSectionProps {
   dict: any;
   lang: string;
+  phrases: HomePhrase[];
 }
 
-export function ProcessSection({ dict, lang }: ProcessSectionProps) {
+const PHRASE_DISPLAY_MS = 3500;
+const PHRASE_FADE_MS = 1200;
+const PHRASE_BLUR_PX = 6;
+const PHRASE_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+const PHRASE_SHADOW = "drop-shadow(0 1px 1px rgba(0,0,0,0.05))";
+
+// Cada aparición recorre uno de estos movimientos al azar, para que las
+// frases no repitan siempre el mismo efecto.
+const PHRASE_VARIANTS = [
+  "translateY(18px) scale(0.96)",
+  "translateY(-18px) scale(0.96)",
+  "translateX(-24px) scale(0.96)",
+  "translateX(24px) scale(0.96)",
+  "scale(0.9)",
+];
+
+const randomVariant = () => PHRASE_VARIANTS[Math.floor(Math.random() * PHRASE_VARIANTS.length)];
+
+export function ProcessSection({ dict, lang, phrases }: ProcessSectionProps) {
   const getLocalizedUrl = (path: string) => (lang === "es" ? path : `/${lang}${path}`);
+  const phraseTexts = phrases.map((p) => (lang === "en" ? p.textEn : p.textEs));
+
+  const [index, setIndex] = useState(0);
+  const [visible, setVisible] = useState(false);
+  const [hiddenTransform, setHiddenTransform] = useState(randomVariant);
+
+  useEffect(() => {
+    if (phraseTexts.length === 0) return;
+
+    setHiddenTransform(randomVariant());
+    setVisible(false);
+    const showFrame = requestAnimationFrame(() => setVisible(true));
+    const fadeOutTimer = setTimeout(() => setVisible(false), PHRASE_DISPLAY_MS);
+    const nextTimer = setTimeout(() => {
+      setIndex((prev) => (prev + 1) % phraseTexts.length);
+    }, PHRASE_DISPLAY_MS + PHRASE_FADE_MS);
+
+    return () => {
+      cancelAnimationFrame(showFrame);
+      clearTimeout(fadeOutTimer);
+      clearTimeout(nextTimer);
+    };
+  }, [index, phraseTexts.length]);
 
   return (
     <section
@@ -26,11 +74,29 @@ export function ProcessSection({ dict, lang }: ProcessSectionProps) {
           <img src="/assets/flecha2.png" alt="" className="mx-auto w-[60px]" />
         </div>
 
-        <div className="space-y-6 text-[#33275f] text-[20px] md:text-[24px] font-light leading-relaxed mb-10" style={{ fontFamily: "'Lato', sans-serif" }}>
-          <p className="drop-shadow-sm" dangerouslySetInnerHTML={{ __html: dict.processLine1 }} />
-          <p className="drop-shadow-sm" dangerouslySetInnerHTML={{ __html: dict.processLine2 }} />
-          <p className="drop-shadow-sm" dangerouslySetInnerHTML={{ __html: dict.processLine3 }} />
-        </div>
+        {phraseTexts.length > 0 && (
+          <div className="relative grid text-[#33275f] text-[22px] md:text-[27px] font-light leading-relaxed mb-10 py-2" style={{ fontFamily: "'Lato', sans-serif" }}>
+            {phraseTexts.map((phrase, i) => {
+              const shown = i === index && visible;
+              return (
+                <p
+                  key={i}
+                  aria-hidden={i !== index}
+                  className="col-start-1 row-start-1 transition-all"
+                  style={{
+                    opacity: shown ? 1 : 0,
+                    transform: shown ? "translate(0, 0) scale(1)" : hiddenTransform,
+                    filter: shown ? `blur(0px) ${PHRASE_SHADOW}` : `blur(${PHRASE_BLUR_PX}px) ${PHRASE_SHADOW}`,
+                    transitionDuration: `${PHRASE_FADE_MS}ms`,
+                    transitionTimingFunction: PHRASE_EASE,
+                    willChange: "opacity, transform, filter",
+                  }}
+                  dangerouslySetInnerHTML={{ __html: renderEditorHtml(phrase) }}
+                />
+              );
+            })}
+          </div>
+        )}
 
         <Link
           href={getLocalizedUrl("/talleres")}
