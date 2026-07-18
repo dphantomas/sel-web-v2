@@ -958,7 +958,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       </td>
                       <td className="py-4 px-6">
                         <span className="text-xs font-bold text-[#B681AE] bg-[#B681AE]/10 px-3 py-1 rounded-full">
-                          {user.unlockedCourses?.length || 0} habilitados
+                          {user.unlockedCourses?.length || 0} realizados
                         </span>
                       </td>
                       <td className="py-4 px-6 text-right">
