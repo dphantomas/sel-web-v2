@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { UploadCloud, User as UserIcon, Users, X, Check, Search, Eye, EyeOff, FileText, CheckCircle, Edit2, Shield, Layout, Trash2, Calendar, Link2, DollarSign, Image as ImageIcon, ChevronDown, ChevronRight } from 'lucide-react'
 import Script from 'next/script'
-import Link from 'next/link'
 import ImageCropperModal from '@/components/ImageCropperModal'
 import GalleryAdmin from './GalleryAdmin'
 
@@ -31,6 +30,9 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   const [userTab, setUserTab] = useState('data') // 'data' | 'access' | 'resources'
   const [editImagePreview, setEditImagePreview] = useState(null)
   const editFileInputRef = useRef(null)
+
+  const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const [newUserData, setNewUserData] = useState({ firstName: '', lastName: '', email: '', phone: '', role: 'Participante' })
 
   const [isCreatingCourse, setIsCreatingCourse] = useState(false)
   const [editingCourse, setEditingCourse] = useState(null)
@@ -657,6 +659,34 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
     }
   }
 
+  // =================== LOGICA CREACION USUARIO ===================
+  const handleCreateUserSubmit = async (e) => {
+    e.preventDefault()
+    setIsSaving(true)
+    try {
+      const res = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUserData)
+      })
+
+      if (!res.ok) {
+        const errorData = await res.json()
+        throw new Error(errorData.error || 'Error al crear participante')
+      }
+
+      const data = await res.json()
+      setUsers([data.user, ...users])
+      setIsCreatingUser(false)
+      setNewUserData({ firstName: '', lastName: '', email: '', phone: '', role: 'Participante' })
+    } catch (error) {
+      console.error(error)
+      alert(error.message || 'Hubo un error al crear el participante.')
+    } finally {
+      setIsSaving(false)
+    }
+  }
+
   // =================== LOGICA ELIMINACION USUARIO ===================
   const handleDeleteUser = async (userId, userName) => {
     if (!window.confirm(`⚠️ ATENCIÓN ⚠️\n\n¿Estás seguro de que deseas ELIMINAR permanentemente a ${userName}?\n\nEsta acción borrará todo su progreso en cursos y no se puede deshacer.`)) {
@@ -801,12 +831,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 <h2 className="text-xl font-bold text-sel-purple">Participantes</h2>
                 <p className="text-sm text-sel-body">Gestioná los usuarios y sus accesos.</p>
               </div>
-              <Link
-                href="/admin/users/new"
+              <button
+                type="button"
+                onClick={() => setIsCreatingUser(true)}
                 className="bg-sel-purple text-white px-5 py-2.5 rounded-xl font-bold hover:bg-sel-quote-icon transition shadow-sm whitespace-nowrap text-center"
               >
                 + Crear Nuevo Participante
-              </Link>
+              </button>
             </div>
             
             <div className="flex items-center gap-4 w-full max-w-2xl">
@@ -1345,6 +1376,53 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
               </div>
             </div>
 
+          </div>
+        </div>
+      )}
+
+      {/* MODAL CREAR PARTICIPANTE */}
+      {isCreatingUser && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-bold text-[#33275f] mb-4">Crear Nuevo Participante</h2>
+            <form onSubmit={handleCreateUserSubmit}>
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label>
+                    <input type="text" required value={newUserData.firstName} onChange={(e) => setNewUserData({...newUserData, firstName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Apellido</label>
+                    <input type="text" required value={newUserData.lastName} onChange={(e) => setNewUserData({...newUserData, lastName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
+                  <input type="email" required value={newUserData.email} onChange={(e) => setNewUserData({...newUserData, email: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono</label>
+                  <input type="text" value={newUserData.phone} onChange={(e) => setNewUserData({...newUserData, phone: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Opcional" />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Rol en la Plataforma</label>
+                  <select value={newUserData.role} onChange={(e) => setNewUserData({...newUserData, role: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                    <option value="Guest">Invitado (Guest)</option>
+                    <option value="Participante">Participante</option>
+                    <option value="Transmisor">Transmisor</option>
+                    <option value="Admin">Admin</option>
+                  </select>
+                </div>
+                <p className="text-xs text-gray-400">La contraseña inicial se genera automáticamente a partir del email y se le puede informar al participante.</p>
+              </div>
+              <div className="mt-6 flex justify-end gap-3">
+                <button type="button" onClick={() => setIsCreatingUser(false)} className="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100 transition">Cerrar</button>
+                <button type="submit" disabled={isSaving} className="px-6 py-2 rounded-xl bg-[#B681AE] text-white font-bold hover:bg-[#9187BA] transition disabled:opacity-50">
+                  {isSaving ? 'Creando...' : 'Crear Participante'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
