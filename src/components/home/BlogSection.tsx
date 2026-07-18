@@ -28,7 +28,7 @@ export function BlogSection({ dict, lang, posts }: BlogSectionProps) {
       <div className="text-center mt-2">
         <Link
           href={getLocalizedUrl("/blog")}
-          className="inline-block border-2 border-[#9187BA] text-[#9187BA] hover:bg-[#9187BA] hover:text-white px-6 py-2 rounded-full font-bold transition-all duration-300"
+          className="inline-block border-2 border-[#6E678D] text-[#6E678D] hover:bg-[#6E678D] hover:text-white px-6 py-2 rounded-full font-bold transition-all duration-300"
         >
           {dict.blogBtn}
         </Link>

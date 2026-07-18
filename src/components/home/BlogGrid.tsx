@@ -91,7 +91,10 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
           let dateStr = post.date;
           if (post.createdAt) {
              const d = new Date(post.createdAt);
-             dateStr = d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+             // timeZone fijo: sin esto, el server (Vercel, UTC) y el navegador
+             // (horario local del visitante) pueden formatear un día distinto
+             // para la misma fecha -> mismatch de texto -> hydration error #418.
+             dateStr = d.toLocaleDateString('es-AR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: 'UTC' });
           }
 
           return (
@@ -133,7 +136,7 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
                 </h2>
                 <p
                   style={{
-                    color: '#c2a2e8',
+                    color: '#806B99',
                     fontSize: '14px',
                     fontFamily: "'Open Sans', sans-serif",
                     marginBottom: '8px',
@@ -155,7 +158,7 @@ export function BlogGrid({ lang, limit, dynamicPosts }: BlogGridProps) {
                   style={{
                     display: 'inline-block',
                     marginTop: '12px',
-                    color: '#2ea3f2',
+                    color: '#237CB8',
                     fontSize: '14px',
                     fontWeight: 700,
                     fontFamily: "'Open Sans', sans-serif",

@@ -1,4 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;500;600;700&display=swap');
+/* Lato/Open Sans se cargan desde <link> en app/layout.tsx, no con @import:
+   un @import dentro de un CSS es render-blocking (HTML -> este CSS -> CSS de
+   Google -> woff2), agrega un salto extra a la cadena crítica y retrasaba el
+   LCP. Con <link> el navegador lo descubre apenas parsea el <head>. */
 
 @tailwind base;
 @tailwind components;

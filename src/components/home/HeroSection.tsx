@@ -30,12 +30,13 @@ export function HeroSection({ dict, lang, session }: HeroSectionProps) {
           className="absolute inset-x-0 top-[-15%] h-[130%] z-0 pointer-events-none"
           style={{ transform: `translateY(${scrollY * 0.4}px)` }}
         >
-          <Image 
+          <Image
             src="/assets/el-hoyo-2.jpeg"
             alt="Sanación en Luz - Hero Background"
             fill
-            priority
-            quality={100}
+            preload
+            fetchPriority="high"
+            quality={75}
             className="object-cover object-center z-0"
           />
           {/* Overlay applied directly over the moving image */}
@@ -49,7 +50,7 @@ export function HeroSection({ dict, lang, session }: HeroSectionProps) {
               alt="Sanación en Luz"
               width={650}
               height={300}
-              priority
+              preload
               className="mx-auto w-auto drop-shadow-2xl"
               style={{ maxWidth: '650px', width: '80vw', height: 'auto' }}
             />

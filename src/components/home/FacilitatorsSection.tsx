@@ -16,9 +16,11 @@ export function FacilitatorsSection({ dict, lang }: FacilitatorsSectionProps) {
       <div className="max-w-5xl mx-auto px-6 flex flex-col md:flex-row items-center gap-10">
         <div className="w-full md:w-1/2 relative">
           <div className="absolute -inset-4 bg-[#e8daf5] rounded-tl-[80px] rounded-br-[80px] opacity-50 transform -rotate-3"></div>
-          <img 
+          <img
             src="/assets/darioymonica.jpg"
-            alt="Darío y Mónica" 
+            alt="Darío y Mónica"
+            width={548}
+            height={381}
             className="relative rounded-tl-[60px] rounded-br-[60px] shadow-2xl w-full object-cover"
             style={{ maxHeight: '400px', objectPosition: 'center top' }}
           />

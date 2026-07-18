@@ -39,7 +39,10 @@ export function ProcessSection({ dict, lang, phrases }: ProcessSectionProps) {
 
   const [index, setIndex] = useState(0);
   const [visible, setVisible] = useState(false);
-  const [hiddenTransform, setHiddenTransform] = useState(randomVariant);
+  // Valor inicial fijo (no Math.random()): el servidor y el cliente deben
+  // renderizar lo mismo en el primer paint o React tira un hydration mismatch.
+  // El useEffect de abajo lo randomiza apenas monta, así que esto no se nota.
+  const [hiddenTransform, setHiddenTransform] = useState(PHRASE_VARIANTS[0]);
 
   useEffect(() => {
     if (phraseTexts.length === 0) return;
@@ -71,7 +74,7 @@ export function ProcessSection({ dict, lang, phrases }: ProcessSectionProps) {
       
       <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
         <div className="mb-8">
-          <img src="/assets/flecha2.png" alt="" className="mx-auto w-[60px]" />
+          <img src="/assets/flecha2.png" alt="" width={60} height={36} className="mx-auto w-[60px]" />
         </div>
 
         {phraseTexts.length > 0 && (
@@ -100,7 +103,7 @@ export function ProcessSection({ dict, lang, phrases }: ProcessSectionProps) {
 
         <Link
           href={getLocalizedUrl("/talleres")}
-          className="inline-block bg-[#9187BA] hover:bg-[#33275f] text-white px-8 py-3 rounded-full font-bold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
+          className="inline-block bg-[#6E678D] hover:bg-[#33275f] text-white px-8 py-3 rounded-full font-bold tracking-wide transition-all duration-300 shadow-lg hover:shadow-xl hover:-translate-y-1"
         >
           {dict.processBtn}
         </Link>

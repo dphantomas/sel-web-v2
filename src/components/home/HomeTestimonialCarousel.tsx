@@ -101,7 +101,7 @@ export function HomeTestimonialCarousel({ reviews, isEn }: HomeTestimonialCarous
                     style={{ fontFamily: "'Open Sans', sans-serif", lineHeight: '1.7em' }}
                     dangerouslySetInnerHTML={{ __html: renderEditorHtml(review.content) }}
                   />
-                  <p className="text-[#b085b3] font-bold text-base uppercase tracking-wider text-center w-full">
+                  <p className="text-[#89688C] font-bold text-base uppercase tracking-wider text-center w-full">
                     — {review.authorName} {review.authorRole ? `(${review.authorRole})` : ''}
                   </p>
                 </div>
@@ -129,20 +129,29 @@ export function HomeTestimonialCarousel({ reviews, isEn }: HomeTestimonialCarous
         </div>
       </div>
 
-      {/* Dots */}
-      <div className="flex justify-center gap-2 mb-6">
+      {/* Dots — el botón tiene un área de toque de 24x24px mínimo (WCAG 2.5.8);
+          el puntito visual adentro se mantiene chico. */}
+      <div className="flex justify-center mb-6">
         {reviews.map((_, i) => (
           <button
             key={i}
             aria-label={(isEn ? "Go to testimonial " : "Ir al testimonio ") + (i + 1)}
             onClick={() => scrollTo(i)}
-            className="rounded-full transition-all duration-300"
+            className="flex items-center justify-center shrink-0"
             style={{
-              width: i === selectedIndex ? '24px' : '8px',
-              height: '8px',
-              backgroundColor: i === selectedIndex ? '#33275f' : '#d4aeea',
+              width: i === selectedIndex ? '40px' : '24px',
+              height: '24px',
             }}
-          />
+          >
+            <span
+              className="rounded-full transition-all duration-300 block"
+              style={{
+                width: i === selectedIndex ? '24px' : '8px',
+                height: '8px',
+                backgroundColor: i === selectedIndex ? '#33275f' : '#d4aeea',
+              }}
+            />
+          </button>
         ))}
       </div>
     </>

@@ -27,7 +27,7 @@ export async function TestimonialsSection({ dict, lang }: TestimonialsSectionPro
 
         <Link
           href={getLocalizedUrl("/testimonios")}
-          className="text-[#9187BA] font-bold hover:text-[#33275f] transition-colors inline-flex items-center gap-2"
+          className="text-[#6E678D] font-bold hover:text-[#33275f] transition-colors inline-flex items-center gap-2"
         >
           {dict.testimonialsBtn} <span className="text-lg">→</span>
         </Link>
