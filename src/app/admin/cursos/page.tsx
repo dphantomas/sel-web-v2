@@ -29,7 +29,11 @@ export default async function AdminCoursesPage() {
     }),
     prisma.user.findMany({
       orderBy: { createdAt: 'desc' },
-      select: { id: true, firstName: true, lastName: true, email: true, role: true, image: true }
+      select: {
+        id: true, firstName: true, lastName: true, email: true, role: true, image: true,
+        unlockedCourses: { select: { courseId: true } },
+        unlockedInstances: { select: { courseInstanceId: true } }
+      }
     })
   ])
 
