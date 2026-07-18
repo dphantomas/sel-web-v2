@@ -1479,11 +1479,6 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo de Traducción (opcional)</label>
-                        <input type="text" value={editingCourse.translationGroupId || ''} onChange={(e) => setEditingCourse({...editingCourse, translationGroupId: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Vacío = curso suelto" />
-                        <p className="text-[11px] text-gray-400 mt-1">Vincula este curso con su versión en otro idioma (mismo valor en ambos). Vacío = sin traducción.</p>
-                      </div>
-                      <div>
                         <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
                         <textarea rows="4" value={editingCourse.description || ''} onChange={(e) => setEditingCourse({...editingCourse, description: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none"></textarea>
                       </div>
@@ -1961,11 +1956,6 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                       <option value="en">English</option>
                     </select>
                   </div>
-                </div>
-                <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo de Traducción (opcional)</label>
-                  <input type="text" value={newCourseData.translationGroupId || ''} onChange={(e) => setNewCourseData({...newCourseData, translationGroupId: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Se completa solo al usar “Traducir”. Vacío = curso suelto." />
-                  <p className="text-[11px] text-gray-400 mt-1">Vincula este curso con su versión en otro idioma. Normalmente lo llena el botón “Traducir”; dejalo vacío si es un curso nuevo sin traducción.</p>
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
