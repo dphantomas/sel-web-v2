@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { UploadCloud, User as UserIcon, Users, X, Check, Search, Eye, EyeOff, FileText, CheckCircle, Edit2, Shield, Layout, Trash2, Calendar, Link2, DollarSign, Image as ImageIcon, ChevronDown, ChevronRight } from 'lucide-react'
 import Script from 'next/script'
 import Link from 'next/link'
@@ -21,6 +21,10 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   
   const [searchTerm, setSearchTerm] = useState('')
   const [updatingId, setUpdatingId] = useState(null) // para loaders de accesos
+
+  // Filtro "hizo taller A pero no taller B"
+  const [filterHasCourseId, setFilterHasCourseId] = useState('')
+  const [filterNotCourseId, setFilterNotCourseId] = useState('')
   
   // Estados para modales de edición/creación
   const [editingUser, setEditingUser] = useState(null)
@@ -167,6 +171,28 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
     } finally {
       setIsUploading(false);
     }
+  }
+
+  // Mapa instancia -> curso, para resolver accesos otorgados a nivel de instancia (fecha puntual)
+  const instanceToCourseId = useMemo(() => {
+    const map = new Map()
+    courses.forEach((course) => {
+      (course.instances || []).forEach((instance) => map.set(instance.id, course.id))
+    })
+    return map
+  }, [courses])
+
+  // Un usuario "hizo" un taller si tiene acceso al curso completo o a alguna de sus instancias
+  const userHasCourseAccess = (user, courseId) => {
+    if (!courseId) return true
+    const hasDirectAccess = user.unlockedCourses?.some((uc) => uc.courseId === courseId)
+    if (hasDirectAccess) return true
+    return user.unlockedInstances?.some((ui) => instanceToCourseId.get(ui.courseInstanceId) === courseId) || false
+  }
+
+  const handleFilterHasCourseChange = (courseId) => {
+    setFilterHasCourseId(courseId)
+    if (courseId && courseId === filterNotCourseId) setFilterNotCourseId('')
   }
 
   const getUserResources = () => {
@@ -747,6 +773,11 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
         (user.sparkName || '').toLowerCase().includes(term)
       )
     })
+    .filter((user) => {
+      if (filterHasCourseId && !userHasCourseAccess(user, filterHasCourseId)) return false
+      if (filterNotCourseId && userHasCourseAccess(user, filterNotCourseId)) return false
+      return true
+    })
     .sort((a, b) => {
       const nameA = (a.firstName || '').trim()
       const nameB = (b.firstName || '').trim()
@@ -794,6 +825,44 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
               <div className="text-sm text-sel-purple font-bold whitespace-nowrap bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
                 {filteredUsers.length} {filteredUsers.length === 1 ? 'usuario' : 'usuarios'}
               </div>
+            </div>
+
+            <div className="flex flex-wrap items-end gap-4 w-full max-w-3xl mt-4">
+              <div className="flex-1 min-w-[220px]">
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Hizo el taller</label>
+                <select
+                  value={filterHasCourseId}
+                  onChange={(e) => handleFilterHasCourseChange(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white"
+                >
+                  <option value="">-- Todos --</option>
+                  {courses.map((course) => (
+                    <option key={course.id} value={course.id}>{course.title}</option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex-1 min-w-[220px]">
+                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pero NO hizo</label>
+                <select
+                  value={filterNotCourseId}
+                  onChange={(e) => setFilterNotCourseId(e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white"
+                >
+                  <option value="">-- Ninguno --</option>
+                  {courses.filter((course) => course.id !== filterHasCourseId).map((course) => (
+                    <option key={course.id} value={course.id}>{course.title}</option>
+                  ))}
+                </select>
+              </div>
+              {(filterHasCourseId || filterNotCourseId) && (
+                <button
+                  type="button"
+                  onClick={() => { setFilterHasCourseId(''); setFilterNotCourseId('') }}
+                  className="text-sm text-gray-500 hover:text-red-500 font-bold px-3 py-2.5 whitespace-nowrap"
+                >
+                  Limpiar filtros
+                </button>
+              )}
             </div>
           </div>
 
