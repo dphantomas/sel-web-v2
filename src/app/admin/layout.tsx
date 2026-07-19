@@ -2,7 +2,7 @@ import "@/app/globals.css";
 import Link from "next/link";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/modules/auth/auth";
-import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon, Star, Quote } from "lucide-react";
+import { LayoutDashboard, FileText, Users, ArrowLeft, GraduationCap, Image as ImageIcon, Star, Quote, UsersRound } from "lucide-react";
 import ThemeToggle from "@/components/admin/ThemeToggle";
 
 export const metadata = {
@@ -47,6 +47,10 @@ export default async function AdminLayout({ children }: { children: React.ReactN
               <Users className="w-4 h-4" />
               Usuarios
             </Link>
+            <Link href="/admin/grupos" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
+              <UsersRound className="w-4 h-4" />
+              Grupos
+            </Link>
             <Link href="/admin/blog" className="flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg text-sel-body hover:bg-sel-lavender/10 hover:text-sel-purple dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white transition-colors">
               <FileText className="w-4 h-4" />
               Artículos
@@ -73,8 +77,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
       {/* Main content */}
       <main
-        style={{ marginLeft: '16rem', minHeight: '100vh' }}
-        className="bg-sel-cream font-sans text-sel-body dark:bg-zinc-950 dark:text-zinc-300 transition-colors"
+        className="min-h-screen md:ml-64 bg-sel-cream font-sans text-sel-body dark:bg-zinc-950 dark:text-zinc-300 transition-colors"
       >
         <header className="h-16 bg-white border-b border-sel-lavender/30 flex items-center justify-between px-8 md:hidden flex-shrink-0 dark:bg-zinc-900 dark:border-zinc-800">
           <Link href="/admin" className="font-bold text-sel-purple dark:text-white">Sanación Admin</Link>

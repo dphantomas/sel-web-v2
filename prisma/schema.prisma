@@ -40,6 +40,10 @@ model User {
   addresses UserAddress[]
   cart      Cart?
   orders    Order[]
+
+  // Relaciones del MÓDULO GRUPOS Y ASISTENCIA
+  groupMemberships  GroupMember[]
+  attendanceRecords AttendanceRecord[]
 }
 
 enum Role {
@@ -127,6 +131,8 @@ model Course {
   prerequisiteFor Course[] @relation("CoursePrerequisites")
 
   prerequisiteForInstances CourseInstance[] @relation("InstancePrerequisiteCourses")
+
+  groups Group[]
 }
 
 model CourseInstance {
@@ -143,6 +149,7 @@ model CourseInstance {
   prerequisites Course[] @relation("InstancePrerequisiteCourses")
 
   usersWithAccess UserInstanceAccess[]
+  groups          Group[]
 }
 
 model UserCourseAccess {
@@ -413,4 +420,77 @@ model RateLimit {
   expiresAt DateTime
 
   @@index([expiresAt])
+}
+
+// --- MÓDULO GRUPOS Y ASISTENCIA ---
+
+// Un grupo de encuentro recurrente (p.ej. "Grupo de crecimiento A"). Puede
+// nacer suelto o quedar asociado a un curso/instancia puntual; ambos son
+// opcionales y mutuamente excluyentes en la práctica pero no se fuerza a
+// nivel de esquema.
+model Group {
+  id               String   @id @default(cuid())
+  name             String
+  description      String?
+  courseId         String?
+  courseInstanceId String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  course         Course?         @relation(fields: [courseId], references: [id], onDelete: SetNull)
+  courseInstance CourseInstance? @relation(fields: [courseInstanceId], references: [id], onDelete: SetNull)
+
+  members  GroupMember[]
+  meetings Meeting[]
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  groupId  String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+// Una fecha puntual de encuentro de un grupo (cada dos domingos, u otra
+// ocasión). La lista de asistencia se toma sobre los miembros del grupo en
+// el momento del encuentro.
+model Meeting {
+  id        String   @id @default(cuid())
+  groupId   String
+  date      DateTime
+  notes     String?
+  createdAt DateTime @default(now())
+
+  group   Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  records AttendanceRecord[]
+
+  @@index([groupId])
+}
+
+enum AttendanceStatus {
+  Presente
+  Tarde
+  MuyTarde
+  Ausente
+  SeFueAntes
+}
+
+// Sólo existe una fila una vez que alguien tocó el estado de esa persona en
+// ese encuentro; un miembro sin fila para un encuentro se interpreta como
+// "todavía no marcado" (distinto de "Ausente", que es una marca explícita).
+model AttendanceRecord {
+  id        String           @id @default(cuid())
+  meetingId String
+  userId    String
+  status    AttendanceStatus
+
+  meeting Meeting @relation(fields: [meetingId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([meetingId, userId])
 }
