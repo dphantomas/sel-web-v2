@@ -167,7 +167,12 @@ export default function GalleryAdmin() {
       
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h2 className="text-xl font-bold text-[#33275f]">Galería de Fotos</h2>
+          <div className="flex items-center gap-3 mb-1">
+            <h2 className="text-xl font-bold text-[#33275f]">Galería de Fotos</h2>
+            <span className="text-sm text-[#33275f] font-bold bg-[#33275f]/10 px-3 py-1.5 rounded-lg border border-[#33275f]/20">
+              {images.length} {images.length === 1 ? 'imagen' : 'imágenes'}
+            </span>
+          </div>
           <p className="text-sm text-gray-500">Subí o borrá fotos de la galería pública. Se mostrarán en el mismo orden que las cargues.</p>
         </div>
         <button

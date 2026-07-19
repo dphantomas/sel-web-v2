@@ -29,7 +29,12 @@ export default async function AdminBlogPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h2 className="text-xl font-bold text-sel-purple">Artículos del Blog</h2>
+          <div className="flex items-center gap-3">
+            <h2 className="text-xl font-bold text-sel-purple">Artículos del Blog</h2>
+            <span className="text-sm text-sel-purple font-bold bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
+              {Object.keys(groupedPosts).length} {Object.keys(groupedPosts).length === 1 ? 'artículo' : 'artículos'}
+            </span>
+          </div>
           <p className="text-sm text-sel-body">Gestioná los artículos y sus traducciones.</p>
         </div>
         <Link 

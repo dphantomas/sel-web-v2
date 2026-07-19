@@ -897,7 +897,12 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
         <div className="p-6">
           <div className="flex justify-between items-center mb-6 gap-4 flex-wrap">
             <div>
-              <h2 className="text-xl font-bold text-sel-purple">Cursos y Talleres</h2>
+              <div className="flex items-center gap-3">
+                <h2 className="text-xl font-bold text-sel-purple">Cursos y Talleres</h2>
+                <span className="text-sm text-sel-purple font-bold bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
+                  {courses.length} {courses.length === 1 ? 'curso' : 'cursos'}
+                </span>
+              </div>
               <p className="text-sm text-sel-body">Administrá los cursos, retiros y talleres de la plataforma.</p>
             </div>
             <div className="flex items-center gap-3">

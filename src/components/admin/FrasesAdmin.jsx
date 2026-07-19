@@ -161,7 +161,12 @@ export default function FrasesAdmin() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-sel-purple dark:text-white mb-2">Frases del Home</h1>
+        <div className="flex items-center gap-3 mb-2">
+          <h1 className="text-3xl font-bold tracking-tight text-sel-purple dark:text-white">Frases del Home</h1>
+          <span className="text-sm text-sel-purple dark:text-white font-bold bg-sel-cream dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700">
+            {phrases.length} {phrases.length === 1 ? 'frase' : 'frases'}
+          </span>
+        </div>
         <p className="text-sel-body/70 dark:text-zinc-400">
           Frases que rotan una por una en la sección &quot;El Proceso&quot; de la portada, en el orden de esta lista.
           Envolvé una palabra entre <code className="px-1 py-0.5 rounded bg-sel-lavender/20 dark:bg-zinc-800">&lt;strong&gt;</code> y{' '}

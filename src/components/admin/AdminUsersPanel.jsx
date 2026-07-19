@@ -957,9 +957,14 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                         </span>
                       </td>
                       <td className="py-4 px-6">
-                        <span className="text-xs font-bold text-[#B681AE] bg-[#B681AE]/10 px-3 py-1 rounded-full">
-                          {user.unlockedCourses?.length || 0} realizados
-                        </span>
+                        <div className="flex flex-col gap-1 items-start">
+                          <span className="text-xs font-bold text-[#B681AE] bg-[#B681AE]/10 px-3 py-1 rounded-full whitespace-nowrap">
+                            {user.unlockedCourses?.length || 0} realizados
+                          </span>
+                          <span className="text-xs font-bold text-[#9187BA] bg-[#9187BA]/10 px-3 py-1 rounded-full whitespace-nowrap">
+                            {user.unlockedInstances?.length || 0} instancias
+                          </span>
+                        </div>
                       </td>
                       <td className="py-4 px-6 text-right">
                         <button

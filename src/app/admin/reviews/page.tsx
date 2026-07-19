@@ -15,9 +15,14 @@ export default async function AdminReviewsPage() {
     <div>
       <div className="flex items-center justify-between mb-8">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-sel-purple mb-2">
-            Gestión de Reseñas
-          </h1>
+          <div className="flex items-center gap-3 mb-2">
+            <h1 className="text-3xl font-bold tracking-tight text-sel-purple">
+              Gestión de Reseñas
+            </h1>
+            <span className="text-sm text-sel-purple font-bold bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
+              {reviews.length} {reviews.length === 1 ? 'reseña' : 'reseñas'}
+            </span>
+          </div>
           <p className="text-sel-body/70">Administra las reseñas y testimonios de la plataforma.</p>
         </div>
         <Link 
