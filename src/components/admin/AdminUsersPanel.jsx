@@ -905,7 +905,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   <th className="py-4 px-6 w-16">Perfil</th>
                   <th className="py-4 px-6">Información</th>
                   <th className="py-4 px-6">Rol</th>
-                  <th className="py-4 px-6">Cursos</th>
+                  <th className="py-4 px-6">Realizados</th>
                   <th className="py-4 px-6 text-right">Acciones</th>
                 </tr>
               </thead>
@@ -959,7 +959,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       <td className="py-4 px-6">
                         <div className="flex flex-col gap-1 items-start">
                           <span className="text-xs font-bold text-[#B681AE] bg-[#B681AE]/10 px-3 py-1 rounded-full whitespace-nowrap">
-                            {user.unlockedCourses?.length || 0} realizados
+                            {user.unlockedCourses?.length || 0} cursos
                           </span>
                           <span className="text-xs font-bold text-[#9187BA] bg-[#9187BA]/10 px-3 py-1 rounded-full whitespace-nowrap">
                             {user.unlockedInstances?.length || 0} instancias

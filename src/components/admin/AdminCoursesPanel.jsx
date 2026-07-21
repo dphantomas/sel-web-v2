@@ -16,7 +16,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
   const [courses, setCourses] = useState(initialCourses || [])
 
   // Vista de la lista de cursos: tarjetas (grilla) o tabla (lista).
-  const [courseView, setCourseView] = useState('grid') // 'grid' | 'list'
+  const [courseView, setCourseView] = useState('list') // 'grid' | 'list'
 
   // Image Cropping States
   const [cropModalImage, setCropModalImage] = useState(null)
