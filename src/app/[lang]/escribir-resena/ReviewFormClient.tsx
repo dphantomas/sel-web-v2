@@ -25,7 +25,7 @@ export default function ReviewFormClient({ authorName, lang }: { authorName: str
       setSuccess(true);
       setTimeout(() => {
         router.push(`/${lang}/mis-cursos`);
-      }, 4000);
+      }, 5000);
     } catch (error) {
       console.error(error);
       setIsSubmitting(false);
@@ -37,7 +37,7 @@ export default function ReviewFormClient({ authorName, lang }: { authorName: str
     return (
       <div className="bg-[#fcfbfe] rounded-2xl p-8 text-center border border-[#e3e1e8] shadow-sm">
         <h3 className="text-2xl font-bold text-[#b085b3] mb-4">¡Gracias por tu testimonio!</h3>
-        <p className="text-gray-600 mb-6">Hemos recibido tu reseña correctamente. Se publicará pronto tras ser revisada.</p>
+        <p className="text-gray-600 mb-6">Hemos recibido tu reseña correctamente. Pronto la podrás ver publicada.</p>
         <p className="text-sm text-gray-500">Redirigiendo a tus cursos...</p>
       </div>
     );
