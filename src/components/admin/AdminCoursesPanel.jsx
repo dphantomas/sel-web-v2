@@ -57,12 +57,16 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       if (e.key === 'Escape') {
         if (isCreatingCourse || editingCourse) {
           handleCancelCourseEdit()
+        } else if (editingUser) {
+          setEditingUser(null)
+        } else if (managingInstanceUsers) {
+          setManagingInstanceUsers(null)
         }
       }
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isCreatingCourse, editingCourse])
+  }, [isCreatingCourse, editingCourse, editingUser, managingInstanceUsers])
 
   const handleCancelCourseEdit = () => {
     if (pendingUploadRef.current) {

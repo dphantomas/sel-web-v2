@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import {
@@ -46,6 +46,16 @@ export default function GroupDetailAdmin({ group: initialGroup, allUsers }: { gr
   const [meetingNotes, setMeetingNotes] = useState('')
   const [isCreatingMeeting, setIsCreatingMeeting] = useState(false)
   const [deletingMeetingId, setDeletingMeetingId] = useState<string | null>(null)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isMemberModalOpen) {
+        setIsMemberModalOpen(false)
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [isMemberModalOpen])
 
   const memberUserIds = new Set(group.members.map((m) => m.userId))
   const sortedMembers = [...group.members].sort((a, b) =>

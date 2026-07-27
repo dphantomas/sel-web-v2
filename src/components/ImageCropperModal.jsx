@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Cropper from 'react-easy-crop'
 import { getCroppedImg } from '@/lib/cropImage'
 import { X, ZoomIn, ZoomOut } from 'lucide-react'
@@ -12,6 +12,14 @@ export default function ImageCropperModal({ imageSrc, onCropComplete, onCancel }
   const handleCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels)
   }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') onCancel()
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onCancel])
 
   const handleSave = async () => {
     if (!croppedAreaPixels) return

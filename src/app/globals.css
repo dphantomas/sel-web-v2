@@ -47,6 +47,30 @@ body {
   box-sizing: border-box;
 }
 
+/* El body usa --color-sel-body (#666) para que el texto de párrafo se sienta
+   suave, pero ese mismo gris se heredaba en TODOS los <input>/<textarea>/
+   <select> sin color propio (la gran mayoría del sitio), dejando lo que el
+   usuario tipeó luciendo "apagado" — se notaba más en campos como el nombre
+   en la edición de usuario del admin. Un valor tipeado necesita más contraste
+   que el texto de relleno, así que se fija acá en vez de parchear ~220
+   elementos uno por uno. Selectores de tag (no clase), así que cualquier
+   className con color explícito (ej. text-white) sigue ganando por
+   especificidad. La variante .dark cubre las pantallas que sí soportan modo
+   oscuro (Grupos, Dashboard, Reseñas); los paneles grandes sin dark: todavía
+   quedan con fondo claro ahí, así que no la necesitan por ahora.
+   Ver [[bug-inputs-texto-gris-claro]] en memoria. */
+input,
+textarea,
+select {
+  color: #111827;
+}
+
+.dark input,
+.dark textarea,
+.dark select {
+  color: #ffffff;
+}
+
 /* Custom scrollbar */
 @supports (scrollbar-color: auto) {
   html {
