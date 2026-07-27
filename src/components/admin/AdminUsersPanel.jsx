@@ -826,13 +826,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
     })
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+    <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
       <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="lazyOnload" />
       {/* Pestañas eliminadas - La navegación ahora es mediante el menú lateral */}
       {/* VISTA PARTICIPANTES */}
       {activeTab === 'users' && (
         <>
-          <div className="p-6 border-b border-sel-lavender/20 bg-white">
+          <div className="p-6 border-b border-sel-lavender/20 bg-white dark:bg-zinc-900">
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h2 className="text-xl font-bold text-sel-purple">Participantes</h2>
@@ -854,24 +854,24 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   placeholder="Buscar por nombre, email, teléfono o chispa..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple transition bg-sel-cream/30"
+                  className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-sel-lavender/30 dark:border-zinc-700 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple dark:text-zinc-100 transition bg-sel-cream/30 dark:bg-zinc-800"
                 />
                 <div className="absolute left-3 top-3 text-sel-lavender">
                   <Search className="w-5 h-5" />
                 </div>
               </div>
-              <div className="text-sm text-sel-purple font-bold whitespace-nowrap bg-sel-cream px-3 py-1.5 rounded-lg border border-sel-lavender/30">
+              <div className="text-sm text-sel-purple dark:text-white font-bold whitespace-nowrap bg-sel-cream dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700">
                 {filteredUsers.length} {filteredUsers.length === 1 ? 'usuario' : 'usuarios'}
               </div>
             </div>
 
             <div className="flex flex-wrap items-end gap-4 w-full max-w-3xl mt-4">
               <div className="flex-1 min-w-[220px]">
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Hizo el taller</label>
+                <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Hizo el taller</label>
                 <select
                   value={filterHasCourseId}
                   onChange={(e) => handleFilterHasCourseChange(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white"
+                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white dark:bg-zinc-800 dark:text-zinc-100"
                 >
                   <option value="">-- Todos --</option>
                   {courses.map((course) => (
@@ -880,11 +880,11 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 </select>
               </div>
               <div className="flex-1 min-w-[220px]">
-                <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Pero NO hizo</label>
+                <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Pero NO hizo</label>
                 <select
                   value={filterNotCourseId}
                   onChange={(e) => setFilterNotCourseId(e.target.value)}
-                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white"
+                  className="w-full px-3 py-2.5 rounded-xl border border-sel-lavender/30 focus:outline-none focus:ring-2 focus:ring-sel-lavender text-sel-purple bg-white dark:bg-zinc-800 dark:text-zinc-100"
                 >
                   <option value="">-- Ninguno --</option>
                   {courses.filter((course) => course.id !== filterHasCourseId).map((course) => (
@@ -896,7 +896,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 <button
                   type="button"
                   onClick={() => { setFilterHasCourseId(''); setFilterNotCourseId('') }}
-                  className="text-sm text-gray-500 hover:text-red-500 font-bold px-3 py-2.5 whitespace-nowrap"
+                  className="text-sm text-gray-500 dark:text-zinc-400 hover:text-red-500 font-bold px-3 py-2.5 whitespace-nowrap"
                 >
                   Limpiar filtros
                 </button>
@@ -907,7 +907,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
-                <tr className="bg-gray-50/50 text-gray-500 text-xs font-bold uppercase tracking-wider border-b border-gray-100">
+                <tr className="bg-gray-50/50 dark:bg-zinc-800/50 text-gray-500 dark:text-zinc-400 text-xs font-bold uppercase tracking-wider border-b border-gray-100 dark:border-zinc-800">
                   <th className="py-4 px-6 w-16">Perfil</th>
                   <th className="py-4 px-6">Información</th>
                   <th className="py-4 px-6">Rol</th>
@@ -915,34 +915,34 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   <th className="py-4 px-6 text-right">Acciones</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-50 text-sm">
+              <tbody className="divide-y divide-gray-50 dark:divide-zinc-800 text-sm">
                 {filteredUsers.length === 0 ? (
                   <tr>
-                    <td colSpan={5} className="py-12 text-center text-gray-500">
+                    <td colSpan={5} className="py-12 text-center text-gray-500 dark:text-zinc-400">
                       No se encontraron participantes.
                     </td>
                   </tr>
                 ) : (
                   filteredUsers.map((user) => (
-                    <tr key={user.id} className="hover:bg-gray-50/30 transition group">
+                    <tr key={user.id} className="hover:bg-gray-50/30 dark:hover:bg-zinc-800/30 transition group">
                       <td className="py-4 px-6">
-                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 border border-gray-200 flex items-center justify-center shrink-0">
+                        <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 flex items-center justify-center shrink-0">
                           {user.image ? (
                             <img src={user.image} alt={user.firstName} referrerPolicy="no-referrer" className="w-full h-full object-cover" />
                           ) : (
-                            <UserIcon className="w-5 h-5 text-gray-400" />
+                            <UserIcon className="w-5 h-5 text-gray-400 dark:text-zinc-500" />
                           )}
                         </div>
                       </td>
                       <td className="py-4 px-6">
                         <button 
                           onClick={() => openEditUser(user)}
-                          className="font-bold text-[#33275f] text-base text-left hover:text-[#B681AE] transition"
+                          className="font-bold text-[#33275f] dark:text-white text-base text-left hover:text-[#B681AE] transition"
                         >
                           {user.firstName} {user.lastName}
                           {user.sparkName && <span className="text-[#9187BA] font-normal ml-2">✨ {user.sparkName}</span>}
                         </button>
-                        <div className="text-sm text-gray-500 mt-0.5 flex items-center gap-2">
+                        <div className="text-sm text-gray-500 dark:text-zinc-400 mt-0.5 flex items-center gap-2">
                           <span>{user.email}</span>
                           {user.emailVerified ? (
                             <span title="Email Verificado"><CheckCircle className="w-3.5 h-3.5 text-green-500" /></span>
@@ -950,14 +950,14 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                             <span title="Email Pendiente de Verificación"><Shield className="w-3.5 h-3.5 text-amber-500" /></span>
                           )}
                         </div>
-                        <div className="text-xs text-gray-400 mt-1 flex items-center gap-2">
+                        <div className="text-xs text-gray-400 dark:text-zinc-500 mt-1 flex items-center gap-2">
                           {user.phone && <span>Wa: {user.phone}</span>}
                           {user.country && <span>📍 {user.country}</span>}
                         </div>
                       </td>
                       <td className="py-4 px-6 whitespace-nowrap">
                         <span className={`inline-block px-3 py-1 rounded-full text-xs font-bold ${
-                          user.role === 'Admin' ? 'bg-red-50 text-red-600' : user.role === 'Transmisor' ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-600'
+                          user.role === 'Admin' ? 'bg-red-50 text-red-600 dark:bg-red-950/40 dark:text-red-400' : user.role === 'Transmisor' ? 'bg-blue-50 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400' : 'bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-zinc-400'
                         }`}>
                           {user.role}
                         </span>
@@ -975,7 +975,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       <td className="py-4 px-6 text-right">
                         <button
                           onClick={() => openEditUser(user)}
-                          className="text-[#9187BA] hover:text-[#33275f] font-bold text-sm bg-white border border-gray-200 hover:border-[#9187BA] px-4 py-2 rounded-lg transition shadow-sm"
+                          className="text-[#9187BA] hover:text-[#33275f] dark:hover:text-white font-bold text-sm bg-white dark:bg-zinc-800 border border-gray-200 dark:border-zinc-800 hover:border-[#9187BA] px-4 py-2 rounded-lg transition shadow-sm"
                         >
                           Gestionar
                         </button>
@@ -1002,19 +1002,19 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {courses.map(course => (
-              <div key={course.id} className="border rounded-2xl p-5 shadow-sm bg-white hover:border-[#9187BA] transition relative flex flex-col">
+              <div key={course.id} className="border rounded-2xl p-5 shadow-sm bg-white dark:bg-zinc-900 hover:border-[#9187BA] transition relative flex flex-col">
                 <div className="absolute top-4 right-4 flex items-center gap-2 z-10">
-                  <span className={`w-3 h-3 rounded-full ${course.published ? 'bg-green-500' : 'bg-gray-300'}`} title={course.published ? 'Publicado' : 'Oculto'}></span>
+                  <span className={`w-3 h-3 rounded-full ${course.published ? 'bg-green-500' : 'bg-gray-300 dark:bg-zinc-600'}`} title={course.published ? 'Publicado' : 'Oculto'}></span>
                 </div>
                 
                 {course.image && (
-                  <div className="w-full h-32 mb-4 rounded-xl overflow-hidden bg-gray-100 flex-shrink-0 relative">
+                  <div className="w-full h-32 mb-4 rounded-xl overflow-hidden bg-gray-100 dark:bg-zinc-800 flex-shrink-0 relative">
                     <img src={course.image} alt={course.title} className="w-full h-full object-cover" />
                   </div>
                 )}
                 
-                <h3 className="font-bold text-[#33275f] text-lg mb-1 pr-6">{course.title}</h3>
-                <p className="text-sm text-gray-600 line-clamp-3 mb-4 mt-2">{course.shortDescription || 'Sin descripción'}</p>
+                <h3 className="font-bold text-[#33275f] dark:text-white text-lg mb-1 pr-6">{course.title}</h3>
+                <p className="text-sm text-gray-600 dark:text-zinc-400 line-clamp-3 mb-4 mt-2">{course.shortDescription || 'Sin descripción'}</p>
                 <button
                   onClick={() => setEditingCourse(course)}
                   className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition w-full"
@@ -1050,20 +1050,20 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
 
       {editingUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 md:p-6 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col max-h-full">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-4xl flex flex-col max-h-full">
             
-            <div className="p-6 border-b border-gray-100 flex justify-between items-start shrink-0">
+            <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-start shrink-0">
               <div>
-                <h2 className="text-2xl font-bold text-[#33275f]">Gestionar Participante</h2>
+                <h2 className="text-2xl font-bold text-[#33275f] dark:text-white">Gestionar Participante</h2>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-sm text-gray-500">{editingUser.email}</p>
+                  <p className="text-sm text-gray-500 dark:text-zinc-400">{editingUser.email}</p>
                   {editingUser.emailVerified ? (
-                    <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 px-2 py-0.5 rounded-full">
+                    <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-green-50 text-green-600 dark:bg-green-950/40 dark:text-green-400 px-2 py-0.5 rounded-full">
                       <CheckCircle className="w-3 h-3" /> Verificado
                     </span>
                   ) : (
                     <div className="flex items-center gap-2">
-                      <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 px-2 py-0.5 rounded-full" title="Pendiente de verificación">
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400 px-2 py-0.5 rounded-full" title="Pendiente de verificación">
                         <Shield className="w-3 h-3" /> Pendiente
                       </span>
                       <button 
@@ -1091,25 +1091,25 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 <div className="flex gap-6 mt-6">
                   <button 
                     onClick={() => setUserTab('data')} 
-                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'data' ? 'border-[#33275f] text-[#33275f]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'data' ? 'border-[#33275f] text-[#33275f] dark:text-white' : 'border-transparent text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
                   >
                     Datos Personales
                   </button>
                   <button 
                     onClick={() => setUserTab('access')} 
-                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'access' ? 'border-[#33275f] text-[#33275f]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'access' ? 'border-[#33275f] text-[#33275f] dark:text-white' : 'border-transparent text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
                   >
                     Talleres y Accesos
                   </button>
                   <button 
                     onClick={() => setUserTab('resources')} 
-                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'resources' ? 'border-[#33275f] text-[#33275f]' : 'border-transparent text-gray-400 hover:text-gray-600'}`}
+                    className={`pb-2 text-sm font-bold border-b-2 transition ${userTab === 'resources' ? 'border-[#33275f] text-[#33275f] dark:text-white' : 'border-transparent text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300'}`}
                   >
                     Materiales
                   </button>
                 </div>
               </div>
-              <button onClick={() => setEditingUser(null)} className="text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition">
+              <button onClick={() => setEditingUser(null)} className="text-gray-400 dark:text-zinc-500 hover:text-gray-700 dark:hover:text-zinc-200 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-600 p-2 rounded-full transition">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -1121,12 +1121,12 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 <form id="editUserForm" onSubmit={handleUserSubmit} className="space-y-8">
                   
                   {/* Foto de Perfil */}
-                  <div className="flex flex-col sm:flex-row items-center gap-6 p-6 bg-gray-50/50 rounded-2xl border border-gray-100">
-                    <div className="relative w-24 h-24 shrink-0 rounded-full border-4 border-[#B681AE]/20 bg-white overflow-hidden flex items-center justify-center group">
+                  <div className="flex flex-col sm:flex-row items-center gap-6 p-6 bg-gray-50/50 dark:bg-zinc-800/50 rounded-2xl border border-gray-100 dark:border-zinc-800">
+                    <div className="relative w-24 h-24 shrink-0 rounded-full border-4 border-[#B681AE]/20 bg-white dark:bg-zinc-800 overflow-hidden flex items-center justify-center group">
                       {editImagePreview ? (
                         <img src={editImagePreview} alt="Preview" className="w-full h-full object-cover" />
                       ) : (
-                        <UserIcon className="w-10 h-10 text-gray-300" />
+                        <UserIcon className="w-10 h-10 text-gray-300 dark:text-zinc-600" />
                       )}
                       
                       <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
@@ -1143,8 +1143,8 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       />
                     </div>
                     <div className="text-center sm:text-left">
-                      <span className="text-lg font-bold text-[#33275f] block mb-1">Foto de Perfil</span>
-                      <p className="text-sm text-gray-500 mb-2">Haz clic en la imagen para cambiarla.</p>
+                      <span className="text-lg font-bold text-[#33275f] dark:text-white block mb-1">Foto de Perfil</span>
+                      <p className="text-sm text-gray-500 dark:text-zinc-400 mb-2">Haz clic en la imagen para cambiarla.</p>
                       {editImagePreview && (
                         <button
                           type="button"
@@ -1164,35 +1164,35 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
 
                   {/* Info Personal */}
                   <div>
-                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Información Personal</h3>
+                    <h3 className="text-sm font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-4 border-b pb-2">Información Personal</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Nombre</label>
-                        <input type="text" name="firstName" required defaultValue={editingUser.firstName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Nombre</label>
+                        <input type="text" name="firstName" required defaultValue={editingUser.firstName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Apellido</label>
-                        <input type="text" name="lastName" required defaultValue={editingUser.lastName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Apellido</label>
+                        <input type="text" name="lastName" required defaultValue={editingUser.lastName} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Nombre de Chispa</label>
-                        <input type="text" name="sparkName" defaultValue={editingUser.sparkName || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" placeholder="Opcional" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Nombre de Chispa</label>
+                        <input type="text" name="sparkName" defaultValue={editingUser.sparkName || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Opcional" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Celular / WhatsApp</label>
-                        <input type="text" name="phone" defaultValue={editingUser.phone || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Celular / WhatsApp</label>
+                        <input type="text" name="phone" defaultValue={editingUser.phone || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Fecha Nacimiento</label>
-                        <input type="date" name="birthDate" defaultValue={editingUser.birthDate ? new Date(editingUser.birthDate).toISOString().split('T')[0] : ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none text-gray-900" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Fecha Nacimiento</label>
+                        <input type="date" name="birthDate" defaultValue={editingUser.birthDate ? new Date(editingUser.birthDate).toISOString().split('T')[0] : ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none text-gray-900 dark:text-white dark:bg-zinc-800" />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Rol en la Plataforma</label>
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Rol en la Plataforma</label>
                         <select 
                           name="role" 
                           key={`role-${editingUser.role}-${editingUser.unlockedCourses?.length}`}
                           defaultValue={(editingUser.role === 'Guest' && editingUser.unlockedCourses?.length > 0) ? 'Participante' : editingUser.role} 
-                          className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white"
+                          className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100"
                         >
                           <option value="Guest">Invitado (Guest)</option>
                           <option value="Participante">Participante</option>
@@ -1205,19 +1205,19 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
 
                   {/* Ubicación */}
                   <div>
-                    <h3 className="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4 border-b pb-2">Ubicación</h3>
+                    <h3 className="text-sm font-bold text-gray-400 dark:text-zinc-500 uppercase tracking-wider mb-4 border-b pb-2">Ubicación</h3>
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Ciudad / Localidad</label>
-                        <input type="text" name="city" defaultValue={editingUser.city || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Ciudad / Localidad</label>
+                        <input type="text" name="city" defaultValue={editingUser.city || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-700 mb-1">Provincia / Región</label>
-                        <input type="text" name="province" defaultValue={editingUser.province || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">Provincia / Región</label>
+                        <input type="text" name="province" defaultValue={editingUser.province || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div className="sm:col-span-2">
-                        <label className="block text-xs font-bold text-gray-700 mb-1">País</label>
-                        <select name="country" defaultValue={editingUser.country || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white">
+                        <label className="block text-xs font-bold text-gray-700 dark:text-zinc-300 mb-1">País</label>
+                        <select name="country" defaultValue={editingUser.country || ''} className="w-full px-4 py-2.5 h-[46px] rounded-xl border border-gray-200 dark:border-zinc-800 focus:ring-2 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                           <option value="">Seleccionar...</option>
                           {COUNTRIES.map((c) => (
                             <option key={c} value={c}>{c}</option>
@@ -1231,9 +1231,9 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
               )}
 
               {userTab === 'access' && (
-                <div className="max-w-3xl mx-auto bg-gray-50/50 rounded-2xl border border-gray-100 p-6 flex flex-col h-full">
-                  <h3 className="text-[#33275f] font-bold text-lg mb-2">Historial de Talleres y Accesos</h3>
-                  <p className="text-sm text-gray-500 mb-6">Gestioná a qué talleres tiene acceso este usuario. Los cambios aquí se guardan instantáneamente.</p>
+                <div className="max-w-3xl mx-auto bg-gray-50/50 dark:bg-zinc-800/50 rounded-2xl border border-gray-100 dark:border-zinc-800 p-6 flex flex-col h-full">
+                  <h3 className="text-[#33275f] dark:text-white font-bold text-lg mb-2">Historial de Talleres y Accesos</h3>
+                  <p className="text-sm text-gray-500 dark:text-zinc-400 mb-6">Gestioná a qué talleres tiene acceso este usuario. Los cambios aquí se guardan instantáneamente.</p>
                   
                   <div className="space-y-4 flex-1 overflow-y-auto pr-2">
                   {courses.map((course) => {
@@ -1243,23 +1243,23 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                     return (
                       <div key={course.id} className="mb-4">
                         <div 
-                          className={`p-4 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${hasAnyAccess ? 'bg-white border-[#B681AE] shadow-sm' : 'bg-transparent border-gray-200 hover:bg-white'}`}
+                          className={`p-4 rounded-xl border flex items-center justify-between transition-all cursor-pointer ${hasAnyAccess ? 'bg-white dark:bg-zinc-800 border-[#B681AE] shadow-sm' : 'bg-transparent border-gray-200 dark:border-zinc-800 hover:bg-white dark:hover:bg-zinc-800'}`}
                           onClick={() => toggleCourseExpansion(course.id)}
                         >
                           <div className="flex-1 pr-4">
-                            <p className={`font-bold text-sm ${hasAnyAccess ? 'text-[#33275f]' : 'text-gray-600'}`}>{course.title}</p>
-                            <p className="text-xs text-gray-400 mt-0.5">{course.type}</p>
+                            <p className={`font-bold text-sm ${hasAnyAccess ? 'text-[#33275f] dark:text-white' : 'text-gray-600 dark:text-zinc-400'}`}>{course.title}</p>
+                            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-0.5">{course.type}</p>
                           </div>
-                          <div className="text-gray-400">
+                          <div className="text-gray-400 dark:text-zinc-500">
                             {expandedCourses.has(course.id) ? <ChevronDown className="w-5 h-5" /> : <ChevronRight className="w-5 h-5" />}
                           </div>
                         </div>
 
                         {/* Instances List */}
                         {expandedCourses.has(course.id) && (
-                          <div className="space-y-2 mt-2 pl-4 border-l-2 border-gray-100 ml-4 animate-in fade-in slide-in-from-top-2 duration-200">
+                          <div className="space-y-2 mt-2 pl-4 border-l-2 border-gray-100 dark:border-zinc-800 ml-4 animate-in fade-in slide-in-from-top-2 duration-200">
                           {!course.instances || course.instances.length === 0 ? (
-                            <p className="text-xs text-gray-400 py-2">No hay instancias creadas para este taller.</p>
+                            <p className="text-xs text-gray-400 dark:text-zinc-500 py-2">No hay instancias creadas para este taller.</p>
                           ) : (
                             course.instances.map(instance => {
                               const isUnlocked = editingUser.unlockedInstances?.some((ui) => ui.courseInstanceId === instance.id)
@@ -1267,10 +1267,10 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                               const dateStr = new Date(instance.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' })
                               
                               return (
-                                <div key={instance.id} className="flex items-center justify-between py-2 border-b border-gray-50 last:border-0">
+                                <div key={instance.id} className="flex items-center justify-between py-2 border-b border-gray-50 dark:border-zinc-800 last:border-0">
                                   <div className="text-sm">
-                                    <span className="font-semibold text-gray-700">{dateStr}</span>
-                                    {instance.location && <span className="text-xs text-gray-500 ml-2">({instance.location})</span>}
+                                    <span className="font-semibold text-gray-700 dark:text-zinc-300">{dateStr}</span>
+                                    {instance.location && <span className="text-xs text-gray-500 dark:text-zinc-400 ml-2">({instance.location})</span>}
                                   </div>
                                   <label className="relative inline-flex items-center cursor-pointer shrink-0">
                                     <input 
@@ -1280,9 +1280,9 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                                       disabled={isLoading}
                                       onChange={() => handleToggleAccess(editingUser.id, course.id, instance.id, isUnlocked)}
                                     />
-                                    <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B681AE]"></div>
+                                    <div className="w-11 h-6 bg-gray-200 dark:bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B681AE]"></div>
                                     {isLoading && (
-                                      <span className="absolute inset-0 flex items-center justify-center bg-white/50 rounded-full">
+                                      <span className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-zinc-900/50 rounded-full">
                                         <span className="w-4 h-4 border-2 border-[#33275f] border-t-transparent rounded-full animate-spin"></span>
                                       </span>
                                     )}
@@ -1301,30 +1301,30 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
               )}
 
               {userTab === 'resources' && (
-                <div className="max-w-3xl mx-auto bg-gray-50/50 rounded-2xl border border-gray-100 p-6 flex flex-col h-full">
-                  <h3 className="text-[#33275f] font-bold text-lg mb-2">Materiales Disponibles</h3>
-                  <p className="text-sm text-gray-500 mb-6">Esta es la lista final de archivos (PDFs, Audios, etc.) que el usuario puede ver en su plataforma basándose en sus accesos.</p>
+                <div className="max-w-3xl mx-auto bg-gray-50/50 dark:bg-zinc-800/50 rounded-2xl border border-gray-100 dark:border-zinc-800 p-6 flex flex-col h-full">
+                  <h3 className="text-[#33275f] dark:text-white font-bold text-lg mb-2">Materiales Disponibles</h3>
+                  <p className="text-sm text-gray-500 dark:text-zinc-400 mb-6">Esta es la lista final de archivos (PDFs, Audios, etc.) que el usuario puede ver en su plataforma basándose en sus accesos.</p>
                   
                   <div className="space-y-4 flex-1 overflow-y-auto pr-2">
                     {(() => {
                       const userResources = getUserResources()
                       if (userResources.length === 0) {
-                        return <p className="text-sm text-gray-500 text-center py-8">El usuario no tiene acceso a ningún material aún.</p>
+                        return <p className="text-sm text-gray-500 dark:text-zinc-400 text-center py-8">El usuario no tiene acceso a ningún material aún.</p>
                       }
                       return userResources.map(res => (
-                        <div key={res.id} className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+                        <div key={res.id} className="bg-white dark:bg-zinc-900 p-4 rounded-xl border border-gray-100 dark:border-zinc-800 shadow-sm flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
                           <div className="min-w-0 flex-1">
-                            <p className="font-bold text-[#33275f] truncate">{res.name}</p>
-                            <div className="flex gap-4 text-xs text-gray-500 mt-1 flex-wrap">
+                            <p className="font-bold text-[#33275f] dark:text-white truncate">{res.name}</p>
+                            <div className="flex gap-4 text-xs text-gray-500 dark:text-zinc-400 mt-1 flex-wrap">
                               <span>📄 {res.type}</span>
                               <span className="text-[#B681AE] font-bold uppercase">{res.courseTitle}</span>
-                              {res.isInstanceExclusive && <span className="text-blue-600 font-bold">Instancia</span>}
+                              {res.isInstanceExclusive && <span className="text-blue-600 dark:text-blue-400 font-bold">Instancia</span>}
                             </div>
                           </div>
                           <button 
                             onClick={() => handlePreviewResource(res)}
                             disabled={previewingId === res.id}
-                            className="shrink-0 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-[#33275f] text-sm font-bold rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
+                            className="shrink-0 px-4 py-2 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-600 text-[#33275f] dark:text-white text-sm font-bold rounded-lg transition-colors disabled:opacity-50 flex items-center gap-2"
                           >
                             {previewingId === res.id ? (
                               <span className="w-4 h-4 border-2 border-[#33275f] border-t-transparent rounded-full animate-spin"></span>
@@ -1341,10 +1341,10 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
             </div>
 
             {/* Footer Modal */}
-            <div className="p-6 border-t border-gray-100 bg-gray-50 flex items-center justify-between shrink-0 rounded-b-2xl">
+            <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 flex items-center justify-between shrink-0 rounded-b-2xl">
               <button 
                 onClick={() => handleDeleteUser(editingUser.id, `${editingUser.firstName} ${editingUser.lastName}`)}
-                className="text-red-500 hover:text-red-700 font-bold text-sm underline px-2"
+                className="text-red-500 hover:text-red-700 dark:hover:text-red-400 font-bold text-sm underline px-2"
               >
                 Eliminar Usuario
               </button>
@@ -1359,7 +1359,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                     {isSaving ? 'Guardando...' : 'Guardar Datos Personales'}
                   </button>
                 )}
-                <button type="button" onClick={() => setEditingUser(null)} className="px-5 py-2.5 rounded-xl text-gray-600 font-bold hover:bg-gray-200 transition">
+                <button type="button" onClick={() => setEditingUser(null)} className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-zinc-400 font-bold hover:bg-gray-200 dark:hover:bg-zinc-600 transition">
                   Cerrar
                 </button>
               </div>
@@ -1372,41 +1372,41 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       {/* MODAL CREAR PARTICIPANTE */}
       {isCreatingUser && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold text-[#33275f] mb-4">Crear Nuevo Participante</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-bold text-[#33275f] dark:text-white mb-4">Crear Nuevo Participante</h2>
             <form onSubmit={handleCreateUserSubmit}>
               <div className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre</label>
-                    <input type="text" required value={newUserData.firstName} onChange={(e) => setNewUserData({...newUserData, firstName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Nombre</label>
+                    <input type="text" required value={newUserData.firstName} onChange={(e) => setNewUserData({...newUserData, firstName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                   </div>
                   <div>
-                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Apellido</label>
-                    <input type="text" required value={newUserData.lastName} onChange={(e) => setNewUserData({...newUserData, lastName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Apellido</label>
+                    <input type="text" required value={newUserData.lastName} onChange={(e) => setNewUserData({...newUserData, lastName: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                   </div>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Email</label>
-                  <input type="email" required value={newUserData.email} onChange={(e) => setNewUserData({...newUserData, email: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Email</label>
+                  <input type="email" required value={newUserData.email} onChange={(e) => setNewUserData({...newUserData, email: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Teléfono</label>
-                  <input type="text" value={newUserData.phone} onChange={(e) => setNewUserData({...newUserData, phone: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Opcional" />
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Teléfono</label>
+                  <input type="text" value={newUserData.phone} onChange={(e) => setNewUserData({...newUserData, phone: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Opcional" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Rol en la Plataforma</label>
-                  <select value={newUserData.role} onChange={(e) => setNewUserData({...newUserData, role: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Rol en la Plataforma</label>
+                  <select value={newUserData.role} onChange={(e) => setNewUserData({...newUserData, role: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                     <option value="Guest">Invitado (Guest)</option>
                     <option value="Participante">Participante</option>
                     <option value="Transmisor">Transmisor</option>
                     <option value="Admin">Admin</option>
                   </select>
                 </div>
-                <p className="text-xs text-gray-400">La contraseña inicial se genera automáticamente a partir del email y se le puede informar al participante.</p>
+                <p className="text-xs text-gray-400 dark:text-zinc-500">La contraseña inicial se genera automáticamente a partir del email y se le puede informar al participante.</p>
               </div>
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={() => setIsCreatingUser(false)} className="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100 transition">Cerrar</button>
+                <button type="button" onClick={() => setIsCreatingUser(false)} className="px-4 py-2 rounded-xl text-gray-500 dark:text-zinc-400 font-bold hover:bg-gray-100 dark:hover:bg-zinc-700 transition">Cerrar</button>
                 <button type="submit" disabled={isSaving} className="px-6 py-2 rounded-xl bg-[#B681AE] text-white font-bold hover:bg-[#9187BA] transition disabled:opacity-50">
                   {isSaving ? 'Creando...' : 'Crear Participante'}
                 </button>
@@ -1419,14 +1419,14 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       {/* MODAL EDITAR CURSO COMPLETO */}
       {editingCourse && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 backdrop-blur-sm p-4 md:p-6 overflow-y-auto">
-          <div className="bg-white rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col max-h-[90vh]">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-2xl w-full max-w-5xl flex flex-col max-h-[90vh]">
             
-            <div className="p-6 border-b border-gray-100 flex justify-between items-center shrink-0">
+            <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-center shrink-0">
               <div>
-                <h2 className="text-2xl font-bold text-[#33275f]">Gestionar Curso</h2>
-                <p className="text-sm text-gray-500">{editingCourse.title}</p>
+                <h2 className="text-2xl font-bold text-[#33275f] dark:text-white">Gestionar Curso</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400">{editingCourse.title}</p>
               </div>
-              <button onClick={handleCancelCourseEdit} className="text-gray-400 hover:text-gray-700 bg-gray-100 hover:bg-gray-200 p-2 rounded-full transition">
+              <button onClick={handleCancelCourseEdit} className="text-gray-400 dark:text-zinc-500 hover:text-gray-700 dark:hover:text-zinc-200 bg-gray-100 dark:bg-zinc-800 hover:bg-gray-200 dark:hover:bg-zinc-600 p-2 rounded-full transition">
                 <X className="w-6 h-6" />
               </button>
             </div>
@@ -1434,48 +1434,48 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
             <div className="flex flex-1 overflow-hidden" style={{ flexDirection: 'row' }}>
               {/* Menú Lateral del Modal */}
               <div 
-                className="bg-gray-50 border-r border-gray-200 shrink-0 overflow-y-auto"
+                className="bg-gray-50 dark:bg-zinc-800 border-r border-gray-200 dark:border-zinc-800 shrink-0 overflow-y-auto"
                 style={{ width: '260px', display: 'flex', flexDirection: 'column' }}
               >
                 <button 
                   onClick={() => setCourseTab('data')}
-                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'data' ? 'bg-white text-[#33275f] border-[#B681AE]' : 'text-gray-500 border-transparent hover:bg-gray-100'}`}
+                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'data' ? 'bg-white dark:bg-zinc-800 text-[#33275f] dark:text-white border-[#B681AE]' : 'text-gray-500 dark:text-zinc-400 border-transparent hover:bg-gray-100 dark:hover:bg-zinc-700'}`}
                 >
                   Datos Base
                 </button>
                 <button 
                   onClick={() => setCourseTab('instances')}
-                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'instances' ? 'bg-white text-[#33275f] border-[#B681AE]' : 'text-gray-500 border-transparent hover:bg-gray-100'}`}
+                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'instances' ? 'bg-white dark:bg-zinc-800 text-[#33275f] dark:text-white border-[#B681AE]' : 'text-gray-500 dark:text-zinc-400 border-transparent hover:bg-gray-100 dark:hover:bg-zinc-700'}`}
                 >
                   Instancias Programadas
                 </button>
                 <button 
                   onClick={() => setCourseTab('resources')}
-                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'resources' ? 'bg-white text-[#33275f] border-[#B681AE]' : 'text-gray-500 border-transparent hover:bg-gray-100'}`}
+                  className={`px-6 py-4 text-left font-bold text-sm whitespace-nowrap transition-colors border-l-4 ${courseTab === 'resources' ? 'bg-white dark:bg-zinc-800 text-[#33275f] dark:text-white border-[#B681AE]' : 'text-gray-500 dark:text-zinc-400 border-transparent hover:bg-gray-100 dark:hover:bg-zinc-700'}`}
                 >
                   Materiales y Archivos
                 </button>
               </div>
 
               {/* Contenido de la Pestaña */}
-              <div className="flex-1 overflow-y-auto p-6 bg-white">
+              <div className="flex-1 overflow-y-auto p-6 bg-white dark:bg-zinc-900">
                 
                 {courseTab === 'data' && (
                   <form id="editCourseForm" onSubmit={handleCourseSubmit} className="max-w-2xl">
-                    <h3 className="text-lg font-bold text-[#33275f] mb-6">Información General</h3>
+                    <h3 className="text-lg font-bold text-[#33275f] dark:text-white mb-6">Información General</h3>
                     <div className="space-y-4">
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Título</label>
-                        <input type="text" required value={editingCourse.title} onChange={(e) => setEditingCourse({...editingCourse, title: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                        <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Título</label>
+                        <input type="text" required value={editingCourse.title} onChange={(e) => setEditingCourse({...editingCourse, title: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                       </div>
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Slug (URL amigable)</label>
-                          <input type="text" required value={editingCourse.slug} onChange={(e) => setEditingCourse({...editingCourse, slug: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" />
+                          <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Slug (URL amigable)</label>
+                          <input type="text" required value={editingCourse.slug} onChange={(e) => setEditingCourse({...editingCourse, slug: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" />
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tipo</label>
-                          <select value={editingCourse.type} onChange={(e) => setEditingCourse({...editingCourse, type: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                          <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Tipo</label>
+                          <select value={editingCourse.type} onChange={(e) => setEditingCourse({...editingCourse, type: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                             <option value="Curso">Curso</option>
                             <option value="Taller">Taller</option>
                             <option value="Iniciacion">Iniciación</option>
@@ -1484,25 +1484,25 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                           </select>
                         </div>
                         <div>
-                          <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Modalidad</label>
-                          <select value={editingCourse.modality || 'Virtual'} onChange={(e) => setEditingCourse({...editingCourse, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                          <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Modalidad</label>
+                          <select value={editingCourse.modality || 'Virtual'} onChange={(e) => setEditingCourse({...editingCourse, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                             <option value="Virtual">Virtual</option>
                             <option value="Presencial">Presencial</option>
                           </select>
                         </div>
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
-                        <textarea rows="4" value={editingCourse.description || ''} onChange={(e) => setEditingCourse({...editingCourse, description: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none"></textarea>
+                        <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción</label>
+                        <textarea rows="4" value={editingCourse.description || ''} onChange={(e) => setEditingCourse({...editingCourse, description: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none dark:bg-zinc-800 dark:text-zinc-100"></textarea>
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción Corta (Catálogo)</label>
-                        <textarea rows="2" value={editingCourse.shortDescription || ''} onChange={(e) => setEditingCourse({...editingCourse, shortDescription: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none" placeholder="Resumen breve para la grilla..."></textarea>
+                        <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción Corta (Catálogo)</label>
+                        <textarea rows="2" value={editingCourse.shortDescription || ''} onChange={(e) => setEditingCourse({...editingCourse, shortDescription: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Resumen breve para la grilla..."></textarea>
                       </div>
                       <div>
-                        <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Imagen de Portada</label>
+                        <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Imagen de Portada</label>
                         <div className="flex gap-2">
-                          <input type="text" value={editingCourse.image || ''} onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})} className="flex-1 px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="/assets/foto.jpg o URL" />
+                          <input type="text" value={editingCourse.image || ''} onChange={(e) => setEditingCourse({...editingCourse, image: e.target.value})} className="flex-1 px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="/assets/foto.jpg o URL" />
                           
                           {editingCourse.image && (
                             <button type="button" disabled={isUploading} onClick={() => handleDeleteCourseImage(false)} className="bg-red-500 text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-red-600 transition flex items-center justify-center disabled:opacity-50" title="Borrar imagen de Cloudinary">
@@ -1516,9 +1516,9 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                           </button>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2 mt-4 p-4 bg-gray-50 rounded-xl border border-gray-100">
-                        <input type="checkbox" id="published" checked={editingCourse.published} onChange={(e) => setEditingCourse({...editingCourse, published: e.target.checked})} className="w-5 h-5 rounded text-[#33275f] focus:ring-[#9187BA] border-gray-300 transition" />
-                        <label htmlFor="published" className="text-sm font-bold text-[#33275f] cursor-pointer">Hacer visible (Publicado)</label>
+                      <div className="flex items-center gap-2 mt-4 p-4 bg-gray-50 dark:bg-zinc-800 rounded-xl border border-gray-100 dark:border-zinc-800">
+                        <input type="checkbox" id="published" checked={editingCourse.published} onChange={(e) => setEditingCourse({...editingCourse, published: e.target.checked})} className="w-5 h-5 rounded text-[#33275f] dark:text-white focus:ring-[#9187BA] border-gray-300 dark:border-zinc-700 transition" />
+                        <label htmlFor="published" className="text-sm font-bold text-[#33275f] dark:text-white cursor-pointer">Hacer visible (Publicado)</label>
                       </div>
                     </div>
                   </form>
@@ -1527,27 +1527,27 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 {courseTab === 'instances' && (
                   <div>
                     <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-lg font-bold text-[#33275f]">Eventos e Instancias</h3>
+                      <h3 className="text-lg font-bold text-[#33275f] dark:text-white">Eventos e Instancias</h3>
                       <button onClick={() => setIsCreatingInstance(!isCreatingInstance)} className="bg-[#33275f] text-white px-4 py-2 rounded-lg text-sm font-bold hover:bg-[#4c3c86] transition">
                         {isCreatingInstance ? 'Cancelar' : '+ Nueva Instancia'}
                       </button>
                     </div>
 
                     {isCreatingInstance && (
-                      <div className="bg-gray-50 p-5 rounded-xl border border-gray-200 mb-6">
-                        <h4 className="font-bold text-sm text-[#33275f] mb-3">Crear Nueva Instancia</h4>
+                      <div className="bg-gray-50 dark:bg-zinc-800 p-5 rounded-xl border border-gray-200 dark:border-zinc-800 mb-6">
+                        <h4 className="font-bold text-sm text-[#33275f] dark:text-white mb-3">Crear Nueva Instancia</h4>
                         <form onSubmit={handleCreateInstance} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                           <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1">Fecha de Inicio</label>
-                            <input type="date" required value={newInstanceData.startDate} onChange={(e) => setNewInstanceData({...newInstanceData, startDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                            <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Fecha de Inicio</label>
+                            <input type="date" required value={newInstanceData.startDate} onChange={(e) => setNewInstanceData({...newInstanceData, startDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-gray-500 mb-1">Fecha de Fin (Opcional)</label>
-                            <input type="date" value={newInstanceData.endDate} onChange={(e) => setNewInstanceData({...newInstanceData, endDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                            <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Fecha de Fin (Opcional)</label>
+                            <input type="date" value={newInstanceData.endDate} onChange={(e) => setNewInstanceData({...newInstanceData, endDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                           </div>
                           <div className="md:col-span-2">
-                            <label className="block text-xs font-bold text-gray-500 mb-1">Ubicación / Modalidad</label>
-                            <input type="text" placeholder="Ej: Zoom, o Buenos Aires" value={newInstanceData.location} onChange={(e) => setNewInstanceData({...newInstanceData, location: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                            <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Ubicación / Modalidad</label>
+                            <input type="text" placeholder="Ej: Zoom, o Buenos Aires" value={newInstanceData.location} onChange={(e) => setNewInstanceData({...newInstanceData, location: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                           </div>
                           <div className="md:col-span-2 flex justify-end">
                             <button type="submit" disabled={isSaving} className="bg-[#B681AE] text-white px-6 py-2 rounded-lg font-bold text-sm disabled:opacity-50 hover:bg-[#9187BA] transition">
@@ -1558,30 +1558,30 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                       </div>
                     )}
 
-                    <div className="bg-white border border-gray-200 rounded-xl divide-y divide-gray-100 max-h-[400px] overflow-y-auto">
+                    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800 rounded-xl divide-y divide-gray-100 dark:divide-zinc-800 max-h-[400px] overflow-y-auto">
                       {!editingCourse.instances || editingCourse.instances.length === 0 ? (
-                        <p className="text-gray-500 text-sm text-center py-8">No hay instancias programadas para este curso.</p>
+                        <p className="text-gray-500 dark:text-zinc-400 text-sm text-center py-8">No hay instancias programadas para este curso.</p>
                       ) : (
                         editingCourse.instances.map(inst => {
                           if (editingInstanceId === inst.id) {
                             return (
-                              <div key={inst.id} className="bg-gray-50 p-5">
-                                <h4 className="font-bold text-sm text-[#33275f] mb-3">Editar Instancia</h4>
+                              <div key={inst.id} className="bg-gray-50 dark:bg-zinc-800 p-5">
+                                <h4 className="font-bold text-sm text-[#33275f] dark:text-white mb-3">Editar Instancia</h4>
                                 <form onSubmit={handleEditInstanceSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                   <div>
-                                    <label className="block text-xs font-bold text-gray-500 mb-1">Fecha de Inicio</label>
-                                    <input type="date" required value={newInstanceData.startDate} onChange={(e) => setNewInstanceData({...newInstanceData, startDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Fecha de Inicio</label>
+                                    <input type="date" required value={newInstanceData.startDate} onChange={(e) => setNewInstanceData({...newInstanceData, startDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                                   </div>
                                   <div>
-                                    <label className="block text-xs font-bold text-gray-500 mb-1">Fecha de Fin (Opcional)</label>
-                                    <input type="date" value={newInstanceData.endDate} onChange={(e) => setNewInstanceData({...newInstanceData, endDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Fecha de Fin (Opcional)</label>
+                                    <input type="date" value={newInstanceData.endDate} onChange={(e) => setNewInstanceData({...newInstanceData, endDate: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                                   </div>
                                   <div className="md:col-span-2">
-                                    <label className="block text-xs font-bold text-gray-500 mb-1">Ubicación / Modalidad</label>
-                                    <input type="text" placeholder="Ej: Zoom, o Buenos Aires" value={newInstanceData.location} onChange={(e) => setNewInstanceData({...newInstanceData, location: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm" />
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 mb-1">Ubicación / Modalidad</label>
+                                    <input type="text" placeholder="Ej: Zoom, o Buenos Aires" value={newInstanceData.location} onChange={(e) => setNewInstanceData({...newInstanceData, location: e.target.value})} className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100" />
                                   </div>
                                   <div className="md:col-span-2 flex justify-end gap-2">
-                                    <button type="button" onClick={() => setEditingInstanceId(null)} className="px-4 py-2 rounded-lg text-gray-500 text-sm font-bold hover:bg-gray-100 transition">
+                                    <button type="button" onClick={() => setEditingInstanceId(null)} className="px-4 py-2 rounded-lg text-gray-500 dark:text-zinc-400 text-sm font-bold hover:bg-gray-100 dark:hover:bg-zinc-700 transition">
                                       Cancelar
                                     </button>
                                     <button type="submit" disabled={isSaving} className="bg-[#B681AE] text-white px-6 py-2 rounded-lg font-bold text-sm disabled:opacity-50 hover:bg-[#9187BA] transition">
@@ -1593,21 +1593,21 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                             )
                           }
                           return (
-                            <div key={inst.id} className="p-3 flex justify-between items-center hover:bg-gray-50 transition group">
+                            <div key={inst.id} className="p-3 flex justify-between items-center hover:bg-gray-50 dark:hover:bg-zinc-800 transition group">
                               <div className="flex items-center gap-6">
-                                <p className="font-bold text-sm text-[#33275f] min-w-[90px]">
+                                <p className="font-bold text-sm text-[#33275f] dark:text-white min-w-[90px]">
                                   {new Date(inst.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' })}
                                 </p>
-                                {inst.location && <span className="text-xs text-gray-500">📍 {inst.location}</span>}
+                                {inst.location && <span className="text-xs text-gray-500 dark:text-zinc-400">📍 {inst.location}</span>}
                               </div>
                               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
-                                <button onClick={() => setManagingInstanceUsers({ courseId: editingCourse.id, instanceId: inst.id, courseTitle: editingCourse.title, dateStr: new Date(inst.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' }) })} className="text-[#33275f] hover:bg-[#33275f]/10 p-1.5 rounded-lg transition" title="Gestionar Alumnos">
+                                <button onClick={() => setManagingInstanceUsers({ courseId: editingCourse.id, instanceId: inst.id, courseTitle: editingCourse.title, dateStr: new Date(inst.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' }) })} className="text-[#33275f] dark:text-white hover:bg-[#33275f]/10 p-1.5 rounded-lg transition" title="Gestionar Alumnos">
                                   <Users className="w-4 h-4" />
                                 </button>
                                 <button onClick={() => startEditInstance(inst)} className="text-[#9187BA] hover:bg-[#9187BA]/10 p-1.5 rounded-lg transition" title="Editar Instancia">
                                   <Edit2 className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => handleDeleteInstance(inst.id)} className="text-red-500 hover:bg-red-50 p-1.5 rounded-lg transition" title="Borrar Instancia">
+                                <button onClick={() => handleDeleteInstance(inst.id)} className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 p-1.5 rounded-lg transition" title="Borrar Instancia">
                                   <X className="w-5 h-5" />
                                 </button>
                               </div>
@@ -1622,7 +1622,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 {courseTab === 'resources' && (
                   <div>
                     <div className="flex justify-between items-center mb-6">
-                      <h3 className="text-lg font-bold text-[#33275f]">Archivos y Materiales del Curso</h3>
+                      <h3 className="text-lg font-bold text-[#33275f] dark:text-white">Archivos y Materiales del Curso</h3>
                       
                       {!selectedFile && (
                         <div className="relative">
@@ -1642,13 +1642,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                     </div>
 
                     {selectedFile && (
-                      <div className="mb-6 p-5 bg-blue-50/50 rounded-xl border border-blue-100">
-                        <h4 className="font-bold text-[#33275f] text-sm mb-4">Preparar Subida</h4>
+                      <div className="mb-6 p-5 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-100 dark:border-blue-900">
+                        <h4 className="font-bold text-[#33275f] dark:text-white text-sm mb-4">Preparar Subida</h4>
                         <div className="space-y-4">
-                          <div className="bg-white p-3 rounded-xl border border-gray-100 shadow-sm flex items-center justify-between">
+                          <div className="bg-white dark:bg-zinc-900 p-3 rounded-xl border border-gray-100 dark:border-zinc-800 shadow-sm flex items-center justify-between">
                             <div className="flex flex-col">
-                              <span className="text-xs font-bold text-gray-500 uppercase">Archivo actual</span>
-                              <span className="text-sm font-bold text-[#33275f] truncate max-wxs mt-0.5">
+                              <span className="text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase">Archivo actual</span>
+                              <span className="text-sm font-bold text-[#33275f] dark:text-white truncate max-wxs mt-0.5">
                                 {selectedFile.name}
                               </span>
                             </div>
@@ -1671,25 +1671,25 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                             </div>
                           </div>
                           <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Público del Archivo</label>
+                            <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Nombre Público del Archivo</label>
                             <input 
                               type="text" 
                               value={newResourceName} 
                               onChange={(e) => setNewResourceName(e.target.value)}
                               placeholder="Ej: Meditación Guiada Nro 1"
-                              className="w-full px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-[#B681AE]"
+                              className="w-full px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-[#B681AE] dark:bg-zinc-800 dark:text-zinc-100"
                               disabled={isUploading}
                             />
-                            <p className="text-xs text-gray-400 mt-1">Este nombre servirá para reemplazar archivos viejos y lo verán los alumnos.</p>
+                            <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Este nombre servirá para reemplazar archivos viejos y lo verán los alumnos.</p>
                           </div>
 
                           <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción (Opcional)</label>
+                            <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción (Opcional)</label>
                             <textarea 
                               value={newResourceDescription} 
                               onChange={(e) => setNewResourceDescription(e.target.value)}
                               placeholder="Breve descripción del archivo (de qué trata, qué incluye, etc.)"
-                              className="w-full px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-[#B681AE]"
+                              className="w-full px-4 py-2 rounded-xl border outline-none focus:ring-2 focus:ring-[#B681AE] dark:bg-zinc-800 dark:text-zinc-100"
                               disabled={isUploading}
                               rows={2}
                             />
@@ -1697,13 +1697,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
 
                           {editingCourse.instances && editingCourse.instances.length > 0 && (
                             <div>
-                              <label className="block text-sm font-bold text-[#33275f] mb-1">
+                              <label className="block text-sm font-bold text-[#33275f] dark:text-white mb-1">
                                 ¿Asignar a una instancia específica? (Opcional)
                               </label>
                               <select 
                                 value={newResourceInstanceId} 
                                 onChange={e => setNewResourceInstanceId(e.target.value)}
-                                className="w-full px-3 py-2 rounded-xl border outline-none text-sm text-gray-700 bg-white focus:ring-2 focus:ring-[#B681AE]"
+                                className="w-full px-3 py-2 rounded-xl border outline-none text-sm text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-[#B681AE]"
                                 disabled={isUploading}
                               >
                                 <option value="">-- Curso Base (Lo ven todas las instancias) --</option>
@@ -1717,13 +1717,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                           )}
 
                           <div>
-                            <label className="block text-sm font-bold text-[#33275f] mb-1">
+                            <label className="block text-sm font-bold text-[#33275f] dark:text-white mb-1">
                               ¿Reemplaza a un archivo anterior? (Opcional)
                             </label>
                             <select 
                               value={overrideResourceId} 
                               onChange={e => setOverrideResourceId(e.target.value)}
-                              className="w-full px-3 py-2 rounded-xl border outline-none text-sm text-gray-700 bg-white focus:ring-2 focus:ring-[#B681AE]"
+                              className="w-full px-3 py-2 rounded-xl border outline-none text-sm text-gray-700 dark:text-zinc-300 bg-white dark:bg-zinc-800 focus:ring-2 focus:ring-[#B681AE]"
                               disabled={isUploading}
                             >
                               <option value="">-- No, es un archivo nuevo --</option>
@@ -1738,7 +1738,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                               type="button" 
                               onClick={handleCancelFileSelect}
                               disabled={isUploading}
-                              className="px-4 py-2 rounded-xl text-gray-600 font-bold hover:bg-gray-200 transition disabled:opacity-50 text-sm"
+                              className="px-4 py-2 rounded-xl text-gray-600 dark:text-zinc-400 font-bold hover:bg-gray-200 dark:hover:bg-zinc-600 transition disabled:opacity-50 text-sm"
                             >
                               Cancelar
                             </button>
@@ -1757,55 +1757,55 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
 
                     <div className="space-y-3">
                       {!editingCourse.resources || editingCourse.resources.length === 0 ? (
-                        <p className="text-gray-500 text-sm text-center py-4 italic">
+                        <p className="text-gray-500 dark:text-zinc-400 text-sm text-center py-4 italic">
                           No hay archivos en este curso.
                         </p>
                       ) : (
                         editingCourse.resources.map(res => {
                           if (editingResourceId === res.id) {
                             return (
-                              <div key={res.id} className="bg-gray-50 p-5 rounded-xl border border-gray-200">
-                                <h4 className="font-bold text-sm text-[#33275f] mb-3">Editar Archivo</h4>
+                              <div key={res.id} className="bg-gray-50 dark:bg-zinc-800 p-5 rounded-xl border border-gray-200 dark:border-zinc-800">
+                                <h4 className="font-bold text-sm text-[#33275f] dark:text-white mb-3">Editar Archivo</h4>
                                 <form onSubmit={handleEditResourceSubmit} className="space-y-4">
                                   <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Nombre Público</label>
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Nombre Público</label>
                                     <input 
                                       type="text" 
                                       value={editResourceData.name} 
                                       onChange={(e) => setEditResourceData({...editResourceData, name: e.target.value})}
-                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm"
+                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100"
                                       required
                                     />
                                   </div>
                                   <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción</label>
                                     <textarea 
                                       value={editResourceData.description} 
                                       onChange={(e) => setEditResourceData({...editResourceData, description: e.target.value})}
-                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm"
+                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm dark:bg-zinc-800 dark:text-zinc-100"
                                       rows={2}
                                     />
                                   </div>
                                   <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                                    <label className="block text-sm font-medium text-gray-700 dark:text-zinc-300 mb-1">
                                       Reemplazar Archivo (Opcional)
                                     </label>
                                     <input 
                                       type="file" 
                                       onChange={(e) => setEditSelectedFile(e.target.files[0])}
-                                      className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#33275f]/5 file:text-[#33275f] hover:file:bg-[#33275f]/10"
+                                      className="w-full text-sm text-gray-500 dark:text-zinc-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#33275f]/5 dark:file:bg-[#33275f]/30 file:text-[#33275f] dark:file:text-white hover:file:bg-[#33275f]/10 dark:hover:file:bg-[#33275f]/40"
                                     />
-                                    <p className="text-xs text-gray-400 mt-1">Si seleccionas un archivo, el anterior será eliminado permanentemente.</p>
+                                    <p className="text-xs text-gray-400 dark:text-zinc-500 mt-1">Si seleccionas un archivo, el anterior será eliminado permanentemente.</p>
                                   </div>
                                   {editingCourse.instances && editingCourse.instances.length > 0 && (
                                     <div>
-                                      <label className="block text-xs font-bold text-gray-500 uppercase mb-1">
+                                      <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">
                                         Asignar a una instancia específica
                                       </label>
                                       <select 
                                         value={editResourceData.courseInstanceId || ''} 
                                         onChange={e => setEditResourceData({...editResourceData, courseInstanceId: e.target.value})}
-                                        className="w-full px-3 py-2 rounded-lg border outline-none text-sm bg-white focus:ring-2 focus:ring-[#B681AE]"
+                                        className="w-full px-3 py-2 rounded-lg border outline-none text-sm bg-white dark:bg-zinc-800 dark:text-zinc-100 focus:ring-2 focus:ring-[#B681AE]"
                                       >
                                         <option value="">-- Curso Base (Lo ven todas las instancias) --</option>
                                         {editingCourse.instances.map(inst => (
@@ -1817,11 +1817,11 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                                     </div>
                                   )}
                                   <div>
-                                    <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Reemplaza a un archivo anterior</label>
+                                    <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Reemplaza a un archivo anterior</label>
                                     <select 
                                       value={editResourceData.overridesResourceId} 
                                       onChange={(e) => setEditResourceData({...editResourceData, overridesResourceId: e.target.value})}
-                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm bg-white"
+                                      className="w-full px-3 py-2 rounded-lg border outline-none text-sm bg-white dark:bg-zinc-800 dark:text-zinc-100"
                                     >
                                       <option value="">-- No reemplaza a ninguno --</option>
                                       {courses.flatMap(c => (c.resources || []).map(r => ({ ...r, courseName: c.title }))).filter(r => r.id !== res.id).map(r => (
@@ -1830,7 +1830,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                                     </select>
                                   </div>
                                   <div className="flex justify-end gap-2 pt-2">
-                                    <button type="button" onClick={() => setEditingResourceId(null)} className="px-4 py-2 rounded-lg text-gray-500 text-sm font-bold hover:bg-gray-100 transition">
+                                    <button type="button" onClick={() => setEditingResourceId(null)} className="px-4 py-2 rounded-lg text-gray-500 dark:text-zinc-400 text-sm font-bold hover:bg-gray-100 dark:hover:bg-zinc-700 transition">
                                       Cancelar
                                     </button>
                                     <button type="submit" disabled={isSaving} className="bg-[#B681AE] text-white px-6 py-2 rounded-lg font-bold text-sm disabled:opacity-50 hover:bg-[#9187BA] transition">
@@ -1842,16 +1842,16 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                             )
                           }
                           return (
-                            <div key={res.id} className="border border-gray-100 rounded-xl p-4 flex justify-between items-center bg-white shadow-sm hover:border-[#9187BA] transition group">
+                            <div key={res.id} className="border border-gray-100 dark:border-zinc-800 rounded-xl p-4 flex justify-between items-center bg-white dark:bg-zinc-900 shadow-sm hover:border-[#9187BA] transition group">
                               <div className="flex-1 min-w-0 pr-4">
-                                <p className="font-bold text-[#33275f] truncate">{res.name}</p>
-                                {res.description && <p className="text-xs text-gray-600 line-clamp-1 mt-0.5">{res.description}</p>}
-                                <div className="flex gap-4 text-xs text-gray-500 mt-1 flex-wrap">
+                                <p className="font-bold text-[#33275f] dark:text-white truncate">{res.name}</p>
+                                {res.description && <p className="text-xs text-gray-600 dark:text-zinc-400 line-clamp-1 mt-0.5">{res.description}</p>}
+                                <div className="flex gap-4 text-xs text-gray-500 dark:text-zinc-400 mt-1 flex-wrap">
                                   <span>📄 {res.type}</span>
-                                  {res.isDownloadable && <span className="text-green-600 font-bold">Descargable</span>}
+                                  {res.isDownloadable && <span className="text-green-600 dark:text-green-400 font-bold">Descargable</span>}
                                   {res.overridesResourceId && <span className="text-[#B681AE] font-bold">Reemplaza un archivo</span>}
                                   {res.courseInstanceId && (
-                                    <span className="text-blue-600 font-bold">
+                                    <span className="text-blue-600 dark:text-blue-400 font-bold">
                                       Exclusivo Instancia
                                     </span>
                                   )}
@@ -1861,7 +1861,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                                 <button 
                                   onClick={() => handlePreviewResource(res)} 
                                   disabled={previewingId === res.id}
-                                  className="text-[#9187BA] hover:text-[#33275f] bg-gray-50 hover:bg-gray-100 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 disabled:opacity-50"
+                                  className="text-[#9187BA] hover:text-[#33275f] dark:hover:text-white bg-gray-50 dark:bg-zinc-800 hover:bg-gray-100 dark:hover:bg-zinc-700 px-3 py-1.5 rounded-lg text-xs font-bold transition flex items-center gap-1 disabled:opacity-50"
                                   title="Ver Preview"
                                 >
                                   {previewingId === res.id ? 'Cargando...' : <><Eye className="w-4 h-4" /> Preview</>}
@@ -1870,7 +1870,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                                   <button onClick={() => startEditResource(res)} className="text-[#9187BA] hover:bg-[#9187BA]/10 p-2 rounded-lg transition" title="Editar Archivo">
                                     <Edit2 className="w-4 h-4" />
                                   </button>
-                                  <button onClick={() => handleDeleteResource(res.id)} className="text-red-500 hover:bg-red-50 p-2 rounded-lg transition" title="Borrar Archivo">
+                                  <button onClick={() => handleDeleteResource(res.id)} className="text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 p-2 rounded-lg transition" title="Borrar Archivo">
                                     <X className="w-5 h-5" />
                                   </button>
                                 </div>
@@ -1886,13 +1886,13 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
             </div>
 
             {/* Footer Modal */}
-            <div className="p-6 border-t border-gray-100 bg-gray-50 flex items-center justify-between shrink-0 rounded-b-2xl">
+            <div className="p-6 border-t border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800 flex items-center justify-between shrink-0 rounded-b-2xl">
               <div>
                 {courseTab === 'data' && (
                   <button 
                     type="button" 
                     onClick={() => handleDeleteCourse(editingCourse.id)}
-                    className="px-4 py-2.5 rounded-xl text-red-500 font-bold hover:bg-red-50 transition flex items-center gap-2"
+                    className="px-4 py-2.5 rounded-xl text-red-500 font-bold hover:bg-red-50 dark:hover:bg-red-950/40 transition flex items-center gap-2"
                     title="Borrar curso permanentemente"
                   >
                     <Trash2 className="w-5 h-5" />
@@ -1901,7 +1901,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 )}
               </div>
               <div className="flex gap-3">
-                <button type="button" onClick={handleCancelCourseEdit} className="px-5 py-2.5 rounded-xl text-gray-600 font-bold hover:bg-gray-200 transition">
+                <button type="button" onClick={handleCancelCourseEdit} className="px-5 py-2.5 rounded-xl text-gray-600 dark:text-zinc-400 font-bold hover:bg-gray-200 dark:hover:bg-zinc-600 transition">
                   Cerrar
                 </button>
                 {courseTab === 'data' && (
@@ -1924,21 +1924,21 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       {/* MODAL CREAR CURSO */}
       {isCreatingCourse && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-xl font-bold text-[#33275f] mb-4">Crear Nuevo Curso/Taller</h2>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-md p-6">
+            <h2 className="text-xl font-bold text-[#33275f] dark:text-white mb-4">Crear Nuevo Curso/Taller</h2>
             <form onSubmit={handleCreateCourseSubmit}>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Título</label>
-                  <input type="text" required value={newCourseData.title} onChange={(e) => setNewCourseData({...newCourseData, title: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Ej: Sanación de la Duda" />
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Título</label>
+                  <input type="text" required value={newCourseData.title} onChange={(e) => setNewCourseData({...newCourseData, title: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Ej: Sanación de la Duda" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Slug (URL amigable)</label>
-                  <input type="text" required value={newCourseData.slug} onChange={(e) => setNewCourseData({...newCourseData, slug: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="Ej: sanacion-de-la-duda" />
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Slug (URL amigable)</label>
+                  <input type="text" required value={newCourseData.slug} onChange={(e) => setNewCourseData({...newCourseData, slug: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Ej: sanacion-de-la-duda" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tipo de Curso</label>
-                  <select value={newCourseData.type} onChange={(e) => setNewCourseData({...newCourseData, type: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Tipo de Curso</label>
+                  <select value={newCourseData.type} onChange={(e) => setNewCourseData({...newCourseData, type: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                     <option value="Curso">Curso</option>
                     <option value="Taller">Taller</option>
                     <option value="Iniciacion">Iniciación</option>
@@ -1947,24 +1947,24 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Modalidad</label>
-                  <select value={newCourseData.modality || 'Virtual'} onChange={(e) => setNewCourseData({...newCourseData, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white">
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Modalidad</label>
+                  <select value={newCourseData.modality || 'Virtual'} onChange={(e) => setNewCourseData({...newCourseData, modality: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none bg-white dark:bg-zinc-800 dark:text-zinc-100">
                     <option value="Virtual">Virtual</option>
                     <option value="Presencial">Presencial</option>
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción</label>
-                  <textarea rows="3" value={newCourseData.description || ''} onChange={(e) => setNewCourseData({...newCourseData, description: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none" placeholder="Breve descripción del curso..."></textarea>
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción</label>
+                  <textarea rows="3" value={newCourseData.description || ''} onChange={(e) => setNewCourseData({...newCourseData, description: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Breve descripción del curso..."></textarea>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Descripción Corta (Catálogo)</label>
-                  <textarea rows="2" value={newCourseData.shortDescription || ''} onChange={(e) => setNewCourseData({...newCourseData, shortDescription: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none" placeholder="Resumen breve para la grilla..."></textarea>
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Descripción Corta (Catálogo)</label>
+                  <textarea rows="2" value={newCourseData.shortDescription || ''} onChange={(e) => setNewCourseData({...newCourseData, shortDescription: e.target.value})} className="w-full px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none resize-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="Resumen breve para la grilla..."></textarea>
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Imagen de Portada</label>
+                  <label className="block text-xs font-bold text-gray-500 dark:text-zinc-400 uppercase mb-1">Imagen de Portada</label>
                   <div className="flex gap-2">
-                    <input type="text" value={newCourseData.image || ''} onChange={(e) => setNewCourseData({...newCourseData, image: e.target.value})} className="flex-1 px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none" placeholder="/assets/foto.jpg o URL" />
+                    <input type="text" value={newCourseData.image || ''} onChange={(e) => setNewCourseData({...newCourseData, image: e.target.value})} className="flex-1 px-4 py-2 rounded-xl border focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] outline-none dark:bg-zinc-800 dark:text-zinc-100" placeholder="/assets/foto.jpg o URL" />
                     
                     {newCourseData.image && (
                       <button type="button" disabled={isUploading} onClick={() => handleDeleteCourseImage(true)} className="bg-red-500 text-white px-3 py-2 rounded-xl text-sm font-bold hover:bg-red-600 transition flex items-center justify-center disabled:opacity-50" title="Borrar imagen de Cloudinary">
@@ -1979,12 +1979,12 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   </div>
                 </div>
                 <div className="flex items-center gap-2 mt-2">
-                  <input type="checkbox" id="publishedNew" checked={newCourseData.published} onChange={(e) => setNewCourseData({...newCourseData, published: e.target.checked})} className="w-5 h-5 rounded text-[#33275f] focus:ring-[#9187BA] border-gray-300 transition" />
-                  <label htmlFor="publishedNew" className="text-sm font-bold text-gray-700 cursor-pointer">Hacer visible (Publicado) ahora</label>
+                  <input type="checkbox" id="publishedNew" checked={newCourseData.published} onChange={(e) => setNewCourseData({...newCourseData, published: e.target.checked})} className="w-5 h-5 rounded text-[#33275f] dark:text-white focus:ring-[#9187BA] border-gray-300 dark:border-zinc-700 transition" />
+                  <label htmlFor="publishedNew" className="text-sm font-bold text-gray-700 dark:text-zinc-300 cursor-pointer">Hacer visible (Publicado) ahora</label>
                 </div>
               </div>
               <div className="mt-6 flex justify-end gap-3">
-                <button type="button" onClick={handleCancelCourseEdit} className="px-4 py-2 rounded-xl text-gray-500 font-bold hover:bg-gray-100 transition">Cerrar</button>
+                <button type="button" onClick={handleCancelCourseEdit} className="px-4 py-2 rounded-xl text-gray-500 dark:text-zinc-400 font-bold hover:bg-gray-100 dark:hover:bg-zinc-700 transition">Cerrar</button>
                 <button type="submit" disabled={isSaving} className="px-6 py-2 rounded-xl bg-[#B681AE] text-white font-bold hover:bg-[#9187BA] transition disabled:opacity-50">
                   {isSaving ? 'Creando...' : 'Crear Curso'}
                 </button>
@@ -1997,34 +1997,34 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       {/* MODAL GESTIONAR ALUMNOS DE INSTANCIA */}
       {managingInstanceUsers && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
             {/* Encabezado */}
-            <div className="p-6 border-b border-gray-100 flex justify-between items-start">
+            <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-start">
               <div>
-                <h2 className="text-xl font-bold text-[#33275f]">Alumnos de {managingInstanceUsers.courseTitle}</h2>
-                <p className="text-sm text-gray-500 mt-1">Instancia: {managingInstanceUsers.dateStr}</p>
+                <h2 className="text-xl font-bold text-[#33275f] dark:text-white">Alumnos de {managingInstanceUsers.courseTitle}</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">Instancia: {managingInstanceUsers.dateStr}</p>
               </div>
               <button 
                 onClick={() => {
                   setManagingInstanceUsers(null)
                   setInstanceSearchTerm('')
                 }}
-                className="text-gray-400 hover:text-gray-600 transition"
+                className="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition"
               >
                 <X className="w-6 h-6" />
               </button>
             </div>
 
             {/* Buscador */}
-            <div className="p-4 border-b border-gray-100 bg-gray-50">
+            <div className="p-4 border-b border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
               <div className="relative">
-                <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500" />
                 <input
                   type="text"
                   placeholder="Buscar alumno por nombre o email..."
                   value={instanceSearchTerm}
                   onChange={(e) => setInstanceSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 focus:outline-none focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] transition bg-white"
+                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-800 focus:outline-none focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] transition bg-white dark:bg-zinc-800 dark:text-zinc-100"
                 />
               </div>
             </div>
@@ -2051,7 +2051,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                   const isLoading = updatingId === `${user.id}-${managingInstanceUsers.instanceId}`
                   
                   return (
-                    <div key={user.id} className="flex items-center justify-between p-3 border border-gray-100 rounded-xl hover:bg-gray-50 transition">
+                    <div key={user.id} className="flex items-center justify-between p-3 border border-gray-100 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition">
                       <div className="flex items-center gap-3">
                         {user.image ? (
                           <img src={user.image} alt={user.firstName} referrerPolicy="no-referrer" className="w-10 h-10 rounded-full object-cover" />
@@ -2061,8 +2061,8 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                           </div>
                         )}
                         <div>
-                          <p className="font-bold text-sm text-[#33275f]">{user.firstName} {user.lastName}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
+                          <p className="font-bold text-sm text-[#33275f] dark:text-white">{user.firstName} {user.lastName}</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-400">{user.email}</p>
                         </div>
                       </div>
                       
@@ -2074,9 +2074,9 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                           disabled={isLoading}
                           onChange={() => handleToggleAccess(user.id, managingInstanceUsers.courseId, managingInstanceUsers.instanceId, isUnlocked)}
                         />
-                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B681AE]"></div>
+                        <div className="w-11 h-6 bg-gray-200 dark:bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B681AE]"></div>
                         {isLoading && (
-                          <span className="absolute inset-0 flex items-center justify-center bg-white/50 rounded-full">
+                          <span className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-zinc-900/50 rounded-full">
                             <span className="w-4 h-4 border-2 border-[#33275f] border-t-transparent rounded-full animate-spin"></span>
                           </span>
                         )}
