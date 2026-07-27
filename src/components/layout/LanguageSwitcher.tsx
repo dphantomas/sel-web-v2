@@ -12,8 +12,11 @@ function setLocaleCookie(locale: 'es' | 'en') {
 export function LanguageSwitcher({ currentLang, textColor = "text-inherit" }: { currentLang: string, textColor?: string }) {
   const pathname = usePathname();
 
-  // Clean current path from locale prefix if it exists
-  const cleanPath = pathname.startsWith('/en') ? pathname.replace(/^\/en/, '') : pathname;
+  // Clean current path from locale prefix if it exists. El lookahead va anclado
+  // a fin de segmento (/en o /es seguido de "/" o fin de string) para no comerse
+  // rutas que arrancan igual, tipo /entrenamiento — mismo criterio que el
+  // rewrite de next.config.ts.
+  const cleanPath = pathname.replace(/^\/(en|es)(?=\/|$)/, '');
 
   // El target de español no lleva prefijo. El target de inglés sí.
   const targetEs = cleanPath || '/';

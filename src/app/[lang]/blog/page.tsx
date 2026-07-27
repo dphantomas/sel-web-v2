@@ -62,7 +62,7 @@ export default async function BlogPage({ params }: { params: Promise<{ lang: str
               return (
                 <Link
                   key={post.slug}
-                  href={`/${lang}/blog/${post.slug}/`}
+                  href={lang === 'en' ? `/en/blog/${post.slug}/` : `/blog/${post.slug}/`}
                   className="blog-card block bg-white overflow-hidden"
                   style={{ textDecoration: 'none' }}
                 >

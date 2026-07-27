@@ -125,7 +125,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Previous (older) */}
           {prevPost ? (
             <Link
-              href={`/${lang}/blog/${prevPost.slug}/`}
+              href={lang === 'en' ? `/en/blog/${prevPost.slug}/` : `/blog/${prevPost.slug}/`}
               style={{ textDecoration: 'none', maxWidth: '45%' }}
             >
               <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '11px', color: '#c2a2e8', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
@@ -140,7 +140,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
           {/* Next (newer) */}
           {nextPost ? (
             <Link
-              href={`/${lang}/blog/${nextPost.slug}/`}
+              href={lang === 'en' ? `/en/blog/${nextPost.slug}/` : `/blog/${nextPost.slug}/`}
               style={{ textDecoration: 'none', maxWidth: '45%', textAlign: 'right' }}
             >
               <p style={{ fontFamily: "'Open Sans', sans-serif", fontSize: '11px', color: '#c2a2e8', marginBottom: '4px', letterSpacing: '1px', textTransform: 'uppercase' }}>
