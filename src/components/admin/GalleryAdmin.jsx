@@ -159,7 +159,7 @@ export default function GalleryAdmin() {
     }
   }
 
-  if (isLoading) return <div className="p-6 text-gray-500">Cargando galería...</div>
+  if (isLoading) return <div className="p-6 text-gray-500 dark:text-zinc-400">Cargando galería...</div>
 
   return (
     <div className="p-6">
@@ -168,12 +168,12 @@ export default function GalleryAdmin() {
       <div className="flex justify-between items-center mb-6">
         <div>
           <div className="flex items-center gap-3 mb-1">
-            <h2 className="text-xl font-bold text-[#33275f]">Galería de Fotos</h2>
-            <span className="text-sm text-[#33275f] font-bold bg-[#33275f]/10 px-3 py-1.5 rounded-lg border border-[#33275f]/20">
+            <h2 className="text-xl font-bold text-[#33275f] dark:text-white">Galería de Fotos</h2>
+            <span className="text-sm text-[#33275f] dark:text-white font-bold bg-[#33275f]/10 px-3 py-1.5 rounded-lg border border-[#33275f]/20">
               {images.length} {images.length === 1 ? 'imagen' : 'imágenes'}
             </span>
           </div>
-          <p className="text-sm text-gray-500">Subí o borrá fotos de la galería pública. Se mostrarán en el mismo orden que las cargues.</p>
+          <p className="text-sm text-gray-500 dark:text-zinc-400">Subí o borrá fotos de la galería pública. Se mostrarán en el mismo orden que las cargues.</p>
         </div>
         <button
           onClick={openCloudinaryWidget}
@@ -185,15 +185,15 @@ export default function GalleryAdmin() {
       </div>
 
       {images.length === 0 ? (
-        <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-2xl">
-          <ImageIcon className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-          <p className="text-gray-500 font-medium">No hay fotos en la galería.</p>
+        <div className="text-center py-12 border-2 border-dashed border-gray-200 dark:border-zinc-800 rounded-2xl">
+          <ImageIcon className="w-12 h-12 text-gray-300 dark:text-zinc-600 mx-auto mb-3" />
+          <p className="text-gray-500 dark:text-zinc-400 font-medium">No hay fotos en la galería.</p>
           <button onClick={openCloudinaryWidget} className="text-[#9187BA] font-bold mt-2 hover:underline">Subir la primera foto</button>
         </div>
       ) : (
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
           {images.map((img) => (
-            <div key={img.id} className="relative group rounded-xl overflow-hidden border border-gray-200 shadow-sm bg-gray-50 aspect-square">
+            <div key={img.id} className="relative group rounded-xl overflow-hidden border border-gray-200 dark:border-zinc-800 shadow-sm bg-gray-50 dark:bg-zinc-800 aspect-square">
               <img src={img.url} alt={img.alt || 'Galería'} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
                 <button
