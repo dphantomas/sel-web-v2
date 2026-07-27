@@ -53,22 +53,21 @@ body {
    usuario tipeó luciendo "apagado" — se notaba más en campos como el nombre
    en la edición de usuario del admin. Un valor tipeado necesita más contraste
    que el texto de relleno, así que se fija acá en vez de parchear ~220
-   elementos uno por uno. Selectores de tag (no clase), así que cualquier
-   className con color explícito (ej. text-white) sigue ganando por
-   especificidad. La variante .dark cubre las pantallas que sí soportan modo
-   oscuro (Grupos, Dashboard, Reseñas); los paneles grandes sin dark: todavía
-   quedan con fondo claro ahí, así que no la necesitan por ahora.
-   Ver [[bug-inputs-texto-gris-claro]] en memoria. */
+   elementos uno por uno. Selector de tag (no clase), así que cualquier
+   className con color explícito (ej. text-white, dark:text-zinc-100) sigue
+   ganando por especificidad.
+
+   A propósito SIN variante .dark: todo campo en una pantalla que sí soporta
+   modo oscuro (Grupos, Reseñas, Frases) ya trae su propio dark:text-zinc-100
+   en el className. Las pantallas sin soporte de modo oscuro (Usuarios,
+   Cursos, Galería) mantienen fondo blanco en sus modales aunque el sitio
+   esté en oscuro, así que agregar .dark input{color:#fff} dejaba el texto
+   tipeado en blanco sobre ese fondo blanco — invisible. Ver
+   [[bug-inputs-texto-gris-claro]] en memoria. */
 input,
 textarea,
 select {
   color: #111827;
-}
-
-.dark input,
-.dark textarea,
-.dark select {
-  color: #ffffff;
 }
 
 /* Custom scrollbar */
