@@ -25,6 +25,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   // Filtro "hizo taller A pero no taller B"
   const [filterHasCourseId, setFilterHasCourseId] = useState('')
   const [filterNotCourseId, setFilterNotCourseId] = useState('')
+  const [copySparkFeedback, setCopySparkFeedback] = useState(false)
   
   // Estados para modales de edición/creación
   const [editingUser, setEditingUser] = useState(null)
@@ -825,6 +826,46 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
       return cmp
     })
 
+  const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
+  // Pegar (Ctrl+V) en Excel/Sheets usa un parser de portapapeles que separa
+  // columnas por TAB y filas por salto de línea; no reconoce ',' ni ';'
+  // (eso sólo aplica al abrir un archivo .csv, no al pegar). El texto plano
+  // no puede llevar negrita, así que además escribimos una versión HTML con
+  // el header en bold: Excel prefiere el HTML cuando está disponible.
+  const handleCopySparkList = async () => {
+    const data = filteredUsers.map((user) => ({
+      name: `${user.firstName} ${user.lastName}`.trim(),
+      spark: user.sparkName && user.sparkName.trim() ? user.sparkName.trim() : '',
+    }))
+
+    const tsv = ['Nombre completo\tChispa', ...data.map((d) => `${d.name}\t${d.spark}`)].join('\n')
+
+    const html =
+      '<table><tr><td style="font-weight:bold">Nombre completo</td><td style="font-weight:bold">Chispa</td></tr>' +
+      data.map((d) => `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.spark)}</td></tr>`).join('') +
+      '</table>'
+
+    try {
+      if (typeof ClipboardItem !== 'undefined') {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/plain': new Blob([tsv], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' }),
+          }),
+        ])
+      } else {
+        await navigator.clipboard.writeText(tsv)
+      }
+    } catch (err) {
+      console.error('Error copiando al portapapeles:', err)
+      alert('No se pudo copiar al portapapeles. Lista:\n\n' + tsv)
+      return
+    }
+    setCopySparkFeedback(true)
+    setTimeout(() => setCopySparkFeedback(false), 2000)
+  }
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
       <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="lazyOnload" />
@@ -863,6 +904,14 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
               <div className="text-sm text-sel-purple dark:text-white font-bold whitespace-nowrap bg-sel-cream dark:bg-zinc-800 px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700">
                 {filteredUsers.length} {filteredUsers.length === 1 ? 'usuario' : 'usuarios'}
               </div>
+              <button
+                type="button"
+                onClick={handleCopySparkList}
+                disabled={filteredUsers.length === 0}
+                className="text-sm font-bold px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700 text-sel-purple dark:text-zinc-100 hover:bg-sel-lavender/10 dark:hover:bg-zinc-800 transition whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {copySparkFeedback ? '✓ Copiado' : '✨ Copiar Nombre-Chispa (pegar en Excel)'}
+              </button>
             </div>
 
             <div className="flex flex-wrap items-end gap-4 w-full max-w-3xl mt-4">
