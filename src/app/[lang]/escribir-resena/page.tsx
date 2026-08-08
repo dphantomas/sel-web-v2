@@ -38,7 +38,7 @@ export default async function EscribirResenaPage({ params }: { params: Promise<{
         
         <div className="bg-white/80 backdrop-blur-md rounded-[24px] p-6 md:p-8 shadow-[0_4px_20px_rgba(0,0,0,0.08)] border border-white/40 mb-8">
           <h1 className="text-[#33275f] text-2xl md:text-3xl font-bold mt-1 mb-2">
-            Compartir Experiencia
+            Comparte tu experiencia
           </h1>
           <p className="text-gray-600">
             Nos alegra que hayas transitado este camino. Cuéntanos cómo fue tu experiencia, qué aprendiste o cómo te sentiste.
