@@ -145,14 +145,14 @@ export function NavbarClient({
                   {lang === 'en' ? 'My Materials' : 'Mis materiales'}
                 </a>
                 {session.user.role === 'Admin' && (
-                  <a
+                  <Link
                     href="/admin"
                     onClick={() => setIsOpen(false)}
                     className="text-left px-6 py-3 text-sm font-bold transition-colors hover:bg-purple-50 block"
                     style={{ color: '#B681AE', textDecoration: 'none' }}
                   >
                     {lang === 'en' ? 'Admin Panel' : 'Panel de Admin'}
-                  </a>
+                  </Link>
                 )}
                 <button
                   onClick={() => {

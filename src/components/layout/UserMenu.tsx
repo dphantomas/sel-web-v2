@@ -105,8 +105,8 @@ export function UserMenu({
 
                 
                 {user.role === 'Admin' && (
-                  <a 
-                    href="/admin" 
+                  <Link
+                    href="/admin"
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-3 px-3 py-2.5 text-sm rounded-lg transition-colors group mt-1"
                     style={{ color: '#666666', fontFamily: "'Open Sans', sans-serif", textDecoration: 'none' }}
@@ -115,7 +115,7 @@ export function UserMenu({
                   >
                     <Settings className="w-4 h-4 transition-transform group-hover:scale-110" style={{ color: '#b085b3' }} />
                     <span className="font-medium group-hover:text-[#33275f] transition-colors">{lang === 'en' ? 'Admin Panel' : 'Panel Admin'}</span>
-                  </a>
+                  </Link>
                 )}
               </div>
               <div className="p-2 border-t border-gray-100 bg-[#faf9fc]">
