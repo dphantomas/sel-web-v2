@@ -4,6 +4,7 @@ import { authOptions } from '@/modules/auth/auth'
 import { NextResponse } from 'next/server'
 import { sendWhatsAppNotification } from '@/lib/whatsapp'
 import { sendEmail } from '@/modules/auth/email'
+import { env } from '@/env'
 
 export async function POST(request) {
   try {
@@ -82,7 +83,7 @@ export async function POST(request) {
           to: user.email,
           subject: `Completaste ${course.title} - Sanación en Luz`,
           html: emailHtml,
-          from: process.env.REVIEWS_EMAIL
+          from: env.TALLERES_EMAIL
         }).catch(err => console.error("Error enviando email de invitación a reseña:", err));
       }
 

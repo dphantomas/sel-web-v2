@@ -36,6 +36,7 @@ export const env = createEnv({
     // de registro/verificación). Obligatorios si hay notificaciones — validación abajo.
     REGISTRATION_EMAIL: z.string().email().optional(), // altas y verificación de cuentas
     ALERTS_EMAIL: z.string().email().optional(),       // alertas de error interno
+    TALLERES_EMAIL: z.string().email().optional(),     // remitente para comunicaciones de talleres/cursos
 
     // Módulo Media - Flags - REQUERIDOS explícitamente
     ENABLE_S3_STORAGE: z.enum(["true", "false"]),
