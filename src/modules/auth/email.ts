@@ -7,6 +7,7 @@ interface SendEmailParams {
   html: string;
   text?: string;
   from?: string;
+  fromName?: string;
 }
 
 // Convierte el HTML del correo a texto plano para el fallback `text/plain`:
@@ -35,7 +36,7 @@ function htmlToText(html: string): string {
     .trim();
 }
 
-export async function sendEmail({ to, subject, html, text, from }: SendEmailParams) {
+export async function sendEmail({ to, subject, html, text, from, fromName }: SendEmailParams) {
   if (env.ENABLE_EMAIL_NOTIFICATIONS !== "true") {
     console.warn("Emails are disabled via ENABLE_EMAIL_NOTIFICATIONS. Skipped sending email to:", to);
     return;
@@ -55,7 +56,7 @@ export async function sendEmail({ to, subject, html, text, from }: SendEmailPara
   })
 
   const mailOptions = {
-    from: from ? `"Sanación en Luz" <${from}>` : `"Sanación en Luz" <${env.SMTP_FROM}>`,
+    from: `"${fromName || "Sanación en Luz"}" <${from || env.SMTP_FROM}>`,
     to,
     subject,
     html,

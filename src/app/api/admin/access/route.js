@@ -83,7 +83,8 @@ export async function POST(request) {
           to: user.email,
           subject: `Completaste ${course.title} - Sanación en Luz`,
           html: emailHtml,
-          from: env.TALLERES_EMAIL
+          from: env.TALLERES_EMAIL,
+          fromName: 'Talleres - Sanación en Luz'
         }).catch(err => console.error("Error enviando email de invitación a reseña:", err));
       }
 
