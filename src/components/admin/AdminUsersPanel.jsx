@@ -26,6 +26,7 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
   const [filterHasCourseId, setFilterHasCourseId] = useState('')
   const [filterNotCourseId, setFilterNotCourseId] = useState('')
   const [copySparkFeedback, setCopySparkFeedback] = useState(false)
+  const [copyListFeedback, setCopyListFeedback] = useState(false)
   
   // Estados para modales de edición/creación
   const [editingUser, setEditingUser] = useState(null)
@@ -866,6 +867,46 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
     setTimeout(() => setCopySparkFeedback(false), 2000)
   }
 
+  // Lista completa (nombre, email, WhatsApp, país, rol) de los participantes
+  // filtrados actualmente, pegable en Excel/Sheets con el mismo mecanismo
+  // (TSV + HTML con header en negrita) que handleCopySparkList.
+  const handleCopyFullList = async () => {
+    const data = filteredUsers.map((user) => ({
+      name: `${user.firstName} ${user.lastName}`.trim(),
+      email: user.email || '',
+      phone: user.phone || '',
+      country: user.country || '',
+      role: user.role || '',
+    }))
+
+    const headers = ['Nombre completo', 'Email', 'WhatsApp', 'País', 'Rol']
+    const tsv = [headers.join('\t'), ...data.map((d) => [d.name, d.email, d.phone, d.country, d.role].join('\t'))].join('\n')
+
+    const html =
+      '<table><tr>' + headers.map((h) => `<td style="font-weight:bold">${h}</td>`).join('') + '</tr>' +
+      data.map((d) => `<tr><td>${escapeHtml(d.name)}</td><td>${escapeHtml(d.email)}</td><td>${escapeHtml(d.phone)}</td><td>${escapeHtml(d.country)}</td><td>${escapeHtml(d.role)}</td></tr>`).join('') +
+      '</table>'
+
+    try {
+      if (typeof ClipboardItem !== 'undefined') {
+        await navigator.clipboard.write([
+          new ClipboardItem({
+            'text/plain': new Blob([tsv], { type: 'text/plain' }),
+            'text/html': new Blob([html], { type: 'text/html' }),
+          }),
+        ])
+      } else {
+        await navigator.clipboard.writeText(tsv)
+      }
+    } catch (err) {
+      console.error('Error copiando al portapapeles:', err)
+      alert('No se pudo copiar al portapapeles. Lista:\n\n' + tsv)
+      return
+    }
+    setCopyListFeedback(true)
+    setTimeout(() => setCopyListFeedback(false), 2000)
+  }
+
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-sm border border-gray-100 dark:border-zinc-800 overflow-hidden">
       <Script src="https://upload-widget.cloudinary.com/global/all.js" strategy="lazyOnload" />
@@ -911,6 +952,14 @@ export default function AdminUsersPanel({ initialUsers, courses: initialCourses 
                 className="text-sm font-bold px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700 text-sel-purple dark:text-zinc-100 hover:bg-sel-lavender/10 dark:hover:bg-zinc-800 transition whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 {copySparkFeedback ? '✓ Copiado' : '✨ Copiar Nombre-Chispa (pegar en Excel)'}
+              </button>
+              <button
+                type="button"
+                onClick={handleCopyFullList}
+                disabled={filteredUsers.length === 0}
+                className="text-sm font-bold px-3 py-1.5 rounded-lg border border-sel-lavender/30 dark:border-zinc-700 text-sel-purple dark:text-zinc-100 hover:bg-sel-lavender/10 dark:hover:bg-zinc-800 transition whitespace-nowrap disabled:opacity-40 disabled:cursor-not-allowed"
+              >
+                {copyListFeedback ? '✓ Copiado' : '📋 Copiar lista completa (pegar en Excel)'}
               </button>
             </div>
 
