@@ -2,10 +2,14 @@
 
 import { useState, useEffect } from 'react'
 import Image from 'next/image'
+import { useRouter, usePathname, useSearchParams } from 'next/navigation'
 
 export default function CoursesGrid({ initialCourses, lang = 'es', hideHero = false }: { initialCourses: any[], lang?: string, hideHero?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(false)
   const [selectedCourse, setSelectedCourse] = useState<any>(null)
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -15,7 +19,29 @@ export default function CoursesGrid({ initialCourses, lang = 'es', hideHero = fa
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  const closeModal = () => setSelectedCourse(null)
+  // Deep link: si la URL trae ?curso=<slug>, abrir ese curso al cargar la página.
+  useEffect(() => {
+    const slug = searchParams.get('curso')
+    if (!slug) return
+    const match = initialCourses.find((c) => c.slug === slug)
+    if (match) setSelectedCourse(match)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialCourses])
+
+  const openCourse = (course: any) => {
+    setSelectedCourse(course)
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('curso', course.slug)
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false })
+  }
+
+  const closeModal = () => {
+    setSelectedCourse(null)
+    const params = new URLSearchParams(searchParams.toString())
+    params.delete('curso')
+    const query = params.toString()
+    router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false })
+  }
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -72,7 +98,7 @@ export default function CoursesGrid({ initialCourses, lang = 'es', hideHero = fa
               <div 
                 key={course.id}
                 onClick={() => {
-                  if (course.description) setSelectedCourse(course)
+                  if (course.description) openCourse(course)
                 }}
                 className={`bg-white rounded-xl overflow-hidden shadow-sm transition-all duration-300 border border-purple-100 flex flex-col h-full group ${
                   course.description ? 'hover:shadow-xl cursor-pointer' : 'cursor-default'
