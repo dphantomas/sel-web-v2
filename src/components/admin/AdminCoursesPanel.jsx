@@ -530,7 +530,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       if (u.id === userId) {
         const newU = { ...u }
         if (!isCurrentlyUnlocked) {
-          newU.unlockedInstances = [...(newU.unlockedInstances || []), { courseInstanceId: instanceId, reviewEmailSentAt: null }]
+          newU.unlockedInstances = [...(newU.unlockedInstances || []), { courseInstanceId: instanceId, reviewEmailSentAt: null, reviewEmailLastError: null }]
         } else {
           newU.unlockedInstances = (newU.unlockedInstances || []).filter(ui => ui.courseInstanceId !== instanceId)
         }
@@ -610,7 +610,9 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       if (res.ok) {
         let msg = `Emails enviados: ${data.sent} de ${data.total}.`
         if (data.skipped > 0) msg += `\n${data.skipped} alumno(s) sin email registrado.`
-        if (data.failed > 0) msg += `\n${data.failed} envío(s) fallaron.`
+        if (data.failures?.length > 0) {
+          msg += `\n\nFallaron ${data.failures.length}:\n` + data.failures.map(f => `- ${f.name} (${f.email}): ${f.error}`).join('\n')
+        }
         alert(msg)
         if (data.failed > 0) {
           // Hubo envíos fallidos: recargamos para reflejar con precisión a quién le llegó el email.
@@ -2144,9 +2146,10 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                   return cmp
                 })
                 .map(user => {
-                  const isUnlocked = user.unlockedInstances?.some(ui => ui.courseInstanceId === managingInstanceUsers.instanceId)
+                  const instanceAccess = user.unlockedInstances?.find(ui => ui.courseInstanceId === managingInstanceUsers.instanceId)
+                  const isUnlocked = !!instanceAccess
                   const isLoading = updatingId === `${user.id}-${managingInstanceUsers.instanceId}`
-                  
+
                   return (
                     <div key={user.id} className="flex items-center justify-between p-3 border border-gray-100 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition">
                       <div className="flex items-center gap-3">
@@ -2160,9 +2163,16 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                         <div>
                           <p className="font-bold text-sm text-[#33275f] dark:text-white">{user.firstName} {user.lastName}</p>
                           <p className="text-xs text-gray-500 dark:text-zinc-400">{user.email}</p>
+                          {isUnlocked && (
+                            instanceAccess.reviewEmailSentAt ? (
+                              <p className="text-[11px] text-green-600 dark:text-green-400 mt-0.5">✓ Email de reseña enviado</p>
+                            ) : instanceAccess.reviewEmailLastError ? (
+                              <p className="text-[11px] text-red-500 mt-0.5" title={instanceAccess.reviewEmailLastError}>⚠ Falló el envío: {instanceAccess.reviewEmailLastError}</p>
+                            ) : null
+                          )}
                         </div>
                       </div>
-                      
+
                       <label className="relative inline-flex items-center cursor-pointer shrink-0">
                         <input 
                           type="checkbox" 

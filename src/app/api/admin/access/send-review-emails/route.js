@@ -48,7 +48,7 @@ export async function POST(request) {
 
     const recipientAccesses = eligibleAccesses.filter(access => !!access.user.email)
 
-    const results = await Promise.allSettled(
+    const results = await Promise.all(
       recipientAccesses.map(async access => {
         const user = access.user
         const emailHtml = `
@@ -63,30 +63,52 @@ export async function POST(request) {
           </div>
         `
 
-        await sendEmail({
-          to: user.email,
-          subject: `Completaste ${instance.course.title} - Sanación en Luz`,
-          html: emailHtml,
-          from: env.TALLERES_EMAIL,
-          fromName: 'Talleres - Sanación en Luz'
-        })
+        try {
+          await sendEmail({
+            to: user.email,
+            subject: `Completaste ${instance.course.title} - Sanación en Luz`,
+            html: emailHtml,
+            from: env.TALLERES_EMAIL,
+            fromName: 'Talleres - Sanación en Luz'
+          })
 
-        await prisma.userInstanceAccess.update({
-          where: { id: access.id },
-          data: { reviewEmailSentAt: new Date() }
-        })
+          await prisma.userInstanceAccess.update({
+            where: { id: access.id },
+            data: { reviewEmailSentAt: new Date(), reviewEmailAttemptedAt: new Date(), reviewEmailLastError: null }
+          })
+
+          return { ok: true, user }
+        } catch (error) {
+          const errorMessage = error instanceof Error ? error.message : 'Error desconocido'
+          await prisma.userInstanceAccess.update({
+            where: { id: access.id },
+            data: { reviewEmailAttemptedAt: new Date(), reviewEmailLastError: errorMessage }
+          })
+          return { ok: false, user, error: errorMessage }
+        }
       })
     )
 
-    const sent = results.filter(r => r.status === 'fulfilled').length
-    const failed = results.filter(r => r.status === 'rejected').length
+    const sent = results.filter(r => r.ok).length
+    const failures = results.filter(r => !r.ok)
     const skipped = eligibleAccesses.length - recipientAccesses.length
 
-    if (failed > 0) {
-      console.error('Error enviando email de invitación a reseña a algunos usuarios:', results.filter(r => r.status === 'rejected'))
+    if (failures.length > 0) {
+      console.error('Error enviando email de invitación a reseña a algunos usuarios:', failures)
     }
 
-    return NextResponse.json({ success: true, sent, failed, skipped, total: eligibleAccesses.length })
+    return NextResponse.json({
+      success: true,
+      sent,
+      failed: failures.length,
+      skipped,
+      total: eligibleAccesses.length,
+      failures: failures.map(f => ({
+        name: `${f.user.firstName || ''} ${f.user.lastName || ''}`.trim(),
+        email: f.user.email,
+        error: f.error
+      }))
+    })
   } catch (error) {
     console.error('Error al enviar emails de invitación a reseña:', error)
     return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 })
