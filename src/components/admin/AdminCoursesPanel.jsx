@@ -530,7 +530,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       if (u.id === userId) {
         const newU = { ...u }
         if (!isCurrentlyUnlocked) {
-          newU.unlockedInstances = [...(newU.unlockedInstances || []), { courseInstanceId: instanceId }]
+          newU.unlockedInstances = [...(newU.unlockedInstances || []), { courseInstanceId: instanceId, reviewEmailSentAt: null }]
         } else {
           newU.unlockedInstances = (newU.unlockedInstances || []).filter(ui => ui.courseInstanceId !== instanceId)
         }
@@ -580,15 +580,22 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
     return users.filter(u => u.unlockedInstances?.some(ui => ui.courseInstanceId === instanceId)).length
   }
 
+  const getInstancePendingReviewEmailCount = (instanceId) => {
+    return users.filter(u => u.unlockedInstances?.some(ui => ui.courseInstanceId === instanceId && !ui.reviewEmailSentAt)).length
+  }
+
   const [isSendingReviewEmails, setIsSendingReviewEmails] = useState(false)
 
-  const handleSendReviewEmails = async (instanceId) => {
-    const count = getInstanceParticipantCount(instanceId)
+  const handleSendReviewEmails = async (instanceId, onlyPending) => {
+    const count = onlyPending ? getInstancePendingReviewEmailCount(instanceId) : getInstanceParticipantCount(instanceId)
     if (count === 0) {
-      alert('No hay alumnos inscriptos en esta instancia.')
+      alert(onlyPending ? 'No hay alumnos pendientes de recibir el email.' : 'No hay alumnos inscriptos en esta instancia.')
       return
     }
-    if (!confirm(`¿Enviar el email de invitación a dejar reseña a los ${count} alumno(s) inscripto(s) en esta instancia?`)) {
+    const confirmMsg = onlyPending
+      ? `¿Enviar el email de invitación a dejar reseña a los ${count} alumno(s) que todavía no lo recibieron?`
+      : `¿Reenviar el email de invitación a dejar reseña a los ${count} alumno(s) inscripto(s), incluyendo quienes ya lo recibieron?`
+    if (!confirm(confirmMsg)) {
       return
     }
 
@@ -597,7 +604,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
       const res = await fetch('/api/admin/access/send-review-emails', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ instanceId })
+        body: JSON.stringify({ instanceId, onlyPending })
       })
       const data = await res.json()
       if (res.ok) {
@@ -605,6 +612,20 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
         if (data.skipped > 0) msg += `\n${data.skipped} alumno(s) sin email registrado.`
         if (data.failed > 0) msg += `\n${data.failed} envío(s) fallaron.`
         alert(msg)
+        if (data.failed > 0) {
+          // Hubo envíos fallidos: recargamos para reflejar con precisión a quién le llegó el email.
+          window.location.reload()
+        } else {
+          setUsers(prev => prev.map(u => {
+            if (!u.unlockedInstances?.some(ui => ui.courseInstanceId === instanceId)) return u
+            return {
+              ...u,
+              unlockedInstances: u.unlockedInstances.map(ui =>
+                ui.courseInstanceId === instanceId ? { ...ui, reviewEmailSentAt: new Date().toISOString() } : ui
+              )
+            }
+          }))
+        }
       } else {
         alert(data.error || 'Error al enviar los emails.')
       }
@@ -2074,13 +2095,20 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
             </div>
 
             {/* Envío manual del email de invitación a reseña */}
-            <div className="px-4 pt-3">
+            <div className="px-4 pt-3 flex gap-2">
               <button
-                onClick={() => handleSendReviewEmails(managingInstanceUsers.instanceId)}
+                onClick={() => handleSendReviewEmails(managingInstanceUsers.instanceId, true)}
                 disabled={isSendingReviewEmails}
-                className="w-full text-sm font-bold text-[#33275f] dark:text-white bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+                className="flex-1 text-sm font-bold text-[#33275f] dark:text-white bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
               >
-                {isSendingReviewEmails ? 'Enviando...' : 'Enviar email de invitación a reseña a todos'}
+                {isSendingReviewEmails ? 'Enviando...' : `Enviar a pendientes (${getInstancePendingReviewEmailCount(managingInstanceUsers.instanceId)})`}
+              </button>
+              <button
+                onClick={() => handleSendReviewEmails(managingInstanceUsers.instanceId, false)}
+                disabled={isSendingReviewEmails}
+                className="flex-1 text-sm font-bold text-[#33275f] dark:text-white bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+              >
+                {isSendingReviewEmails ? 'Enviando...' : 'Reenviar a todos'}
               </button>
             </div>
 

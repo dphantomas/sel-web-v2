@@ -165,10 +165,11 @@ model UserCourseAccess {
 }
 
 model UserInstanceAccess {
-  id               String   @id @default(cuid())
-  userId           String
-  courseInstanceId String
-  grantedAt        DateTime @default(now())
+  id                String    @id @default(cuid())
+  userId            String
+  courseInstanceId  String
+  grantedAt         DateTime  @default(now())
+  reviewEmailSentAt DateTime?
 
   user           User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   courseInstance CourseInstance @relation(fields: [courseInstanceId], references: [id], onDelete: Cascade)

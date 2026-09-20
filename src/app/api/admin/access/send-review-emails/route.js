@@ -21,7 +21,7 @@ export async function POST(request) {
       return NextResponse.json({ error: 'No autorizado. Se requieren permisos de Admin o Transmisor.' }, { status: 403 })
     }
 
-    const { instanceId } = await request.json()
+    const { instanceId, onlyPending } = await request.json()
 
     if (!instanceId) {
       return NextResponse.json({ error: 'Falta el parámetro requerido (instanceId).' }, { status: 400 })
@@ -42,12 +42,15 @@ export async function POST(request) {
     const typeLabel = courseTypeLabels[instance.course.type] || 'el taller'
     const reviewUrl = `${process.env.NEXTAUTH_URL || 'https://sanacionenluz.com'}/escribir-resena`
 
-    const recipients = instance.usersWithAccess
-      .map(access => access.user)
-      .filter(user => !!user.email)
+    const eligibleAccesses = onlyPending
+      ? instance.usersWithAccess.filter(access => !access.reviewEmailSentAt)
+      : instance.usersWithAccess
+
+    const recipientAccesses = eligibleAccesses.filter(access => !!access.user.email)
 
     const results = await Promise.allSettled(
-      recipients.map(user => {
+      recipientAccesses.map(async access => {
+        const user = access.user
         const emailHtml = `
           <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
             <h2 style="color: #6d28d9;">¡Hola ${user.firstName}!</h2>
@@ -60,25 +63,30 @@ export async function POST(request) {
           </div>
         `
 
-        return sendEmail({
+        await sendEmail({
           to: user.email,
           subject: `Completaste ${instance.course.title} - Sanación en Luz`,
           html: emailHtml,
           from: env.TALLERES_EMAIL,
           fromName: 'Talleres - Sanación en Luz'
         })
+
+        await prisma.userInstanceAccess.update({
+          where: { id: access.id },
+          data: { reviewEmailSentAt: new Date() }
+        })
       })
     )
 
     const sent = results.filter(r => r.status === 'fulfilled').length
     const failed = results.filter(r => r.status === 'rejected').length
-    const skipped = instance.usersWithAccess.length - recipients.length
+    const skipped = eligibleAccesses.length - recipientAccesses.length
 
     if (failed > 0) {
       console.error('Error enviando email de invitación a reseña a algunos usuarios:', results.filter(r => r.status === 'rejected'))
     }
 
-    return NextResponse.json({ success: true, sent, failed, skipped, total: instance.usersWithAccess.length })
+    return NextResponse.json({ success: true, sent, failed, skipped, total: eligibleAccesses.length })
   } catch (error) {
     console.error('Error al enviar emails de invitación a reseña:', error)
     return NextResponse.json({ error: 'Error interno del servidor.' }, { status: 500 })

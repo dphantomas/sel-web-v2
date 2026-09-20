@@ -32,7 +32,7 @@ export default async function AdminCoursesPage() {
       select: {
         id: true, firstName: true, lastName: true, email: true, role: true, image: true,
         unlockedCourses: { select: { courseId: true } },
-        unlockedInstances: { select: { courseInstanceId: true } }
+        unlockedInstances: { select: { courseInstanceId: true, reviewEmailSentAt: true } }
       }
     })
   ])
