@@ -576,6 +576,46 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
     }
   }
 
+  const getInstanceParticipantCount = (instanceId) => {
+    return users.filter(u => u.unlockedInstances?.some(ui => ui.courseInstanceId === instanceId)).length
+  }
+
+  const [isSendingReviewEmails, setIsSendingReviewEmails] = useState(false)
+
+  const handleSendReviewEmails = async (instanceId) => {
+    const count = getInstanceParticipantCount(instanceId)
+    if (count === 0) {
+      alert('No hay alumnos inscriptos en esta instancia.')
+      return
+    }
+    if (!confirm(`¿Enviar el email de invitación a dejar reseña a los ${count} alumno(s) inscripto(s) en esta instancia?`)) {
+      return
+    }
+
+    setIsSendingReviewEmails(true)
+    try {
+      const res = await fetch('/api/admin/access/send-review-emails', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ instanceId })
+      })
+      const data = await res.json()
+      if (res.ok) {
+        let msg = `Emails enviados: ${data.sent} de ${data.total}.`
+        if (data.skipped > 0) msg += `\n${data.skipped} alumno(s) sin email registrado.`
+        if (data.failed > 0) msg += `\n${data.failed} envío(s) fallaron.`
+        alert(msg)
+      } else {
+        alert(data.error || 'Error al enviar los emails.')
+      }
+    } catch (error) {
+      console.error(error)
+      alert('Error de conexión.')
+    } finally {
+      setIsSendingReviewEmails(false)
+    }
+  }
+
   const toggleCourseExpansion = (courseId) => {
     setExpandedCourses(prev => {
       const next = new Set(prev)
@@ -1595,6 +1635,9 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                                   {new Date(inst.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' })}
                                 </p>
                                 {inst.location && <span className="text-xs text-gray-500 dark:text-zinc-400">📍 {inst.location}</span>}
+                                <span className="text-xs text-gray-500 dark:text-zinc-400 flex items-center gap-1">
+                                  <Users className="w-3.5 h-3.5" /> {getInstanceParticipantCount(inst.id)}
+                                </span>
                               </div>
                               <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition">
                                 <button onClick={() => setManagingInstanceUsers({ courseId: editingCourse.id, instanceId: inst.id, courseTitle: editingCourse.title, dateStr: new Date(inst.startDate).toLocaleDateString('es-AR', { timeZone: 'UTC' }) })} className="text-[#33275f] dark:text-white hover:bg-[#33275f]/10 p-1.5 rounded-lg transition" title="Gestionar Alumnos">
@@ -2015,9 +2058,11 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
             <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-start">
               <div>
                 <h2 className="text-xl font-bold text-[#33275f] dark:text-white">Alumnos de {managingInstanceUsers.courseTitle}</h2>
-                <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">Instancia: {managingInstanceUsers.dateStr}</p>
+                <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">
+                  Instancia: {managingInstanceUsers.dateStr} · {getInstanceParticipantCount(managingInstanceUsers.instanceId)} inscripto(s)
+                </p>
               </div>
-              <button 
+              <button
                 onClick={() => {
                   setManagingInstanceUsers(null)
                   setInstanceSearchTerm('')
@@ -2025,6 +2070,17 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                 className="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition"
               >
                 <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Envío manual del email de invitación a reseña */}
+            <div className="px-4 pt-3">
+              <button
+                onClick={() => handleSendReviewEmails(managingInstanceUsers.instanceId)}
+                disabled={isSendingReviewEmails}
+                className="w-full text-sm font-bold text-[#33275f] dark:text-white bg-gray-50 dark:bg-zinc-800 border border-gray-200 dark:border-zinc-700 rounded-lg py-2 hover:bg-gray-100 dark:hover:bg-zinc-700 transition disabled:opacity-50"
+              >
+                {isSendingReviewEmails ? 'Enviando...' : 'Enviar email de invitación a reseña a todos'}
               </button>
             </div>
 
