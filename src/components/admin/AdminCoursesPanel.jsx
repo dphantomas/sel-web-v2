@@ -38,6 +38,8 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
 
   const [managingInstanceUsers, setManagingInstanceUsers] = useState(null)
   const [instanceSearchTerm, setInstanceSearchTerm] = useState('')
+  const [isAddingStudents, setIsAddingStudents] = useState(false)
+  const [addStudentsSearchTerm, setAddStudentsSearchTerm] = useState('')
 
   // =================== LOGICA LIMPIEZA CLOUDINARY ===================
   const pendingUploadRef = useRef(null)
@@ -59,6 +61,8 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
           handleCancelCourseEdit()
         } else if (editingUser) {
           setEditingUser(null)
+        } else if (isAddingStudents) {
+          setIsAddingStudents(false)
         } else if (managingInstanceUsers) {
           setManagingInstanceUsers(null)
         }
@@ -66,7 +70,7 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [isCreatingCourse, editingCourse, editingUser, managingInstanceUsers])
+  }, [isCreatingCourse, editingCourse, editingUser, isAddingStudents, managingInstanceUsers])
 
   const handleCancelCourseEdit = () => {
     if (pendingUploadRef.current) {
@@ -2096,8 +2100,16 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
               </button>
             </div>
 
-            {/* Envío manual del email de invitación a reseña */}
-            <div className="px-4 pt-3 flex gap-2">
+            {/* Acciones */}
+            <div className="px-4 pt-3">
+              <button
+                onClick={() => setIsAddingStudents(true)}
+                className="w-full text-sm font-bold text-white bg-[#33275f] rounded-lg py-2 hover:bg-[#4c3c86] transition"
+              >
+                + Agregar Alumnos
+              </button>
+            </div>
+            <div className="px-4 pt-2 flex gap-2">
               <button
                 onClick={() => handleSendReviewEmails(managingInstanceUsers.instanceId, true)}
                 disabled={isSendingReviewEmails}
@@ -2114,13 +2126,13 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
               </button>
             </div>
 
-            {/* Buscador */}
+            {/* Buscador (dentro de los ya inscriptos) */}
             <div className="p-4 border-b border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
               <div className="relative">
                 <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500" />
                 <input
                   type="text"
-                  placeholder="Buscar alumno por nombre o email..."
+                  placeholder="Buscar entre los inscriptos..."
                   value={instanceSearchTerm}
                   onChange={(e) => setInstanceSearchTerm(e.target.value)}
                   className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-800 focus:outline-none focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] transition bg-white dark:bg-zinc-800 dark:text-zinc-100"
@@ -2128,10 +2140,11 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
               </div>
             </div>
 
-            {/* Lista de Alumnos */}
+            {/* Lista de inscriptos */}
             <div className="flex-1 overflow-y-auto p-4 space-y-2">
               {users
-                .filter(u => 
+                .filter(u => u.unlockedInstances?.some(ui => ui.courseInstanceId === managingInstanceUsers.instanceId))
+                .filter(u =>
                   u.firstName?.toLowerCase().includes(instanceSearchTerm.toLowerCase()) ||
                   u.lastName?.toLowerCase().includes(instanceSearchTerm.toLowerCase()) ||
                   u.email?.toLowerCase().includes(instanceSearchTerm.toLowerCase())
@@ -2147,7 +2160,6 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                 })
                 .map(user => {
                   const instanceAccess = user.unlockedInstances?.find(ui => ui.courseInstanceId === managingInstanceUsers.instanceId)
-                  const isUnlocked = !!instanceAccess
                   const isLoading = updatingId === `${user.id}-${managingInstanceUsers.instanceId}`
 
                   return (
@@ -2163,19 +2175,115 @@ export default function AdminCoursesPanel({ initialUsers, courses: initialCourse
                         <div>
                           <p className="font-bold text-sm text-[#33275f] dark:text-white">{user.firstName} {user.lastName}</p>
                           <p className="text-xs text-gray-500 dark:text-zinc-400">{user.email}</p>
-                          {isUnlocked && (
-                            instanceAccess.reviewEmailSentAt ? (
-                              <p className="text-[11px] text-green-600 dark:text-green-400 mt-0.5">✓ Email de reseña enviado</p>
-                            ) : instanceAccess.reviewEmailLastError ? (
-                              <p className="text-[11px] text-red-500 mt-0.5" title={instanceAccess.reviewEmailLastError}>⚠ Falló el envío: {instanceAccess.reviewEmailLastError}</p>
-                            ) : null
-                          )}
+                          {instanceAccess.reviewEmailSentAt ? (
+                            <p className="text-[11px] text-green-600 dark:text-green-400 mt-0.5">✓ Email de reseña enviado</p>
+                          ) : instanceAccess.reviewEmailLastError ? (
+                            <p className="text-[11px] text-red-500 mt-0.5" title={instanceAccess.reviewEmailLastError}>⚠ Falló el envío: {instanceAccess.reviewEmailLastError}</p>
+                          ) : null}
                         </div>
                       </div>
 
                       <label className="relative inline-flex items-center cursor-pointer shrink-0">
-                        <input 
-                          type="checkbox" 
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={true}
+                          disabled={isLoading}
+                          onChange={() => handleToggleAccess(user.id, managingInstanceUsers.courseId, managingInstanceUsers.instanceId, true)}
+                        />
+                        <div className="w-11 h-6 bg-gray-200 dark:bg-zinc-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#B681AE]"></div>
+                        {isLoading && (
+                          <span className="absolute inset-0 flex items-center justify-center bg-white/50 dark:bg-zinc-900/50 rounded-full">
+                            <span className="w-4 h-4 border-2 border-[#33275f] border-t-transparent rounded-full animate-spin"></span>
+                          </span>
+                        )}
+                      </label>
+                    </div>
+                  )
+                })}
+              {getInstanceParticipantCount(managingInstanceUsers.instanceId) === 0 && (
+                <p className="text-gray-500 dark:text-zinc-400 text-sm text-center py-8">Todavía no hay alumnos inscriptos en esta instancia.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* MODAL AGREGAR ALUMNOS (lista completa) */}
+      {isAddingStudents && managingInstanceUsers && (
+        <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
+            {/* Encabezado */}
+            <div className="p-6 border-b border-gray-100 dark:border-zinc-800 flex justify-between items-start">
+              <div>
+                <h2 className="text-xl font-bold text-[#33275f] dark:text-white">Agregar Alumnos</h2>
+                <p className="text-sm text-gray-500 dark:text-zinc-400 mt-1">{managingInstanceUsers.courseTitle} · {managingInstanceUsers.dateStr}</p>
+              </div>
+              <button
+                onClick={() => {
+                  setIsAddingStudents(false)
+                  setAddStudentsSearchTerm('')
+                }}
+                className="text-gray-400 dark:text-zinc-500 hover:text-gray-600 dark:hover:text-zinc-300 transition"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+
+            {/* Buscador */}
+            <div className="p-4 border-b border-gray-100 dark:border-zinc-800 bg-gray-50 dark:bg-zinc-800">
+              <div className="relative">
+                <Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-zinc-500" />
+                <input
+                  type="text"
+                  placeholder="Buscar alumno por nombre o email..."
+                  value={addStudentsSearchTerm}
+                  onChange={(e) => setAddStudentsSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-2 rounded-xl border border-gray-200 dark:border-zinc-800 focus:outline-none focus:border-[#9187BA] focus:ring-1 focus:ring-[#9187BA] transition bg-white dark:bg-zinc-800 dark:text-zinc-100"
+                />
+              </div>
+            </div>
+
+            {/* Lista completa de usuarios */}
+            <div className="flex-1 overflow-y-auto p-4 space-y-2">
+              {users
+                .filter(u =>
+                  u.firstName?.toLowerCase().includes(addStudentsSearchTerm.toLowerCase()) ||
+                  u.lastName?.toLowerCase().includes(addStudentsSearchTerm.toLowerCase()) ||
+                  u.email?.toLowerCase().includes(addStudentsSearchTerm.toLowerCase())
+                )
+                .sort((a, b) => {
+                  const nameA = (a.firstName || '').trim()
+                  const nameB = (b.firstName || '').trim()
+                  const cmp = nameA.localeCompare(nameB, 'es', { sensitivity: 'base' })
+                  if (cmp === 0) {
+                    return (a.lastName || '').trim().localeCompare((b.lastName || '').trim(), 'es', { sensitivity: 'base' })
+                  }
+                  return cmp
+                })
+                .map(user => {
+                  const isUnlocked = user.unlockedInstances?.some(ui => ui.courseInstanceId === managingInstanceUsers.instanceId)
+                  const isLoading = updatingId === `${user.id}-${managingInstanceUsers.instanceId}`
+
+                  return (
+                    <div key={user.id} className="flex items-center justify-between p-3 border border-gray-100 dark:border-zinc-800 rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition">
+                      <div className="flex items-center gap-3">
+                        {user.image ? (
+                          <img src={user.image} alt={user.firstName} className="w-10 h-10 rounded-full object-cover" />
+                        ) : (
+                          <div className="w-10 h-10 rounded-full bg-[#B681AE]/20 flex items-center justify-center text-[#B681AE] font-bold">
+                            {user.firstName?.charAt(0) || ''}{user.lastName?.charAt(0) || ''}
+                          </div>
+                        )}
+                        <div>
+                          <p className="font-bold text-sm text-[#33275f] dark:text-white">{user.firstName} {user.lastName}</p>
+                          <p className="text-xs text-gray-500 dark:text-zinc-400">{user.email}</p>
+                        </div>
+                      </div>
+
+                      <label className="relative inline-flex items-center cursor-pointer shrink-0">
+                        <input
+                          type="checkbox"
                           className="sr-only peer"
                           checked={isUnlocked || false}
                           disabled={isLoading}
