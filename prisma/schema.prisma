@@ -44,6 +44,9 @@ model User {
   // Relaciones del MÓDULO GRUPOS Y ASISTENCIA
   groupMemberships  GroupMember[]
   attendanceRecords AttendanceRecord[]
+
+  // Relaciones del MÓDULO RESEÑAS
+  reviews Review[]
 }
 
 enum Role {
@@ -406,15 +409,19 @@ model HomePhrase {
 // --- MÓDULO RESEÑAS ---
 
 model Review {
-  id          String   @id @default(cuid())
-  authorName  String
-  authorRole  String?
-  authorImage String?
-  content     String   @db.Text
-  rating      Int?     @default(5)
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id                  String    @id @default(cuid())
+  authorName          String
+  authorRole          String?
+  authorImage         String?
+  userId              String?
+  content             String    @db.Text
+  rating              Int?      @default(5)
+  isActive            Boolean   @default(true)
+  approvalEmailSentAt DateTime?
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 }
 
 model RateLimit {

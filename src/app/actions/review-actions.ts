@@ -4,16 +4,21 @@ import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import { sendEmail } from "@/modules/auth/email";
 import { env } from "@/env";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/modules/auth/auth";
 
 export async function submitUserReview(data: {
   authorName: string;
   authorRole?: string;
   content: string;
 }) {
+  const session = await getServerSession(authOptions);
+
   const result = await prisma.review.create({
     data: {
       authorName: data.authorName,
       authorRole: data.authorRole || null,
+      userId: session?.user?.id || null,
       content: data.content,
       isActive: false, // Oculta por defecto
     },
@@ -84,10 +89,35 @@ export async function updateReview(id: string, data: Partial<{
   rating: number;
   isActive: boolean;
 }>) {
+  const existing = await prisma.review.findUnique({
+    where: { id },
+    include: { user: { select: { email: true } } },
+  });
+
   const result = await prisma.review.update({
     where: { id },
     data,
   });
+
+  if (data.isActive === true && existing?.user?.email && !existing.approvalEmailSentAt) {
+    const emailHtml = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+        <h2 style="color: #6d28d9;">¡Hola ${result.authorName}!</h2>
+        <p>Tu reseña en Sanación en Luz ya fue aprobada y publicada. ¡Gracias por compartir tu experiencia!</p>
+      </div>
+    `;
+
+    await sendEmail({
+      to: existing.user.email,
+      subject: `Tu reseña fue publicada - Sanación en Luz`,
+      html: emailHtml,
+      from: env.TALLERES_EMAIL,
+      fromName: 'Talleres - Sanación en Luz'
+    })
+      .then(() => prisma.review.update({ where: { id }, data: { approvalEmailSentAt: new Date() } }))
+      .catch(err => console.error("Error notificando aprobación de reseña:", err));
+  }
+
   revalidatePath("/admin/reviews");
   revalidatePath("/");
   return result;
